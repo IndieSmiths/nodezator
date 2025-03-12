@@ -1,3 +1,60 @@
+[project]
+name = "nodezator"
+dynamic = ["version"]
+dependencies = [
+    "pygame-ce",
+    "numpy",
+]
+authors = [
+  { name="Kennedy Richard", email="kennedy@kennedyrichard.com" },
+]
+description = "A generalist Python node editor"
+keywords = [
+    "gui",
+    "desktop",
+    "application",
+    "pygame",
+    "pygame-ce",
+    "graph",
+    "graphs",
+    "nodes",
+    "node",
+    "editor",
+]
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "License :: OSI Approved :: The Unlicense (Unlicense)",
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: pygame",
+    "Topic :: Desktop Environment",
+    "Topic :: Multimedia",
+    "Topic :: Software Development :: User Interfaces",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Artistic Software",
+    "Topic :: Office/Business",
+    "Topic :: Scientific/Engineering",
+    "Intended Audience :: End Users/Desktop",
+]
+license = { text="Unlicense" }
+
+[project.urls]
+Homepage = "https://nodezator.com"
+"Source Code" = "https://github.com/IndieSmiths/nodezator"
+Forum = "https://github.com/IndieSmiths/nodezator/discussions"
+"User Manual" = "https://manual.nodezator.com"
+"Bug Tracker" = "https://github.com/IndieSmiths/nodezator/issues"
+Donate = "https://indiesmiths.com/donate"
+
+[project.gui-scripts]
+nodezator = "nodezator.__main__:parse_args_and_execute_main"
+
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=59.6"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "nodezator.__version__"}
