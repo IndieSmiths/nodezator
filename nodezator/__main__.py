@@ -4,10 +4,11 @@ Nodezator: A generalist Python node editor developed by
 Kennedy Richard <kennedy@kennedyrichard.com>.
 
 https://kennedyrichard.com
+https://bsky.app/profile/kennedyrichard.com
 https://x.com/KennedyRichard
 
 https://nodezator.com
-https://github.com/IndiePython/nodezator
+https://github.com/IndieSmiths/nodezator
 """
 
 ### standard library imports

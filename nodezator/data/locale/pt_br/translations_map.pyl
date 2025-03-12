@@ -50,15 +50,12 @@
     'links': "Links",
 
     'application_website' : "Sítio do app",
-    'application_website_name' : "nodezator.com",
     'application_website_url' : "https://nodezator.com",
 
-    'project_website' : "Sítio do projeto",
-    'project_website_name' : 'br.indiepython.com',
-    'project_website_url'  : 'https://br.indiepython.com',
+    'parent_project_website' : "Projeto pai",
+    'parent_project_website_url'  : 'https://indiesmiths.com',
 
     'developer_website' : "Sítio do desenvolvedor",
-    'developer_website_name' : "br.kennedyrichard.com",
     'developer_website_url' : "https://br.kennedyrichard.com",
 
     'developer_links_social': "Links do desenvolvedor",

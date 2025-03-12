@@ -86,16 +86,13 @@
 
     'links': "Links",
 
-    'application_website'      : "Application website",
-    'application_website_name' : "nodezator.com",
+    'application_website'      : "Nodezator website",
     'application_website_url'  : "https://nodezator.com",
 
-    'project_website'      : "Project website",
-    'project_website_name' : 'indiepython.com',
-    'project_website_url'  : 'https://indiepython.com',
+    'parent_project_website'      : "Parent project",
+    'parent_project_website_url'  : 'https://indiesmiths.com',
 
     'developer_website'      : "Developer website",
-    'developer_website_name' : "kennedyrichard.com",
     'developer_website_url'  : "https://kennedyrichard.com",
 
     'developer_links_social' : "Developer links/social/email",

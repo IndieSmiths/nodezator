@@ -12,13 +12,13 @@
 <h1>What's new in Nodezator 1.4?</h1>
 
 <ul>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.4.0">[v1.4.0] Many new features and improvements</a></li>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.4.1">[v1.4.1] Tiny packaging fix</a></li>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.4.2">[v1.4.2] Fixed error when executing collapsed nodes</a></li>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.4.3">[v1.4.3] Fixed error when executing operation nodes</a></li>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.4.4">[v1.4.4] Fixed bugs in SVG exporting and change checking</a></li>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.4.5">[v1.4.5] Additions, improvements and fixes to tests</a></li>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.4.6">[v1.4.6] More additions and a bug fix</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.4.0">[v1.4.0] Many new features and improvements</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.4.1">[v1.4.1] Tiny packaging fix</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.4.2">[v1.4.2] Fixed error when executing collapsed nodes</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.4.3">[v1.4.3] Fixed error when executing operation nodes</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.4.4">[v1.4.4] Fixed bugs in SVG exporting and change checking</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.4.5">[v1.4.5] Additions, improvements and fixes to tests</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.4.6">[v1.4.6] More additions and a bug fix</a></li>
 </ul>
 
 

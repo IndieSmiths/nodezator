@@ -142,7 +142,7 @@
 
 <p>Beware that this template does not attempt to teach you the best way or configuration for your package. It just presents <b>one</b> possible and relatively straightforward way of packaging your node pack. Teaching about packaging in Python and the many options available is outside the scope of our project.</p>
 
-<p>Even so, we always welcome questions and people seeking help, so if you have any trouble just reach us on <a href="https://github.com/IndiePython/nodezator/discussions">github discussions for Nodezator</a> or the <a href="https://indiepython.com/discord">Indie Python discord server</a>.</p>
+<p>Even so, we always welcome questions and people seeking help, so if you have any trouble just reach us on <a href="https://github.com/IndieSmiths/nodezator/discussions">GitHub discussions for Nodezator</a> or the <a href="https://indiesmiths.com/discord">Indie Smiths discord server</a>.</p>
 
 
 <p><a href="ch-other-objects.htsl">Previous chapter</a> | <a href="index.htsl">Table of contents</a> | <a href="ch-conditional-execution.htsl">Next chapter</a></p>

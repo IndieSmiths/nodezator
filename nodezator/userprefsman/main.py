@@ -13,7 +13,7 @@ from copy import deepcopy
 
 ### local imports
 
-from ..config import APP_REFS, WRITEABLE_PATH
+from ..config import APP_REFS, WRITEABLE_PATH, OLD_WRITEABLE_PATH
 
 from ..appinfo import APP_DIR_NAME, NATIVE_FILE_EXTENSION
 
@@ -27,6 +27,8 @@ from .validation import (
     AVAILABLE_SOCKET_DETECTION_GRAPHICS,
     validate_prefs_data,
 )
+
+
 
 ### module level logger
 logger = get_new_logger(__name__)
@@ -75,39 +77,64 @@ USER_PREFS = {
 validate_prefs_data(USER_PREFS)
 
 
+### names of config files
+
+CONFIG_FILE_NAMES = (
+    'bookmarks.pyl',
+    'recent_files.pyl',
+    'config.pyl',
+    'known_packs.pyl',
+)
+
+
 ### path to config file and other important files
 ###
 ### the locations defined here are different from the locations in
-### previous versions because we are using a more reliable new
-### solution (based on pygame.system.get_pref_path()) that picks
-### an appropriate writeable path for us
+### previous versions because WRITEABLE_PATH uses a new org name
+### (the new name of nodezator's parent project) and even older versions
+### didn't use pygame.system.get_pref_path() either
 
-## base location for the config directory
+## current base location for the config directory
 APP_CONFIG_DIR = WRITEABLE_PATH / 'config'
 
-## location for specific files
 
-BOOKMARKS_FILE = APP_CONFIG_DIR / 'bookmarks.pyl'
-RECENT_FILES = APP_CONFIG_DIR / 'recent_files.pyl'
-CONFIG_FILEPATH = APP_CONFIG_DIR / 'config.pyl'
-KNOWN_PACKS_FILE = APP_CONFIG_DIR / 'known_packs.pyl'
+## current locations for specific files
 
-TEMP_FILE_SWAP = APP_CONFIG_DIR  / f'temp_file_swap{NATIVE_FILE_EXTENSION}'
+_current_locations_map = {
+    filename: APP_CONFIG_DIR / filename
+    for filename in CONFIG_FILE_NAMES
+}
 
 
-### here we have the old locations defined in previous versions
+### create variables to hold the paths for the config files
+
+BOOKMARKS_FILE = APP_CONFIG_DIR / "bookmarks.pyl"
+RECENT_FILES = APP_CONFIG_DIR / "recent_files.pyl"
+CONFIG_FILEPATH = APP_CONFIG_DIR / "config.pyl"
+KNOWN_PACKS_FILE = APP_CONFIG_DIR / "known_packs.pyl"
+
+
+### below we define old versions of the previous paths
 ###
-### why do we still define them here? because when users install the new
-### version, we must guarantee that the data from the files in the old
-### locations are copied into the new locations, so that data is not lost
+### why do we do that? Because when users install the new versions,
+### we must guarantee that the data from the files in the old locations
+### are copied into the new locations, so that data is not lost
 ### (configs, recent files, etc.)
-###
-### we don't need to do so for the temp file swap though because they are
-### expected to be deleted whenever the user saves the a new untitled file
-### or close the app while editing it. That is, they are not meant to persist
-### in the disk
 
-## old base location for the config directory
+## path to config file and other important files using old
+## parent project name
+
+OLD_PROJ_NAME_APP_CONFIG_DIR = OLD_WRITEABLE_PATH / 'config'
+
+_old_projname_locations_map = {
+    filename: OLD_PROJ_NAME_APP_CONFIG_DIR / filename
+    for filename in CONFIG_FILE_NAMES
+}
+
+## path to config file and other important files using that didn't
+## rely on pygame.system.get_pref_path()
+
+# old base location for the config directory
 
 if "APPDATA" in environ:
     config_dir = Path(environ["APPDATA"])
@@ -118,17 +145,15 @@ elif "XDG_CONFIG_HOME" in environ:
 else:
     config_dir = Path(environ["HOME"]) / ".config"
 
-OLD_APP_CONFIG_DIR = config_dir / APP_DIR_NAME
+OLD_NON_GET_PREF_PATH_APP_CONFIG_DIR = config_dir / APP_DIR_NAME
 
-## define the old location for each specific file
-
-OLD_BOOKMARKS_FILE = OLD_APP_CONFIG_DIR / "bookmarks.pyl"
-OLD_RECENT_FILES = OLD_APP_CONFIG_DIR / "recent_files.pyl"
-OLD_CONFIG_FILEPATH = OLD_APP_CONFIG_DIR / "config.pyl"
-OLD_KNOWN_PACKS_FILE = OLD_APP_CONFIG_DIR / "known_packs.pyl"
+_old_non_get_pref_path_locations_map = {
+    name: OLD_NON_GET_PREF_PATH_APP_CONFIG_DIR / name
+    for name in CONFIG_FILE_NAMES
+}
 
 
-## check whether the APP_CONFIG_DIR exists and create it otherwise
+### check whether the APP_CONFIG_DIR exists and create it otherwise
 
 if not APP_CONFIG_DIR.exists():
 
@@ -139,44 +164,66 @@ if not APP_CONFIG_DIR.exists():
         USER_LOGGER.exception(CONFIG_DIR_NOT_CREATED_MESSAGE)
 
 
-## if the APP_CONFIG_DIR already existed or was created in the previous
-## if block, we can now check whether there is data in the old locations
-## that is missing in the current locations and, if so, copy the data
-## into the new locations
-##
-## we decided not to delete the files in the old locations, in case they
-## are needed by the user somehow; the deletion must be done manually by
-## the users if they desire
+### if the APP_CONFIG_DIR already existed or was created in the previous
+### if block, we can now check whether there is data in the old locations
+### that is missing in the current locations and, if so, copy the data
+### into the new locations
+###
+### we decided not to delete the files in the old locations, in case they
+### are needed by the user somehow; the deletion must be done manually by
+### the users if they desire
 
 if APP_CONFIG_DIR.exists():
 
-    for data_name, old_path, new_path in (
-        ('file browser bookmarks', OLD_BOOKMARKS_FILE, BOOKMARKS_FILE),
-        ('recent files', OLD_RECENT_FILES, RECENT_FILES),
-        ('config', OLD_CONFIG_FILEPATH, CONFIG_FILEPATH),
-        ('known packs', OLD_KNOWN_PACKS_FILE, KNOWN_PACKS_FILE),
-    ):
+    for filename in CONFIG_FILE_NAMES:
 
-        ### we only copy files in case the file exists in the old location
-        ### but doesn't exist in the new location
+        ### old paths used for that filename
 
-        if (
-            old_path.exists()
-            and (not new_path.exists())
-        ):
+        old_paths = (
 
-            ## try copying the file
+            # the ones on top get the preference when more than one file
+            # exists
 
-            try:
-                copyfile(str(old_path), str(new_path))
+            _old_projname_locations_map[filename],
+            _old_non_get_pref_path_locations_map[filename],
 
-            ## in case an error occurs, log error
+        )
 
-            except Exception:
+        ### current path used for that filename
+        current_path = _current_locations_map[filename]
 
-                USER_LOGGER.exception(
-                    "Error when copying {data_name} data from old location."
-                )
+        ### we only try copying from old locations in case the file doesn't
+        ### exist in the current location
+
+        if not current_path.exists():
+
+            for old_path in old_paths:
+
+                ## also, we only try copying from the old path if it exists
+
+                if old_path.exists():
+
+                    ## try copying
+
+                    try:
+                        copyfile(str(old_path), str(current_path))
+
+                    ## in case an error occurs, log error
+
+                    except Exception:
+
+                        USER_LOGGER.exception(
+                            "Error when copying {filename} data from"
+                            " {old_path} to {current_path}."
+                        )
+
+                    ## otherwise, break out of this loop
+                    else:
+                        break
+
+### the temp file swap just uses the current app config dir because it is
+### not meant to persist in disk
+TEMP_FILE_SWAP = APP_CONFIG_DIR  / f'temp_file_swap{NATIVE_FILE_EXTENSION}'
 
 
 ### now we can finally load the config data, if it exists

@@ -33,7 +33,7 @@ TITLE = "Nodezator"
 ## supported by any major operating system;
 APP_DIR_NAME = "nodezator"
 
-ORG_DIR_NAME = 'IndiePython' # org name for pygame.system.get_pref_path
+ORG_DIR_NAME = 'IndieSmiths' # org name for pygame.system.get_pref_path
 
 ABBREVIATED_TITLE = "NDZ"
 

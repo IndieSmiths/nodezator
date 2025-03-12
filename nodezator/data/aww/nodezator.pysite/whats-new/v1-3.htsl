@@ -10,7 +10,7 @@
 
 <h1>What's new in Nodezator 1.3.14?</h1>
 
-<p><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.3.14">[v1.3.14] Performance fix</a></p>
+<p><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.3.14">[v1.3.14] Performance fix</a></p>
 
 <p>It has an important performance fix provided by Mr. Richards <a href="https://github.com/nrichards">@nrichards</a> via pull request. In summary, specific pygame.font.Font objects defined after many calculations were not being stored back for later use in the dictionary used for font caching due to a missing dictionary item asignment. The font caching system can be found in the nodezator/fontsman/cache.py module.</p>
 

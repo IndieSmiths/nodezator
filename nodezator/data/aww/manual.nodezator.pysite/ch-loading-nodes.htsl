@@ -25,7 +25,7 @@
     <li>How to reference them in the .ndz file.</li>
 </ol>
 
-<p>If you ever encounter any kind of problem, with those or any other task you are trying to perform in Nodezator, don't hesitate to seek help on the <a href="https://indiepython.com/discord">discord server</a>.</p>
+<p>If you ever encounter any kind of problem, with those or any other task you are trying to perform in Nodezator, don't hesitate to seek help on the <a href="https://indiesmiths.com/discord">discord server</a>.</p>
 
 <p>Without further ado, let's learn how to do those things.</p>
 
@@ -223,9 +223,9 @@ pip install mynodepack
 
 <p>Hence, if you change the name of parameters/outputs or make other changes that result in an incompatible signature, your file will become invalid or you'll have to update the .ndz file by hand yourself.</p>
 
-<p>A feature that consists in a conflict resolution mode for Nodezator, to guide the user in the resolution of such problems is already listed among the <a href="https://github.com/IndiePython/nodezator/discussions/13">planned/requested features for Nodezator</a>.</p>
+<p>A feature that consists in a conflict resolution mode for Nodezator, to guide the user in the resolution of such problems is already listed among the <a href="https://github.com/IndieSmiths/nodezator/discussions/13">planned/requested features for Nodezator</a>.</p>
 
-<p>For now, if you want to update the signature of a node that is in use, it is easier to delete the instances of that node in the related .ndz files, make your changes, than instantiate and reconnect the node again. Or just seek help on the <a href="https://indiepython.com/discord">discord server</a>.</p>
+<p>For now, if you want to update the signature of a node that is in use, it is easier to delete the instances of that node in the related .ndz files, make your changes, than instantiate and reconnect the node again. Or just seek help on the <a href="https://indiesmiths.com/discord">discord server</a>.</p>
 
 
 <p><a href="ch-more-ways-define-nodes.htsl">Previous chapter</a> |  <a href="index.htsl">Table of contents</a> | <a href="ch-color-coding-inputs-outputs.htsl">Next chapter</a></p>

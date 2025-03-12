@@ -12,10 +12,10 @@
 <h1>What's new in Nodezator 1.5?</h1>
 
 <ul>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.5.0">[v1.5.0] System testing, topological sorting and QOL features</a></li>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.5.1">[v1.5.1] Usability improvements and content update</a></li>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.5.2">[v1.5.2] Bug fix for nodes with keyword-variable parameters</a></li>
-    <li><a href="https://github.com/IndiePython/nodezator/releases/tag/v1.5.3">[v1.5.3] User manual utility and file manager bug fix</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.5.0">[v1.5.0] System testing, topological sorting and QOL features</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.5.1">[v1.5.1] Usability improvements and content update</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.5.2">[v1.5.2] Bug fix for nodes with keyword-variable parameters</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.5.3">[v1.5.3] User manual utility and file manager bug fix</a></li>
 </ul>
 
 <ol>
@@ -57,7 +57,7 @@
 
 <p>The remaining changes will be presented futher ahead, in a dedicated section.</p>
 
-<p>In addition to the information presented in this release text, you can find much of the development process documented in this GitHub discussion: <a href="https://github.com/IndiePython/nodezator/discussions/72">https://github.com/IndiePython/nodezator/discussions/72</a>. It was used as a development log (devlog) detailing changes and related decisions.</p>
+<p>In addition to the information presented in this release text, you can find much of the development process documented in this GitHub discussion: <a href="https://github.com/IndieSmiths/nodezator/discussions/72">https://github.com/IndieSmiths/nodezator/discussions/72</a>. It was used as a development log (devlog) detailing changes and related decisions.</p>
 
 
 
@@ -104,9 +104,9 @@
 
 <p>In order to aid in development of not only of the system testing feature, but the whole app, a holistic view of its design is needed. Each and every task and feature must be listed. This is specially important for system testing because we need such information in order to define and implement all the needed test cases.</p>
 
-<p>Because of that, since the beginning of our scheduled work for this version, we also started producing a <a href="https://en.wikipedia.org/wiki/Software_design_description">Software Design Document</a> (SDD) for Nodezator, which you can find in this dedicated repository: <a href="https://github.com/IndiePython/nodezator-sdd">https://github.com/IndiePython/nodezator-sdd</a></p>
+<p>Because of that, since the beginning of our scheduled work for this version, we also started producing a <a href="https://en.wikipedia.org/wiki/Software_design_description">Software Design Document</a> (SDD) for Nodezator, which you can find in this dedicated repository: <a href="https://github.com/IndieSmiths/nodezator-sdd">https://github.com/IndieSmiths/nodezator-sdd</a></p>
 
-<p>A system testing document is also being produced. It is kept in a separate repository although it is considered part of Nodezator's SDD: <a href="https://github.com/IndiePython/nodezator-system-testing">https://github.com/IndiePython/nodezator-system-testing</a>. It is used to help manage system testing for Nodezator and to document its test cases. It is kept as a separate repository so changes to system testing can be managed and tracked separately from the rest of the SDD.</p>
+<p>A system testing document is also being produced. It is kept in a separate repository although it is considered part of Nodezator's SDD: <a href="https://github.com/IndieSmiths/nodezator-system-testing">https://github.com/IndieSmiths/nodezator-system-testing</a>. It is used to help manage system testing for Nodezator and to document its test cases. It is kept as a separate repository so changes to system testing can be managed and tracked separately from the rest of the SDD.</p>
 
 <p>Finishing those documents is important not only for system testing, but also for Nodezator in general. For instance, once these documents are ready, we'll be able to organize the missing features in a sensible order for scheduling and implementation. We'll also be able to present a proper roadmap to users of the app and followers of the project.</p>
 
@@ -261,7 +261,7 @@
 
 <p>A few key content pieces were update as well. The first chapter of the user manual now has a new subsection on <a href="nodezator://manual.nodezator.pysite/ch-defining-your-first-node.htsl#sharing-resources-among-nodes">sharing resources among nodes</a>. A very useful and long needed resource. In addition to that, a few other parts of the chapter were improved for clarity.</p>
 
-<p>The <a href="https://github.com/IndiePython/nodezator/blob/main/README.md">README</a> file of the repository is much more informative now and makes usage of more images and animated GIFs to showcase Nodezator features and capabilities. Like the first chapter of the manual, the README file also had several parts of its text improved for clarity.</p>
+<p>The <a href="https://github.com/IndieSmiths/nodezator/blob/main/README.md">README</a> file of the repository is much more informative now and makes usage of more images and animated GIFs to showcase Nodezator features and capabilities. Like the first chapter of the manual, the README file also had several parts of its text improved for clarity.</p>
 
 <p>We also made sure to include important information and warnings to avoid common misconceptions people tend to have when learning about Nodezator for the first time. For instance, some people seem to have a hard time telling whether Nodezator is an application or a framework/GUI library at first, so in the text we made sure to emphasize what Nodezator is and what it is not.</p>
 

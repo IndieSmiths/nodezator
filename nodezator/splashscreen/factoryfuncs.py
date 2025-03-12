@@ -184,7 +184,7 @@ def get_project_link_objs():
         (IMAGE_SURFS_DB["github_mark.png"][{"use_alpha": True}]),
         (IMAGE_SURFS_DB["github_mark.png"][{"use_alpha": True}]),
         NODES_GALLERY_ICON,
-        (IMAGE_SURFS_DB["indie_python_logo.png"][{"use_alpha": True}]),
+        (IMAGE_SURFS_DB["indie_smiths_logo.png"][{"use_alpha": True}]),
         (IMAGE_SURFS_DB["kennedy_logo.png"][{"use_alpha": True}]),
         (IMAGE_SURFS_DB["bluesky_logo.png"][{"use_alpha": True}]),
         (IMAGE_SURFS_DB["discord_logo.png"][{"use_alpha": True}]),
@@ -220,19 +220,19 @@ def get_project_link_objs():
         ),
         (
             "Source code",
-            "https://github.com/IndiePython/nodezator",
+            "https://github.com/IndieSmiths/nodezator",
         ),
         (
             "Discussions/forum",
-            "https://github.com/IndiePython/nodezator/discussions",
+            "https://github.com/IndieSmiths/nodezator/discussions",
         ),
         (
             "Find, download, publish nodes",
             "https://gallery.nodezator.com",
         ),
         (
-            t.splash_screen.project_website,
-            t.splash_screen.project_website_url,
+            t.splash_screen.parent_project_website,
+            t.splash_screen.parent_project_website_url,
         ),
         (
             t.splash_screen.developer_website,
@@ -244,7 +244,7 @@ def get_project_link_objs():
         ),
         (
             "Join us on discord",
-            "https://indiepython.com/discord",
+            "https://indiesmiths.com/discord",
         ),
         (
             "Support us on patreon",
@@ -252,7 +252,7 @@ def get_project_link_objs():
         ),
         (
             "Other support options",
-            "https://indiepython.com/donate",
+            "https://indiesmiths.com/donate",
         ),
     )
 

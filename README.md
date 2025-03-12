@@ -56,14 +56,14 @@ There's also a [youtube video][] presenting Nodezator:
 
 [![thumb of youtube video](https://img.youtube.com/vi/GlQJvuU7Z_8/hqdefault.jpg)](https://www.youtube.com/watch?v=GlQJvuU7Z_8)
 
-Nodezator is made with pure Python on top of the [pygame-ce][] library (and a bit of the excellent [numpy][] library as well), by [Kennedy Richard Silva Guerra][] (born in 1990), as part of the [Indie Python][] project.
+Nodezator is made with pure Python on top of the [pygame-ce][] library (and a bit of the excellent [numpy][] library as well), by [Kennedy Richard Silva Guerra][] (born in 1990), as part of the [Indie Smiths][] project.
 
 > [!NOTE]
 > Despite being maintained mostly by a single person, Nodezator is a serious and active project that gets a couple of large releases every year.
 
 We recommend Nodezator for **intermediate Python users**. Or, in case you are not a programmer, have an intermediate Python user next to you so that person can help you set up a no-code/low-code workflow for you.
 
-Nodezator can already be used in production and supports a vast variety of workflows. It still has a long way to go, though. So, please, be patient and also consider supporting it: https://indiepython.com/donate
+Nodezator can already be used in production and supports a vast variety of workflows. It still has a long way to go, though. So, please, be patient and also consider supporting it: https://indiesmiths.com/donate
 
 After you finish reading this README file, you may also want to visit Nodezator's homepage: https://nodezator.com
 
@@ -243,7 +243,7 @@ Once you distributed your nodes, you may want a place wherein to let people know
 
 You can do all this on the [nodes gallery][] website. There you can search node packs by name, author and tags.
 
-To have a link to your node pack added to the nodes gallery/database, upload it somewhere people can download/install it from, as described in the manual's chapter about [distributing your nodes][], then submit the relevant info about your node pack in this [node pack submission form][]. Alternatively, you can also submit a pull request to the [nodes gallery repository][] on github following the instructions on the README.md file.
+To have a link to your node pack added to the nodes gallery/database, upload it somewhere people can download/install it from, as described in the manual's chapter about [distributing your nodes][], then submit the relevant info about your node pack in this [node pack submission form][]. Alternatively, you can also submit a pull request to the [nodes gallery repository][] on GitHub following the instructions on the README.md file.
 
 You can also [email][] me if you need any help.
 
@@ -289,9 +289,13 @@ The in-app version is always the most accurate, since it is updated first, where
 
 Everyone is welcome to suggest and contribute changes.
 
-If the proposed change is small enough, you can submit your pull request for analysis right away and it will be answered ASAP.
+If the proposed change is small enough, you can submit your pull request (PR) for analysis right away to the `develop` branch and it will be answered ASAP.
 
-More complex pull requests will also be welcome in the future, but due to the complexity of the app, I will first need to implement some automated GUI tests to ensure everyone's future contributions do not break each other.
+Please, if submitting a pull request, use the `develop` branch, not the `main` branch. This way it is easier to refine/complement your changes before merging them with `main`.
+
+More complex pull requests will also be welcome in the future, but due to the complexity of the app, I will first need to finish implementing the missing system test cases to ensure everyone's future contributions do not break each other.
+
+Speaking of system testing, Nodezator has system testing capabilities that take advantage of GUI automation, with a few test cases already implemented. Just press **Shift+Ctrl+F8** to see the current system test cases run automatically. Once the tests finish running, a report with the results is displayed so you can inspect them. If you need, the report can be exported to a variety of formats with the buttons at the bottom of the report. You can also configure the system testing session in the menu **Gui Automation > System testing > Setup and run custom session**.
 
 
 ## Issues
@@ -304,7 +308,7 @@ If you find a bug that...
 - causes Nodezator to crash;
 - representing something malfunctioning or not working at all;
 
-...then, please, use [github issues][] to submit an issue as soon as possible.
+...then, please, use [GitHub issues][] to submit an issue as soon as possible.
 
 Please, include as much information as you can:
 
@@ -321,20 +325,20 @@ Nevertheless, never hesitate to ask for help, even if you don't have much info a
 
 ### Minor issues
 
-If however, the problem is not as serious/urgent, that is, it doesn't cause Nodezator to crash or malfunction, then, please, open a discussion on [github discussions][] instead. There's a dedicated category for this kind of problem called "Minor issue".
+If however, the problem is not as serious/urgent, that is, it doesn't cause Nodezator to crash or malfunction, then, please, open a discussion on [GitHub discussions][] instead. There's a dedicated category for this kind of problem called "Minor issue".
 
-It doesn't mean your issue is any less important. It is just that in Nodezator and other Indie Python repos we use [github issues][] for things that crash the app or otherwise prevent the user from doing something that is supposed to be available (stuff that cause crashes or malfunctioning). When such a critical issue appears, any other work is paused and all attention is given to that issue so that it can be fixed ASAP.
+It doesn't mean your issue is any less important. It is just that in Nodezator and other Indie Smiths's repos we use [GitHub issues][] for things that crash the app or otherwise prevent the user from doing something that is supposed to be available (stuff that cause crashes or malfunctioning). When such a critical issue appears, any other work is paused and all attention is given to that issue so that it can be fixed ASAP.
 
 This measure is taken for the benefit of the users: by doing things this way, whenever you have an urgent/critical issue, it won't compete for space with other less urgent matters. We'll be able to promptly schedule time to solve the issue.
 
-Minor issues, suggestions of improvements, feature requests, feedback about bad experiences, etc. are all important, but they don't have the same urgency as something that crashes the app or causes it to malfunction. This is why we use [github discussions][] for the less urgent stuff. They'll be tended to all the same, just not with the same urgency.
+Minor issues, suggestions of improvements, feature requests, feedback about bad experiences, etc. are all important, but they don't have the same urgency as something that crashes the app or causes it to malfunction. This is why we use [GitHub discussions][] for the less urgent stuff. They'll be tended to all the same, just not with the same urgency.
 
-Of course, [github discussions][] is used for many other important stuff as well, as we'll see in the next section.
+Of course, [GitHub discussions][] is used for many other important stuff as well, as we'll see in the next section.
 
 
 ## Discussions/forum
 
-Consider [github discussions][] as the official online forum for Nodezator.
+Consider [GitHub discussions][] as the official online forum for Nodezator.
 
 It is used for many things like announcements to the community, to list planned/requested features, to communicate and discuss current work, etc.
 
@@ -355,14 +359,14 @@ If you have...
 
 Contact me any time via [Twitter/X][] or [email][].
 
-You are also welcome on the Indie Python's [discord server][].
+You are also welcome on the Indie Smiths's [discord server][].
 
 
 ## Patreon and donations
 
-Please, support Nodezator and other useful apps of the Indie Python project by becoming our patron on [patreon][]. You can also make recurrent donations using [github sponsors][], [liberapay][] or [Ko-fi][].
+Please, support Nodezator and other useful apps of the Indie Smiths project by becoming our patron on [patreon][]. You can also make recurrent donations using [GitHub sponsors][], [liberapay][] or [Ko-fi][].
 
-Both [github sponsors][] and [Ko-fi][] also accept one-time donations.
+Both [GitHub sponsors][] and [Ko-fi][] also accept one-time donations.
 
 Any amount is welcome and helps. Check the project's [donation page][] for all donation methods available.
 
@@ -376,7 +380,7 @@ The `nodezator_icons` font used in the app for its icons was created by me and i
 The logos/images listed below, featured in Nodezator's splash screen (and sometimes in other spots in the app), are all mine:
 
 - the Kennedy Richard "KR" logo;
-- the Indie Python project logo;
+- the Indie Smiths project logo;
 - the Nodezator logo;
 - the robot, called Zenith Green, Nodezator's mascot.
 
@@ -398,19 +402,19 @@ Also, other parts of the code, despite being carefully designed, might be redesi
 [youtube video]: https://www.youtube.com/watch?v=GlQJvuU7Z_8
 [pygame-ce]: https://pyga.me
 [numpy]: https://numpy.org
-[Indie Python]: https://indiepython.com
+[Indie Smiths]: https://indiesmiths.com
 
 [manual]: https://manual.nodezator.com
 
 [Twitter/X]: https://x.com/KennedyRichard
 [email]: mailto:kennedy@kennedyrichard.com
-[discord server]: https://indiepython.com/discord
+[discord server]: https://indiesmiths.com/discord
 
 [patreon]: https://patreon.com/KennedyRichard
-[github sponsors]: https://github.com/sponsors/KennedyRichard
+[GitHub sponsors]: https://github.com/sponsors/KennedyRichard
 [liberapay]: https://liberapay.com/KennedyRichard
 [Ko-fi]: https://ko-fi.com/kennedyrichard
-[donation page]: https://indiepython.com/donate
+[donation page]: https://indiesmiths.com/donate
 
 [defining your first node]: https://manual.nodezator.com/ch-defining-your-first-node.html
 [loading nodes]: https://manual.nodezator.com/ch-loading-nodes.html
@@ -418,10 +422,10 @@ Also, other parts of the code, despite being carefully designed, might be redesi
 [nodes gallery]: https://gallery.nodezator.com
 
 [node pack submission form]: https://docs.google.com/forms/d/e/1FAIpQLSd1XceOnzEeaBZcpkkXEFiAVO_5YUbd43sieQUekh1PZ8dm5A/viewform?usp=sf_link
-[nodes gallery repository]: https://github.com/IndiePython/gallery.nodezator.com
+[nodes gallery repository]: https://github.com/IndieSmiths/gallery.nodezator.com
 
-[github issues]: https://github.com/IndiePython/nodezator/issues
-[github discussions]: https://github.com/IndiePython/nodezator/discussions
+[GitHub issues]: https://github.com/IndieSmiths/nodezator/issues
+[GitHub discussions]: https://github.com/IndieSmiths/nodezator/discussions
 
 [The Unlicense]: https://unlicense.org/
 [Open Font License]: https://en.wikipedia.org/wiki/SIL_Open_Font_License
