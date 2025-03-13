@@ -1,6 +1,8 @@
+"""Facility for playing audio."""
+
 ### third-party imports
 
-from pygame import Rect
+from pygame import Rect, error as PygameError
 
 from pygame.locals import (
     QUIT,
@@ -91,7 +93,18 @@ PLAYING_ICON = render_layered_icon(
 logger = get_new_logger(__name__)
 
 
+UNAVAILABLE_AUDIO_MESSAGE = (
+    "An error ocurred while trying to set the audio volume"
+    " (for usage by the widget that plays audio files to"
+    " preview them). You can still use Nodezator normally,"
+    " you just won't be able to listen to audio files within"
+    " the widget until you figure out the problem. Please, check"
+    " the audio on your system."
+)
+
+
 class AudioPlayer(Object2D):
+
     def __init__(self):
         """"""
 
@@ -137,11 +150,7 @@ class AudioPlayer(Object2D):
         )
 
         ###
-
         self.volume = 0.4
-        music.set_volume(self.volume)
-
-        ###
 
         volume_area = self.volume_area = Rect((0, 0), (100, 30))
 
@@ -188,6 +197,34 @@ class AudioPlayer(Object2D):
         )
 
     def play_audio(self, audio_paths, index=0):
+
+        ### try setting the volume
+
+        try:
+            music.set_volume(self.volume)
+
+        ### if a pygame error occurs at this spot, it might
+        ### mean the mixer wasn't initialized properly due to
+        ### a problem on the user's system (at least it happened
+        ### before and it is the reason this check exists)
+        ###
+        ### inform the user of the problem its implications and
+        ### leave the player immediately by returning earlier
+
+        except PygameError:
+
+            logger.exception(UNAVAILABLE_AUDIO_MESSAGE)
+            USER_LOGGER.exception(UNAVAILABLE_AUDIO_MESSAGE)
+
+            dialog_message = UNAVAILABLE_AUDIO_MESSAGE + (
+                " Check the user log for details (on the graph/canvas,"
+                " press <Ctrl+Shift+j> or access the \"Help > Show user"
+                " log\" option on the menubar)."
+            )
+
+            create_and_show_dialog(dialog_message, level_name='error')
+
+            return
 
         self.audio_paths = (
             [audio_paths] if isinstance(audio_paths, str) else audio_paths
@@ -328,7 +365,7 @@ class AudioPlayer(Object2D):
             try:
                 music.load(self.audio_path)
 
-            except Exception as err:
+            except Exception:
 
                 log_message = (
                     "An error ocurred while trying to"
