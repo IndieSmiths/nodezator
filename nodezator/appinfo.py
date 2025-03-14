@@ -20,7 +20,7 @@ from collections import namedtuple
 
 AppVersion = namedtuple("AppVersion", "major minor micro release_level")
 
-APP_VERSION = AppVersion(1, 5, 3, "release_candidate")
+APP_VERSION = AppVersion(1, 5, 4, "release_candidate")
 
 MINIMAL_VERSION_STRING = '.'.join(map(str, APP_VERSION[:3]))
 
