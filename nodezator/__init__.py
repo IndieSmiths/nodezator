@@ -1,1 +1,4 @@
-__version__ = "1.5.3"
+from .appinfo import MINIMAL_VERSION_STRING
+
+
+__version__ = MINIMAL_VERSION_STRING

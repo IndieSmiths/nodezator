@@ -22,6 +22,8 @@ AppVersion = namedtuple("AppVersion", "major minor micro release_level")
 
 APP_VERSION = AppVersion(1, 5, 3, "release_candidate")
 
+MINIMAL_VERSION_STRING = '.'.join(map(str, APP_VERSION[:3]))
+
 
 ### titles for the application
 
