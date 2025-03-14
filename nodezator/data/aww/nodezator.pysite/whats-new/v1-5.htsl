@@ -16,6 +16,7 @@
     <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.5.1">[v1.5.1] Usability improvements and content update</a></li>
     <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.5.2">[v1.5.2] Bug fix for nodes with keyword-variable parameters</a></li>
     <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.5.3">[v1.5.3] User manual utility and file manager bug fix</a></li>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.5.4">[v1.5.4] Renamed parent project, bug fixes and more</a></li>
 </ul>
 
 <ol>
@@ -35,6 +36,7 @@
     <li><a href="whats-new/v1-5.htsl#usability-improvements-content-update">v1.5.1: Usability improvements and content update</a></li>
     <li><a href="whats-new/v1-5.htsl#bug-fix-keyword-variable">v1.5.2: Bug fix for nodes with keyword-variable parameters</a></li>
     <li><a href="whats-new/v1-5.htsl#user-manual-utility-file-manager-fix">v1.5.3: User manual utility and file manager bug fix</a></li>
+    <li><a href="whats-new/v1-5.htsl#renamed-parent-project-bug-fixes-more">[v1.5.4] Renamed parent project, bug fixes and more</a></li>
 
 </ol>
 
@@ -293,6 +295,17 @@
 
 <p>I also fixed a bug on the file manager that sometimes caused paths to still be submitted despite the user having pressed the <b>Cancel</b> button. Naturally, this was a clearly undesired behaviour that could cause all kinds of undesired side-effects as well.</p>
 
+<h2 id="renamed-parent-project-bug-fixes-more">v1.5.4: Renamed parent project, bug fixes and more</h2>
+
+<p>The parent project of the Nodezator app now has a new name: <b>Indie Smiths</b>. Thus, the old name, including identifiers, URLs and logo were replaced.</p>
+
+<p>This patch release also has a few fixes for bugs that could cause the app to crash in specific circumstances. Some typos were also fixed in the README file, with help from Mr. Adrian Scott (<a href="https://github.com/AdrianScott">@AdrianScott</a>).</p>
+
+<p>The text of the README file was also slightly improved, including the addition of extra instructions in the subsection about contributions.</p>
+
+<p>Package metadata now relies solely on the <b>pyproject.toml</b> file, instead of using the <b>setup.cfg</b> file (which we deleted, since it wasn't needed anymore). We also grab the <code>__version__</code> for the "root" <b>__init__.py</b> file from the <b>appinfo.py</b> module, making it so there's only one place where the version of the app is defined. Before this change and the usage of <b>pyproject.toml</b>, the version had to be updated in 03 different locations (the <b>__init__.py</b> and <b>appinfo.py</b> files we just mentioned plus the <b>setup.cfg</b> we mentioned earlier).</p>
+
+<p>Finally, we now also suppress a warning raised by pygame-ce versions 2.5.2 and 2.5.3 in specific circumstances. Such warning is actually a bug, which was already reported on their repository. Other than the misplaced warning, the bug is harmless though, so thankfully we only needed to suppress the warning so it doesn't confuse the users.</p>
 
 </body>
 
