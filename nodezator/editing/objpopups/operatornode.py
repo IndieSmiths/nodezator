@@ -1,6 +1,9 @@
 
 ### standard library imports
+
 from functools import partial, partialmethod
+
+from contextlib import suppress
 
 
 ### local imports
@@ -8,8 +11,6 @@ from functools import partial, partialmethod
 from ...config import APP_REFS
 
 from ...menu.main import MenuManager
-
-from ...ourstdlibs.behaviour import get_suppressing_callable
 
 from ...our3rdlibs.behaviour import set_status_message
 
@@ -149,15 +150,6 @@ class OperatorNodePopupMenu(GeneralPopupCommands):
         ## reference graph manager locally
         gm = APP_REFS.gm
 
-        ## create a new version of its segment definition
-        ## resuming operation which suppresses
-        ## ContinueLoopException instances
-
-        suppressed_segment_definition_resumption = get_suppressing_callable(
-            gm.resume_defining_segment,
-            ContinueLoopException,
-        )
-
         ## transfer input sockets' connections
 
         for input_socket_a, input_socket_b in zip(
@@ -171,8 +163,13 @@ class OperatorNodePopupMenu(GeneralPopupCommands):
                 continue
 
             gm.socket_a = parent
+            gm.socket_b = input_socket_b
 
-            suppressed_segment_definition_resumption(input_socket_b)
+            ## execute method, supressing exception it
+            ## raises at the end
+
+            with suppress(ContinueLoopException):
+                gm.resume_defining_segment()
 
         ## transfer output node's connections if output
         ## socket of current node has children
@@ -193,8 +190,13 @@ class OperatorNodePopupMenu(GeneralPopupCommands):
             for child in children.copy():
 
                 gm.socket_a = parent
+                gm.socket_b = child
 
-                suppressed_segment_definition_resumption(child)
+                ## execute method, supressing exception it
+                ## raises at the end
+
+                with suppress(ContinueLoopException):
+                    gm.resume_defining_segment()
 
         ### delete the current node
         self.delete_obj()
