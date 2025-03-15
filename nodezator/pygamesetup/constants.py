@@ -1,6 +1,9 @@
 
-### standard library import
+### standard library imports
+
 from functools import partial
+
+from warnings import catch_warnings, simplefilter
 
 
 ### third-party imports
@@ -10,6 +13,8 @@ from pygame import (
     get_sdl_version,
     locals as pygame_locals,
 )
+
+from pygame.version import vernum as pygame_vernum
 
 from pygame.locals import (
 
@@ -110,7 +115,23 @@ SIZE = (
     else (1280, 720)
 )
 
-SCREEN = set_mode(SIZE, RESIZABLE)
+
+## under the circumstances in the if-block below, set_mode() raises
+## a warning that shouldn't be raised (as explained in issue #3385 of
+## pygame-ce's repository), so we make the call in a context that
+## temporarily suppresses warnings
+
+if SIZE == (0, 0) and pygame_vernum in ((2, 5, 2), (2, 5, 3)):
+
+    with catch_warnings():
+        simplefilter('ignore')
+        SCREEN = set_mode(SIZE, RESIZABLE)
+
+## otherwise we can make the call normally
+
+else:
+    SCREEN = set_mode(SIZE, RESIZABLE)
+
 SCREEN_RECT = SCREEN.get_rect()
 blit_on_screen = SCREEN.blit
 

@@ -1,7 +1,13 @@
 
+### standard library imports
+from warnings import catch_warnings, simplefilter
+
+
 ### third-party imports
 
 from pygame.locals import RESIZABLE
+
+from pygame.version import vernum as pygame_vernum
 
 from pygame.display import set_mode
 
@@ -63,8 +69,23 @@ def set_behaviour(services_namespace, reset_window_mode=True):
 
     if reset_window_mode:
 
-        ## use pygame.display.set_mode
-        set_mode(SIZE, RESIZABLE)
+        ### use pygame.display.set_mode
+
+        ## under the circumstances in the if-block below, set_mode() raises
+        ## a warning that shouldn't be raised (as explained in issue #3385 of
+        ## pygame-ce's repository), so we make the call in a context that
+        ## temporarily suppresses warnings
+
+        if SIZE == (0, 0) and pygame_vernum in ((2, 5, 2), (2, 5, 3)):
+
+            with catch_warnings():
+                simplefilter('ignore')
+                set_mode(SIZE, RESIZABLE)
+
+        ## otherwise we can make the call normally
+
+        else:
+            set_mode(SIZE, RESIZABLE)
 
         ## perform setups related to window size
         watch_window_size()
