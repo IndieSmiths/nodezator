@@ -32,7 +32,9 @@ main_callable = get_circle_area
 
 ![node image](https://nodezator.com/images/get_circle_area_node.png)
 
-You can store these functions/node definitions anywhere you want in your disk and once you launch Nodezator just provide the path so Nodezator can load them. The only requirement is that you organize these nodes definitions in separate files and store them in a folder (more about that further ahead in another section).
+You can store these functions/node definitions anywhere you want in your disk and once you launch Nodezator just provide the path so Nodezator can load them. The only requirement is that you organize these nodes definitions in separate files and store them in a folder. This small video (~2min) actually shows you how to define and load a node in **less than 60 seconds**:
+
+[![video: Defining and loading a node in less than 60 seconds](https://img.youtube.com/vi/cMfoaEs0fGY/hqdefault.jpg)](https://www.youtube.com/watch?v=cMfoaEs0fGY)
 
 You can actually turn **any** callable into a node very easily: classes, methods, etc. All callables available in the Python ecosystem can be turned into a node (even the ones defined in C, for instance).
 
@@ -76,7 +78,7 @@ On top of making it very easy to define nodes, Nodezator comes packed full of us
 
 As we said before, Nodezator allows you to convert callables from third-party libraries with minimal effort. Here are just a few screenshots showing the usage of Nodezator with different libraries.
 
-Here's is a simple graph showing Nodezator usage with the [Pillow](https://python-pillow.org/) library.
+Here's a simple graph showing Nodezator usage with the [Pillow](https://python-pillow.org/) library.
 
 ![Pillow demonstration](https://nodezator.com/images/nodezator_pillow_demo.png)
 
@@ -213,6 +215,8 @@ Original cherries image by [congerdesign](https://pixabay.com/pt/users/congerdes
 However, users are encouraged to define their own nodes for their specific purposes, or use existing nodes from other users. Nodes defined by users have colored headers (green, blue, etc.), like the one below:
 
 ![A user-defined node](https://nodezator.com/images/node.png)
+
+In case you missed it at the beginning of this README, here's the link to a small video demonstrating how to define and load a node in less than 60 seconds: https://www.youtube.com/watch?v=cMfoaEs0fGY
 
 Nodes are created from Python scripts organized within folders that we call **node packs**. You can create a node pack folder **anywhere you want in your disk**. Under the hood, Nodezator treats it as a package in some contexts, so you can name that folder whatever you like, as long as it is a Python identifier. That is, it must start with a letter or underscore and contain only letters, digits and underscores.
 
