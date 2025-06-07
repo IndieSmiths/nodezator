@@ -18,9 +18,9 @@ from .ourstdlibs.collections.nestedfromdict import NestedObjectFromDict
 ### first load English translation data; we use it as
 ### fallback in case a translation isn't found
 
-lang_dirname = "en_us"
+lang_dirname = "zh_cn"
 
-LANG_DEPENDENT_DATA_DIR = DATA_DIR / "locale" / "en_us"
+LANG_DEPENDENT_DATA_DIR = DATA_DIR / "locale" / lang_dirname
 
 DIALOGS_MAP = load_pyl(LANG_DEPENDENT_DATA_DIR / "dialogs_map.pyl")
 
@@ -43,6 +43,7 @@ if USER_PREFS["LANGUAGE"] != "English":
     lang_dirname = {
         "English": "en_us",
         "Português do Brasil": "pt_br",
+        "简体中文": "zh_cn",
     }[USER_PREFS["LANGUAGE"]]
 
     ###
