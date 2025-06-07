@@ -10,6 +10,7 @@ from .constants import TEST_SESSION_SETTINGS_KEY
 AVAILABLE_LANGUAGES = {
     "English",
     "Português do Brasil",
+    "简体中文",
 }
 
 ORDERED_SOCKET_DETECTION_GRAPHICS = (
