@@ -530,7 +530,7 @@ class OutputVisualization:
 
                 ## notify user via dialog
 
-                dialog_messsage = log_message + (
+                dialog_message = log_message + (
                     " Check user log for details (on the graph/canvas, press"
                     " <Shift+Ctrl+j> or access the \"Help > User log\" option"
                     " on menubar)."
@@ -642,7 +642,7 @@ class OutputVisualization:
 
                 ## notify user via dialog
 
-                dialog_messsage = log_message + (
+                dialog_message = log_message + (
                     " Check user log for details (on the graph/canvas, press"
                     " <Shift+Ctrl+j> or access the \"Help > User log\" option"
                     " on menubar)."

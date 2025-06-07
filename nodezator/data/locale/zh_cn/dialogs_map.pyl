@@ -1,0 +1,75 @@
+# -*- coding: utf-8 -*-
+{
+  'close_file_dialog' : {
+    'message' : "当前存在未保存的更改。您确定要关闭文件吗？",
+    'buttons' : [
+      ["忽略修改并关闭", 'close'],
+      ["保存并关闭", 'save_and_close'],
+      ["不关闭", None]
+    ],
+    'level_name': 'warning',
+  },
+  'quit_app_dialog' : {
+    'message' : "当前存在未保存的更改。您确定要退出吗？",
+    'buttons' : [
+      ["忽略修改并退出", 'quit'],
+      ["不退出", None]
+    ],
+    'level_name': 'warning',
+  }, 
+  "swap_exists_dialog" : {
+    'message' : "我们发现数据表明该文件正在编辑中，这意味着：(1) 应用程序上次编辑此文件时意外崩溃，或 (2) 可能有另一个应用程序实例正在编辑同一文件。您希望如何处理？",
+    'buttons' : [
+      ["加载源文件", "load_original"],
+      ["加载编辑后的文件", "load_swap"],
+      ["不加载文件", None]
+    ],
+    'level_name': 'warning',
+  },
+  "create_new_while_unsaved_dialog" : {
+    'message' : "您即将加载新文件，但当前文件存在未保存的更改。您希望如何处理？",
+    'buttons' : [
+      ["忽略所有直接打开新文件", "open_new"],
+      ["保存当前文件并打开新文件", "save_first"],
+      ["停止创建或加载新文件", None]
+    ],
+    'level_name': 'warning',
+  },
+  "replace_existing_file_dialog" : {
+    'message' : "新提供的目录下有文件存在，您希望如何处理？",
+    'buttons' : [
+      ["停止创建或加载新文件", "abort"],
+      ["替换文件", "replace"]
+    ],
+    'level_name': 'warning',
+  },
+  "open_new_while_unsaved_dialog" : {
+    'message' : "正在打开新文件，但是当前文件存在未保存修改，您希望如何处理？",
+    'buttons' : [
+      ["忽略所有直接打开新文件", "open new"],
+      ["保存当前文件并打开新文件", "save first"],
+      ["停止创建或加载新文件", None]
+    ],
+    'level_name': 'warning',
+  },
+  "reload_unsaved_dialog" : {
+    'message' : "正在重新加载当前文件，但是当前文件存在未保存的修改，如果重新加载您所做的所有修改将会丢失，您希望如何处理？",
+    'buttons' : [
+      ["重新加载文件", 'reload'],
+      ["不重新加载", None]
+    ],
+    'level_name': 'warning',
+  },
+  "cancelled_file_loading_dialog": {
+    'message': "文件加载操作已取消",
+    'level_name': 'info',
+  },
+  "expected_single_path_dialog": {
+    'message' : "仅接受单个路径，但是您输入了多个文件路径，操作已取消。",
+    'level_name': 'warning',
+  },
+  "error_while_loading_node_packs_dialog" : {
+    'message': "加载节点包时发生了一个或多个错误。检查用户日志以获取更多信息 (按下 Ctrl+Shift+j 或者 访问菜单 \"帮助 > 打开用户日志\").",
+    'level_name': 'error',
+  },
+}

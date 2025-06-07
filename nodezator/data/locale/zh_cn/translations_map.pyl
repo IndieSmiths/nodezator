@@ -1,0 +1,196 @@
+# -*- coding: utf-8 -*-
+
+{
+  'window_manager': {
+    'status': "状态",
+  },
+
+  'file_manager': {
+    'caption'            : "文件管理器",
+    'current'            : "当前",
+    'bookmarks'          : "书签",
+    'directory_contents' : "目录内容",
+    'selected'           : "已选",
+    'submit'             : "提交",
+    'cancel'             : "取消",
+    'select_path'        : "选择路径",
+    'dummy_text'         : "虚拟文本",
+
+    'new_path_form': {
+      'caption'          : "获取新路径",
+      'type_path_name'   : "输入新路径名称",
+      'create'           : "创建",
+      'cancel'           : "取消",
+      'get_new_file'     : "获取新文件",
+      'get_new_folder'   : "获取新文件夹",
+      'type_file_name'   : "输入新文件名称",
+      'type_folder_name' : "输入新文件夹名称",
+    },
+  },
+
+  'menu': {
+    'file'        : "文件",
+    'new'         : "新建",
+    'open'        : "打开",
+    'open_recent' : "打开最近",
+    'save'        : "保存",
+    'save_as'     : "另存为...",
+
+    'export_as_image'  : "导出为图像",
+    'export_as_python' : "导出为Python",
+    'view_as_python'   : "以Python查看",
+
+    'close_file' : "关闭文件",
+    'quit_app'   : "退出应用",
+
+    'edit'             : "编辑",
+    'user_preferences' : "用户偏好设置",
+
+    'help'               : "帮助",
+    'show_splash_screen' : "显示启动画面",
+    'license'            : "许可证",
+    'about'              : "关于",
+
+    'graph' : "图表",
+
+    'change_node_packs' : "更换节点包",
+    'rename_node_packs' : "重命名节点包",
+    'change_category_colors' : "更改分类颜色",
+    'load_nodes'             : "加载节点",
+    'execute_graph'          : "执行图表",
+    'execute_with_custom_stdout' : "使用自定义标准输出执行",
+    'text_block' : "文本块",
+  },
+
+  'splash_screen': {
+    'node_editor' : "Python节点编辑器",
+    'nodes_from_functions': "从您的Python函数创建节点",
+    'powered_by': "技术支持",
+    'actions'           : "操作",
+    'new_file'          : "新建文件",
+    'open_file'         : "打开文件",
+    'open_recent_files' : "打开最近文件...",
+    'links': "相关链接",
+    'application_website'      : "Nodezator官网",
+    'application_website_url'  : "https://nodezator.com",
+    'parent_project_website'      : "父级项目",
+    'parent_project_website_url'  : 'https://indiesmiths.com',
+    'developer_website'      : "开发者网站",
+    'developer_website_url'  : "https://kennedyrichard.com",
+    'developer_links_social' : "开发者链接/社交/邮箱",
+    'license_declaration_text' : "Nodezator采用The Unlicense许可，已贡献至公共领域",
+  },
+
+  'graph_manager': {
+    'widget_picker': {
+       'caption' : "部件选择表单",
+       'cancel': "取消",
+       'submit': "提交",
+    },
+  },
+
+  'editing': {
+    'objinsert': {
+      'new_text_block' : "新建文本块",
+    },
+    'data': {
+      'no_source_available' : "无可用源码或文档",
+    },
+    'category_colors_form': {
+      'caption' : "分类颜色选择表单",
+      'finish'  : "完成",
+      'cancel'  : "取消",
+    },
+    'change_node_packs_form': {
+      'form_caption' : "更改{}文件节点包的表单",
+      'file_manager_caption' : "选择要更改节点包的{}文件",
+      'no_filepath_chosen' : "未选择文件路径",
+      'cancel'     : "取消",
+    },
+    'rename_node_packs_form': {
+      'form_caption' : "重命名{}文件节点包的表单",
+      'file_manager_caption' : "选择要重命名节点包的{}文件",
+      'choose_filepath'    : "文件路径",
+      'no_filepath_chosen' : "未选择文件路径",
+      'submit'     : "提交",
+      'cancel'     : "取消",
+    },
+    'python_exporting': {
+      'pick_new_path': "选择新Python文件路径",
+    },
+    'image_export_form': {
+      'pick_new_path': "选择新图像文件路径",
+      'caption'                : "图像导出表单",
+      'new_image'              : "新图像",
+      'change'                 : "更改",
+      'background_color'       : "背景颜色",
+      'restore_default'        : "恢复默认（图表背景）",
+      'horizontal_and_vertical': "水平与垂直边距",
+      'raster_for_preview'     : "视觉媒体预览栅格",
+      'submit': "提交",
+      'cancel': "取消",
+      'final_image_size': "最终图像尺寸为 {} x {} 像素（不含边距）",
+    },
+  },
+
+  'user_preferences_form': {
+    'caption': "用户偏好设置表单",
+    'language': "语言",
+    'backup_files': "备份文件",
+    'user_logger_lines': "用户日志行数",
+    'custom_stdout_lines': "自定义标准输出行数",
+    'finish': "完成",
+    'cancel': "取消",
+  },
+
+  'colors_picker': {
+    'click_to_select': "点击选择/取消选择颜色",
+    'ok': "确定",
+    'cancel': "取消",
+    'hover_color': "悬停显示颜色信息",
+  },
+
+  'colors_viewer': {
+    'caption': "颜色查看器",
+    'mode': "模式",
+    'go_back': "返回",
+    'patterns': "图案",
+    'redraw': "重绘",
+  },
+
+  'colors_editor': {
+    'caption': "颜色编辑器",
+    'current_colors': "当前颜色",
+    'html_colors': "HTML颜色",
+    'pygame_colors': "pygame颜色",
+    'import': "导入",
+    'export': "导出",
+    'hue_lower': "色相",
+    'hue_title': "色相",
+    'lightness_lower': "明度",
+    'lightness_title': "明度",
+    'saturation_lower': "饱和度",
+    'saturation_title': "饱和度",
+    'value_lower': "亮度",
+    'value_title': "亮度",
+    'red_lower': "红",
+    'red_title': "红色",
+    'green_lower': "绿",
+    'green_title': "绿色",
+    'blue_lower': "蓝",
+    'blue_title': "蓝色",
+    'alpha_lower': "透明度",
+    'alpha_title': "透明度",
+    'use_alpha': "使用透明度",
+    'hex': "十六进制",
+    'html_name': "HTML名称",
+    'pygame_name': "pygame名称",
+  },
+
+  'widget_picker': {
+    'caption': "部件选择表单",
+    'chosen_widget': "已选部件",
+    'cancel': "取消",
+    'submit': "提交",
+  },
+}
