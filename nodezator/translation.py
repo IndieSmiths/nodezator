@@ -18,7 +18,7 @@ from .ourstdlibs.collections.nestedfromdict import NestedObjectFromDict
 ### first load English translation data; we use it as
 ### fallback in case a translation isn't found
 
-lang_dirname = "zh_cn"
+lang_dirname = "en_us"
 
 LANG_DEPENDENT_DATA_DIR = DATA_DIR / "locale" / lang_dirname
 
