@@ -33,8 +33,6 @@ from ..dialog import create_and_show_dialog
 
 from ..ourstdlibs.pyl import save_pyl
 
-from ..ourstdlibs.collections.general import CallList
-
 from ..ourstdlibs.behaviour import (
     empty_function,
     get_oblivious_callable,
@@ -258,12 +256,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         self.finish_button = Button.from_text(
             text=(t.user_preferences_form.finish),
-            command=CallList(
-                [
-                    self.finish_form,
-                    self.exit_loop,
-                ]
-            ),
+            command=self.finish_form,
             **BUTTON_SETTINGS,
         )
 
@@ -323,13 +316,10 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
                 if event.key == K_ESCAPE:
                     self.exit_loop()
 
-                ## confirm edition and exit form by
-                ## pressing one of the "enter" keys
+                ## confirm edition by pressing one of the "enter" keys
 
                 elif event.key in (K_RETURN, K_KP_ENTER):
-
                     self.finish_form()
-                    self.exit_loop()
 
             ### MOUSEBUTTONDOWN
 
@@ -413,21 +403,34 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
     def finish_form(self):
         """Assign new category indices and exit loop."""
 
-        edited_prefs = {widget.name: widget.get() for widget in self.prefs_widgets}
+        prefs_copy = USER_PREFS.copy()
+
+        prefs_copy.update(
+
+            (widget.name, widget.get())
+            for widget in self.prefs_widgets
+
+        )
 
         try:
-            validate_prefs_data(edited_prefs)
+            validate_prefs_data(prefs_copy)
 
-        except Exception:
+        except Exception as err:
+
+            message = f"Some error happened: {err}"
+            create_and_show_dialog(message, level_name='error')
 
             return
 
         else:
 
             try:
-                save_pyl(edited_prefs, CONFIG_FILEPATH)
+                save_pyl(prefs_copy, CONFIG_FILEPATH)
 
-            except Exception:
+            except Exception as err:
+
+                message = f"Couldn't save config file: {err}"
+                create_and_show_dialog(message, level_name='error')
 
                 return
 
@@ -438,7 +441,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
                 # assign max_lines to user logger and
                 # also take care of max lines for
                 # the custom stdout)
-                USER_PREFS.update(edited_prefs)
+                USER_PREFS.update(prefs_copy)
 
         ### notify user via dialog and status message
 
@@ -450,6 +453,9 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         set_status_message(message)
 
         create_and_show_dialog(message, level_name='info')
+
+        ### trigger exit of the loop
+        self.exit_loop()
 
     def draw(self):
         """Draw itself and widgets.
