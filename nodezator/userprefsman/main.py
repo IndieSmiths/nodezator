@@ -23,6 +23,8 @@ from ..ourstdlibs.pyl import load_pyl, save_pyl
 
 from ..our3rdlibs.userlogger import USER_LOGGER
 
+from ..translatedtext import TranslationNode
+
 from .validation import (
     AVAILABLE_SOCKET_DETECTION_GRAPHICS,
     validate_prefs_data,
@@ -62,7 +64,7 @@ neither custom data like recent files and bookmarks.
 ### populated with default values
 
 USER_PREFS = {
-    "LANGUAGE": "English",
+    "LOCALE": "en_us",
     "NUMBER_OF_BACKUPS": 5,
     "USER_LOGGER_MAX_LINES": 1000,
     "CUSTOM_STDOUT_MAX_LINES": 1000,
@@ -255,6 +257,8 @@ else:
     USER_LOGGER.info(UNEXISTENT_USER_PREFS_MESSAGE)
 
 
+### reference user prefs in translation node class
+TranslationNode._user_prefs = USER_PREFS
 
 ### apply user configuration where needed
 USER_LOGGER.max_lines = USER_PREFS["USER_LOGGER_MAX_LINES"]

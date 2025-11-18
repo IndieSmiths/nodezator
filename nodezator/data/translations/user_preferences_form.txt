@@ -1,0 +1,16 @@
+
+caption
+    en-us User preferences editing form
+language
+    en-us Language
+backup_files
+    en-us Backup files
+user_logger_lines
+    en-us User logger lines
+custom_stdout_lines
+    en-us Custom stdout lines
+
+finish
+    en-us Finish
+cancel
+    en-us Cancel

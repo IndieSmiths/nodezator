@@ -1,0 +1,42 @@
+
+node_editor
+    en-us Python node editor
+
+nodes_from_functions
+    en-us Nodes from your own Python functions
+
+powered_by
+    en-us Powered by
+
+actions
+    en-us Actions
+new_file
+    en-us New file
+open_file
+    en-us Open file
+open_recent_files
+    Open recent files...
+
+links
+    en-us Links
+
+application_website
+    en-us Nodezator website
+application_website_url
+    en-us https://nodezator.com
+
+parent_project_website
+    en-us Parent project
+parent_project_website_url
+    en-us https://indiesmiths.com
+
+developer_website
+    en-us Developer website
+developer_website_url
+    en-us https://kennedyrichard.com
+
+developer_links_social
+    en-us Developer links/social/email
+
+license_declaration_text
+    en-us Nodezator is dedicated to the public domain using the Unlicense

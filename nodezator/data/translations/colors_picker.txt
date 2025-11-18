@@ -1,0 +1,9 @@
+
+click_to_select
+    en-us click to select/deselect colors
+ok
+    en-us Ok
+cancel
+    en-us Cancel
+hover_color
+    en-us Hover color for info to appear

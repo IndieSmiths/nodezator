@@ -1,0 +1,9 @@
+
+caption
+    en-us Widget picker form
+chosen_widget
+    en-us Chosen widget
+cancel
+    en-us Cancel
+submit
+    en-us Submit

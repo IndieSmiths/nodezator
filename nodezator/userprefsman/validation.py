@@ -1,17 +1,14 @@
 """Facility for user preferences validation."""
 
-### local import
+### local imports
+
+from ..translatedtext import AVAILABLE_LOCALES
+
 from .constants import TEST_SESSION_SETTINGS_KEY
 
 
 
 ### constants
-
-AVAILABLE_LANGUAGES = {
-    "English",
-    "Português do Brasil",
-    "简体中文",
-}
 
 ORDERED_SOCKET_DETECTION_GRAPHICS = (
     'assisting_line',
@@ -37,7 +34,11 @@ KEY_ERROR_FORMATTER = ("{!r} key not present in user preferences").format
 ### function definitions
 
 def validate_prefs_data(prefs_data):
-    """Raise exception if preferences data doesn't validate."""
+    """Raise exception if preferences data doesn't validate.
+
+    In some cases, the absence of a key may be fixed by inserting a
+    default value instead of triggering an exception.
+    """
     ### ensure preferences data is a dict
 
     if not isinstance(prefs_data, dict):
@@ -105,19 +106,19 @@ def validate_prefs_data(prefs_data):
 
     ### available languages
 
-    lang_key = "LANGUAGE"
+    locale_key = "LOCALE"
 
-    if lang_key not in prefs_data:
-        raise KeyError(KEY_ERROR_FORMATTER(lang_key))
+    if locale_key not in prefs_data:
+        prefs_data['LOCALE'] = 'en_us'
 
-    lang_value = prefs_data[lang_key]
+    locale_value = prefs_data[locale_key]
 
-    if lang_value not in AVAILABLE_LANGUAGES:
+    if locale_value not in AVAILABLE_LOCALES:
 
         raise ValueError(
-            f"value in {repr(lang_key)} key must be"
+            f"value in {repr(locale_key)} key must be"
             " one of the following strings:"
-            f" {AVAILABLE_LANGUAGES}"
+            f" {AVAILABLE_LOCALES}"
         )
 
     ### test session data

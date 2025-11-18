@@ -1,0 +1,60 @@
+
+file
+    en-us File
+new
+    en-us New
+open
+    en-us Open
+open_recent
+    en-us Open recent
+save
+    en-us Save
+save_as
+    en-us Save as...
+
+export_as_image
+    en-us Export as image
+export_as_python
+    en-us Export as python
+view_as_python
+    en-us View as python
+
+close_file
+    en-us Close file
+quit_app
+    en-us Quit app
+
+edit
+    en-us Edit
+user_preferences
+    en-us User preferences
+
+help
+    en-us Help
+show_splash_screen
+    en-us Show splash screen
+license
+    en-us License
+about
+    en-us About
+
+graph
+    en-us Graph
+
+change_node_packs
+    en-us Change node packs
+rename_node_packs
+    en-us Rename node packs
+
+change_category_colors
+    en-us Change category colors
+load_nodes
+    en-us Load nodes
+execute_graph
+    en-us Execute graph
+
+execute_with_custom_stdout
+    en-us Execute with custom stdout
+
+text_block
+    en-us Text block

@@ -1,0 +1,9 @@
+
+widget_picker
+
+    caption
+        en-us Widget Picker Form
+    cancel
+        en-us Cancel
+    submit
+        en-us Submit

@@ -1,0 +1,76 @@
+
+objinsert
+    new_text_block
+        en-us New text block
+
+data
+    no_source_available
+        en-us (no source or docstring available)
+
+category_colors_form
+    caption
+        en-us Category color picking form
+    finish
+        en-us Finish
+    cancel
+        en-us Cancel
+
+change_node_packs_form
+    form_caption
+        en-us Form to change node packs on {} file
+    file_manager_caption
+        en-us Select {} file to change its node packs
+    no_filepath_chosen
+        en-us No filepath chosen
+    cancel
+        en-us Cancel
+
+rename_node_packs_form
+
+    form_caption
+        en-us Form to rename node packs on {} file
+    file_manager_caption
+        en-us Select {} file to rename its node packs
+
+    choose_filepath
+        en-us filepath
+    no_filepath_chosen
+        en-us No filepath chosen
+
+    submit
+        en-us Submit
+    cancel
+        en-us Cancel
+
+python_exporting
+    pick_new_path
+        en-us Pick a path for new python file
+
+image_export_form
+    pick_new_path
+        en-us Pick a path for new image file
+
+    caption
+        en-us Image exporting form
+    new_image
+        en-us New image
+    change
+        en-us Change
+    background_color
+        en-us Background color
+    restore_default
+        en-us Restore default (graph background)
+    horizontal_and_vertical
+        en-us Horizontal and vertical margin
+    raster_for_preview
+        en-us Raster for visual media preview
+
+    submit
+        en-us Submit
+    cancel
+        en-us Cancel
+
+    # it's .format() method will receive dimensions of image
+    # to be exported
+    final_image_size
+        en-us The final image will be {} x {} pixels, plus the margins

@@ -81,6 +81,9 @@ SYSTEM_TESTING_DATA_DIR = DATA_DIR / "system_testing"
 
 APP_COLORS_FILE = DATA_DIR / "app_themes" / "emeralds_on_coal.pyl"
 
+TRANSLATIONS_DIR = DATA_DIR / 'translations'
+LANGUAGE_NAMES_FILEPATH = TRANSLATIONS_DIR / 'language_native_names.pyl'
+
 
 ### writeable paths for config/logs, etc.
 WRITEABLE_PATH = Path(get_pref_path(ORG_DIR_NAME, APP_DIR_NAME))

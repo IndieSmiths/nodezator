@@ -1,0 +1,54 @@
+
+caption
+    en-us File manager
+
+current
+    en-us Current
+
+bookmarks
+    en-us Bookmarks
+
+directory_contents
+    en-us Directory contents
+
+selected
+    en-us Selected
+
+submit
+    en-us Submit
+
+cancel
+    en-us Cancel
+
+select_path
+    en-us Select Path(s)
+
+dummy_text
+    en-us dummy text
+
+
+new_path_form
+
+    caption
+        en-us Get new path
+
+    type_path_name
+        en-us Type name for new path
+
+    create
+        en-us Create
+
+    cancel
+        en-us Cancel
+
+    get_new_file
+        en-us Get new file
+
+    get_new_folder
+        en-us Get new folder
+
+    type_file_name
+        en-us Type name for new file
+
+    type_folder_name
+        en-us Type name for new folder

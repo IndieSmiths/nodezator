@@ -1,0 +1,119 @@
+
+close_file
+# level_name warning
+
+    message
+        en-us There are unsaved changes. Are you sure you want to close the file?
+
+    buttons
+
+        discard_changes
+            en-us Discard changes
+        save_and_close
+            en-us Save & close
+        cancel_closing
+            # value returned is None
+            en-us Cancel closing file
+
+quit_app
+# level_name warning
+
+    message
+        en-us There are unsaved chagnes. Are you sure you want to quit?
+
+    buttons
+
+        discard_changes
+            en-us Discard changes
+        cancel_quitting
+            # value returned is None
+            en-us Cancel quitting
+
+swap_exists
+# level_name warning
+
+    message
+        en-us We found data indicating the file was/is being edited, which means that either (1) the application previously crashed while editing the file or (2) another instance of the application may be editing the same file. What would you like to do?
+
+    buttons
+
+        load_original
+            en-us Load original file
+        load_swap
+            en-us Loaded edited file
+        cancel_loading
+            # value returned is None
+            en-us Cancel loading any file
+
+create_new_while_unsaved
+# level_name warning
+
+    message
+        en-us You are about to load a new file, but the current one has unsaved changes. What would you like to do?
+
+    buttons
+        open_new
+            en-us Open the new file anyway
+        save_first
+            en-us Save current one, then open new
+        abort
+            # value returned is None
+            en-us Abort creating and loading the new file
+
+replace_existing_file
+# level_name warning
+
+    message
+        en-us A file already exists in the path you provided. What would you like to do?
+
+    buttons
+        abort
+            en-us Abort creating and loading the new file
+        replace
+            en-us Replace with new file
+
+open_new_while_unsaved
+# level_name warning
+
+    message
+        en-us You are about to open a new file, but the current file has unsaved changes. What would you like to do?
+
+    buttons
+        open_new
+            en-us Open the new file anyway
+        save_first
+            en-us Save current one, then open new
+        abort
+            # return value is None
+            en-us Abort opening new file
+
+reload_unsaved
+# level_name warning
+
+    message
+        en-us You are about to reload the current file, but it has unsaved changes. If you proceed, the changes will be lost. What would you like to do?
+
+    buttons
+        reload
+            en-us Reload the file anyway
+        abort
+            # return value is None
+            en-us Abort reloading file
+
+cancelled_file_loading
+# level_name info
+
+    message
+        en-us The file loading operation was cancelled.
+
+expected_single_path
+# level_name warning
+
+    message
+        en-us A single path was expected, but more than one was provided. The operation was cancelled.
+
+error_while_loading_node_packs
+# level_name error
+
+    message
+        en-us One or more errors occurred while trying to load node packs. Check the user log for more info (press Ctrl+Shift+j or access the menu "Help > Show user log").

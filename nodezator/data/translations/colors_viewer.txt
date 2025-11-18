@@ -1,0 +1,11 @@
+
+caption
+    en-us Colors Viewer
+mode
+    en-us Mode
+go_back
+    en-us Go back
+patterns
+    en-us Patterns
+redraw
+    en-us Redraw

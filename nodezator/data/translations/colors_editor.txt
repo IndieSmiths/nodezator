@@ -1,0 +1,64 @@
+
+caption
+    en-us Colors editor
+current_colors
+    en-us Current colors
+
+html_colors
+    en-us HTML colors
+pygame_colors
+    en-us pygame colors
+import
+    en-us Import
+export
+    en-us Export
+
+hue_lower
+    en-us hue
+hue_title
+    en-us Hue
+
+lightness_lower
+    en-us lightness
+lightness_title
+    en-us Lightness
+
+saturation_lower
+    en-us saturation
+saturation_title
+    en-us Saturation
+
+value_lower
+    en-us value
+value_title
+    en-us Value
+
+red_lower
+    en-us red
+red_title
+    en-us Red
+
+green_lower
+    en-us green
+green_title
+    en-us Green
+
+blue_lower
+    en-us blue
+blue_title
+    en-us Blue
+
+alpha_lower
+    en-us alpha
+alpha_title
+    en-us Alpha
+
+use_alpha
+    en-us Use alpha
+
+hex
+    en-us Hex
+html_name
+    en-us HTML name
+pygame_name
+    en-us pygame name
