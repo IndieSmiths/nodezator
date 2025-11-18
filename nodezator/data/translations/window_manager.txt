@@ -1,0 +1,4 @@
+status
+    en-us Status
+    pt-br Status
+    zh-cn 状态

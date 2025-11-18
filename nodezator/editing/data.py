@@ -30,7 +30,7 @@ from ..pygamesetup import SCREEN_RECT
 
 from ..logman.main import get_new_logger
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..dialog import create_and_show_dialog
 
@@ -62,6 +62,9 @@ from ..graphman.textblock.check import check_text_block_text
 
 ### create logger for module
 logger = get_new_logger(__name__)
+
+### translations
+t = TRANSLATIONS.editing
 
 
 ### map associating node "commented_out" states to
@@ -105,7 +108,7 @@ def retrieve_callable_info(callable_obj):
         text = getdoc(callable_obj)
 
         if text is None:
-            text = t.editing.data.no_source_available
+            text = t.data.no_source_available
 
     ### if it is, set flag to True
     else:

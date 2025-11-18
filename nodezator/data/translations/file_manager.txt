@@ -1,0 +1,88 @@
+
+caption
+    en-us File manager
+    pt-br Gerenciador de arquivos
+    zh-cn 文件管理器
+
+current
+    en-us Current
+    pt-br Atual
+    zh-cn 当前
+
+bookmarks
+    en-us Bookmarks
+    pt-br Favoritos
+    zh-cn 书签
+
+directory_contents
+    en-us Directory contents
+    pt-br Conteúdo da pasta
+    zh-cn 目录内容
+
+selected
+    en-us Selected
+    pt-br Selecionado
+    zh-cn 已选
+
+submit
+    en-us Submit
+    pt-br Submeter
+    zh-cn 提交
+
+cancel
+    en-us Cancel
+    pt-br Cancelar
+    zh-cn 取消
+
+select_path
+    en-us Select Path(s)
+    pt-br Selecionar caminho(s)
+    zh-cn 选择路径
+
+dummy_text
+    en-us dummy text
+    pt-br texto de enchimento
+    zh-cn 虚拟文本
+
+
+new_path_form
+
+    caption
+        en-us Get new path
+        pt-br Obter novo caminho
+        zh-cn 获取新路径
+
+    type_path_name
+        en-us Type name for new path
+        pt-br Digite nome para novo caminho
+        zh-cn 输入新路径名称
+
+    create
+        en-us Create
+        pt-br Criar
+        zh-cn 创建
+
+    cancel
+        en-us Cancel
+        pt-br Cancelar
+        zh-cn 取消
+
+    get_new_file
+        en-us Get new file
+        pt-br Obter novo arquivo
+        zh-cn 获取新文件
+
+    get_new_folder
+        en-us Get new folder
+        pt-br Obter nova pasta
+        zh-cn 获取新文件夹
+
+    type_file_name
+        en-us Type name for new file
+        pt-br Digite nome para o novo arquivo
+        zh-cn 输入新文件名称
+
+    type_folder_name
+        en-us Type name for new folder
+        pt-br Digite nome para a nova pasta
+        zh-cn 输入新文件夹名称

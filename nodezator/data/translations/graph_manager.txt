@@ -1,0 +1,17 @@
+
+widget_picker
+
+    caption
+        en-us Widget Picker Form
+        pt-br Formulário para escolha de widget
+        zh-cn 部件选择表单
+
+    cancel
+        en-us Cancel
+        pt-br Cancelar
+        zh-cn 取消
+
+    submit
+        en-us Submit
+        pt-br Submeter
+        zh-cn 提交

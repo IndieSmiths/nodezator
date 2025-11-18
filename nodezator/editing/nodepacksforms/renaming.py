@@ -28,7 +28,7 @@ from pygame.math import Vector2
 
 from ...config import APP_REFS
 
-from ...translation import TRANSLATION_HOLDER as t
+from ...translatedtext import TRANSLATIONS
 
 from ...pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
@@ -82,6 +82,10 @@ from ...colorsman.colors import (
 from ...widget.stringentry import StringEntry
 
 
+
+### translations
+t = TRANSLATIONS.editing
+
 ### constants
 
 TEXT_SETTINGS = {
@@ -101,11 +105,11 @@ BUTTON_SETTINGS = {
     "background_color": BUTTON_BG,
 }
 
-FILE_MANAGER_CAPTION = (t.editing.rename_node_packs_form.file_manager_caption).format(
+FILE_MANAGER_CAPTION = (t.rename_node_packs_form.file_manager_caption).format(
     NATIVE_FILE_EXTENSION
 )
 
-FORM_CAPTION = (t.editing.rename_node_packs_form.form_caption).format(
+FORM_CAPTION = (t.rename_node_packs_form.form_caption).format(
     NATIVE_FILE_EXTENSION
 )
 
@@ -197,7 +201,7 @@ class NodePacksRenamingChangeForm(Object2D):
 
         self.choose_filepath_button = Object2D.from_surface(
             surface=render_text(
-                text=(t.editing.rename_node_packs_form.choose_filepath),
+                text=(t.rename_node_packs_form.choose_filepath),
                 **BUTTON_SETTINGS,
             ),
             coordinates_name="topleft",
@@ -213,7 +217,7 @@ class NodePacksRenamingChangeForm(Object2D):
         midleft = self.choose_filepath_button.rect.move(5, 0).midright
 
         self.chosen_filepath_label = Label(
-            text=(t.editing.rename_node_packs_form.no_filepath_chosen),
+            text=(t.rename_node_packs_form.no_filepath_chosen),
             name="filepath",
             max_width=345,
             ellipsis_at_end=False,
@@ -240,7 +244,7 @@ class NodePacksRenamingChangeForm(Object2D):
         ## submit button
 
         self.submit_button = Button.from_text(
-            text=(t.editing.rename_node_packs_form.submit),
+            text=(t.rename_node_packs_form.submit),
             command=self.submit_form,
             **BUTTON_SETTINGS,
         )
@@ -252,7 +256,7 @@ class NodePacksRenamingChangeForm(Object2D):
         ## cancel button
 
         self.cancel_button = Button.from_text(
-            text=(t.editing.rename_node_packs_form.cancel),
+            text=(t.rename_node_packs_form.cancel),
             command=self.cancel,
             **BUTTON_SETTINGS,
         )

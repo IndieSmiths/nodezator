@@ -35,7 +35,7 @@ from ..pygamesetup import (
 
 from ..config import APP_REFS
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..rectsman.main import RectsManager
 
@@ -91,6 +91,9 @@ from .validation import (
 )
 
 
+
+### translations
+t = TRANSLATIONS.user_preferences_form
 
 ### constants
 
@@ -376,7 +379,7 @@ class SocketDetectionEditionForm(Object2D, LoopHolder):
         ## cancel button
 
         self.cancel_button = Button.from_text(
-            text=(t.user_preferences_form.cancel),
+            text=(t.cancel),
             command=self.exit_loop,
             **BUTTON_SETTINGS,
         )

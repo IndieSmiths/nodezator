@@ -1,0 +1,21 @@
+
+caption
+    en-us Colors Viewer
+    pt-br Visualizador de cores
+    zh-cn 颜色查看器
+mode
+    en-us Mode
+    pt-br Modo
+    zh-cn 模式
+go_back
+    en-us Go back
+    pt-br Voltar
+    zh-cn 返回
+patterns
+    en-us Patterns
+    pt-br Padrões
+    zh-cn 图案
+redraw
+    en-us Redraw
+    pt-br Redesenhar
+    zh-cn 重绘

@@ -17,7 +17,7 @@ from ..config import APP_REFS
 
 from ..pygamesetup import SCREEN_RECT
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..ourstdlibs.behaviour import (
     empty_function,
@@ -59,6 +59,11 @@ from .op import FileManagerOperations
 
 from .dirpanel.main import DirectoryPanel
 from .bookmarkpanel.main import BookmarkPanel
+
+
+
+### translations
+t = TRANSLATIONS.file_manager
 
 
 ### XXX for extra flexibility, the order in which some
@@ -173,7 +178,7 @@ class FileManager(FileManagerOperations):
 
         title_obj = Object2D.from_surface(
             render_text(
-                f"{t.file_manager.caption} -",
+                t.caption + " -",
                 font_height=FONT_HEIGHT,
                 foreground_color=WINDOW_FG,
                 background_color=WINDOW_BG,
@@ -205,15 +210,15 @@ class FileManager(FileManagerOperations):
 
         surf_params = [
             (
-                t.file_manager.current + ":",
+                t.current + ":",
                 self.rect.move(5, 40).topleft,
             ),
             (
-                t.file_manager.bookmarks,
+                t.bookmarks,
                 self.rect.move(5, 70).topleft,
             ),
             (
-                t.file_manager.directory_contents,
+                t.directory_contents,
                 self.rect.move(300, 70).topleft,
             ),
         ]
@@ -281,7 +286,7 @@ class FileManager(FileManagerOperations):
         ## instantiate and store it
 
         self.caption_label = Label(
-            t.file_manager.caption,
+            t.caption,
             font_height=FONT_HEIGHT,
             padding=5,
             foreground_color=WINDOW_FG,
@@ -298,7 +303,7 @@ class FileManager(FileManagerOperations):
 
         self.selected_label = Object2D.from_surface(
             render_text(
-                t.file_manager.selected + ":",
+                t.selected + ":",
                 font_height=FONT_HEIGHT,
                 foreground_color=WINDOW_FG,
                 background_color=WINDOW_BG,
@@ -374,7 +379,7 @@ class FileManager(FileManagerOperations):
 
         self.submit_button = Object2D.from_surface(
             surface=render_text(
-                t.file_manager.submit,
+                t.submit,
                 font_height=FONT_HEIGHT,
                 foreground_color=BUTTON_FG,
                 background_color=BUTTON_BG,
@@ -391,7 +396,7 @@ class FileManager(FileManagerOperations):
 
         self.cancel_button = Object2D.from_surface(
             surface=render_text(
-                t.file_manager.cancel,
+                t.cancel,
                 font_height=FONT_HEIGHT,
                 foreground_color=BUTTON_FG,
                 background_color=BUTTON_BG,

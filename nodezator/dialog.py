@@ -32,14 +32,18 @@ from pygame.draw import rect as draw_rect
 
 ### local imports
 
-from .translation import DIALOGS_MAP
-
 from .pygamesetup import (
     SERVICES_NS,
     SCREEN,
     SCREEN_RECT,
     blit_on_screen,
 )
+
+from .config import DIALOGS_DATA_PATH
+
+from .ourstdlibs.pyl import load_pyl
+
+from .translatedtext import TRANSLATIONS
 
 from .classes2d.single import Object2D
 from .classes2d.collections import List2D
@@ -82,6 +86,9 @@ from .colorsman.colors import (
     CRITICAL_ICON_FG,
 )
 
+
+
+
 # XXX the dialogs could have optional parameters to add
 # text or buttons to the dialog on the spot; this would be
 # useful to provide additional context to the dialogs and
@@ -96,6 +103,9 @@ from .colorsman.colors import (
 # XXX whenever convenient implement changes from this
 # module on other packages, since this one is the
 # more complete and further developed version;
+
+### translations
+t = TRANSLATIONS.dialogs
 
 ### constants
 
@@ -122,6 +132,8 @@ HOVERED_BUTTON_SETTINGS = {
     "depth_finish_thickness": 1,
 }
 
+## dialogs data
+DIALOGS_DATA = load_pyl(DIALOGS_DATA_PATH)
 
 ## height for font used
 FONT_HEIGHT = ENC_SANS_BOLD_FONT_HEIGHT
@@ -205,7 +217,7 @@ class DialogManager(Object2D, LoopHolder):
             used as a key to retrieve data from the
             dialogs map with which to generate the dialog.
         """
-        data = DIALOGS_MAP[key]
+        data = process_dialog_data(key)
         return self.create_and_show_dialog(**data)
 
     def show_formatted_dialog(self, key, *args):
@@ -219,15 +231,13 @@ class DialogManager(Object2D, LoopHolder):
         args (iterable)
             contains arguments to pass to str.format.
         """
-        ### note the data must be copied, since it is
-        ### edited each time it is retrieved
-        data = DIALOGS_MAP[key].copy()
+        return (
 
-        ### edit message
-        data["message"] = data["message"].format(*args)
+            self.create_and_show_dialog(
+                **process_dialog_data(key, extra_args=args)
+            )
 
-        ### create dialog
-        return self.create_and_show_dialog(**data)
+        )
 
     ### TODO the unhighlight_obj parameter could probably
     ### be much more versatile, think about it; it could
@@ -703,6 +713,51 @@ class DialogManager(Object2D, LoopHolder):
         """Free memory by clearing collections."""
         self.message.clear()
         self.buttons.clear()
+
+
+### utility function
+
+def process_dialog_data(key, extra_args=()):
+
+    raw_data = DIALOGS_DATA[key]
+
+    dialog_t = getattr(t, key)
+
+    message = dialog_t.message
+
+    try:
+        buttons = dialog_t.buttons
+    except Exception:
+        pass
+
+    return {
+
+        'message' : (
+
+            message.format(*extra_args)
+            if extra_args
+
+            else message
+
+        ),
+
+        'buttons': (
+
+            None
+            if 'buttons' not in raw_data
+
+            else [
+
+                [getattr(buttons, text_key), value]
+                for text_key, value in raw_data['buttons']
+
+            ]
+
+        ),
+
+        'level_name': raw_data['level_name']
+
+    }
 
 
 ### instantiate dialog manager and reference its relevant

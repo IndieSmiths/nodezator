@@ -19,17 +19,11 @@ from ..pygamesetup.constants import get_fps
 
 from ..loopman.exception import QuitAppException, CloseFileException
 
-from ..translation import STATUS_MESSAGES_MAP
-
 
 
 ### utility functions
 
 set_status_message = partial(setattr, APP_REFS, "status_message")
-
-
-def set_status_message_from_key(key):
-    set_status_message(STATUS_MESSAGES_MAP[key])
 
 
 def quit_app():

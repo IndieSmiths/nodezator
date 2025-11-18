@@ -4,7 +4,7 @@
 
 from ..config import APP_REFS
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..logman.main import get_new_logger
 
@@ -23,9 +23,12 @@ from ..textman.viewer.main import view_text
 ### create logger for module
 logger = get_new_logger(__name__)
 
+### translations
+t = TRANSLATIONS.editing
+
 
 ### constant
-NEW_PYTHON_FILEPATH_CAPTION = (t.editing.python_exporting.pick_new_path) + " (.py)"
+NEW_PYTHON_FILEPATH_CAPTION = (t.python_exporting.pick_new_path) + " (.py)"
 
 
 ### main functions

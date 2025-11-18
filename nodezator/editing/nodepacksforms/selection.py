@@ -29,7 +29,7 @@ from pygame.math import Vector2
 
 from ...config import APP_REFS
 
-from ...translation import TRANSLATION_HOLDER as t
+from ...translatedtext import TRANSLATIONS
 
 from ...pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
@@ -121,6 +121,10 @@ from ...widget.stringentry import StringEntry
 logger = get_new_logger(__name__)
 
 
+### translations
+t = TRANSLATIONS.editing
+
+
 
 ### constants
 
@@ -141,11 +145,11 @@ BUTTON_SETTINGS = {
     "background_color": BUTTON_BG,
 }
 
-FILE_MANAGER_CAPTION = (t.editing.change_node_packs_form.file_manager_caption).format(
+FILE_MANAGER_CAPTION = (t.change_node_packs_form.file_manager_caption).format(
     NATIVE_FILE_EXTENSION
 )
 
-FORM_CAPTION = (t.editing.change_node_packs_form.form_caption).format(
+FORM_CAPTION = (t.change_node_packs_form.form_caption).format(
     NATIVE_FILE_EXTENSION
 )
 
@@ -431,7 +435,7 @@ class NodePacksSelectionChangeForm(Object2D):
         ## cancel button
 
         cancel_button = Button.from_text(
-            text=(t.editing.change_node_packs_form.cancel),
+            text=(t.change_node_packs_form.cancel),
             command=self.cancel,
             **BUTTON_SETTINGS,
         )
@@ -935,7 +939,7 @@ class NodePacksSelectionChangeForm(Object2D):
         except Exception as err:
 
             ## report problem to user
-            show_dialog_from_key("error_while_loading_node_packs_dialog")
+            show_dialog_from_key("error_while_loading_node_packs")
 
             ## also log it
 

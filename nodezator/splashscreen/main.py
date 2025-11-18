@@ -5,7 +5,7 @@
 
 from ..config import APP_REFS
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..pygamesetup import SCREEN
 
@@ -73,8 +73,13 @@ from .animsetup import (
 from .op import SplashScreenOperations
 
 
+
 ### create logger for module
 logger = get_new_logger(__name__)
+
+### translations
+t = TRANSLATIONS.splash_screen
+
 
 
 class SplashScreen(SplashScreenOperations):
@@ -106,7 +111,7 @@ class SplashScreen(SplashScreenOperations):
 
         self.kind_label = Object2D.from_surface(
             surface=render_text(
-                text=t.splash_screen.node_editor,
+                text=t.node_editor,
                 ## text settings w/ different
                 ## font height
                 **{
@@ -134,7 +139,7 @@ class SplashScreen(SplashScreenOperations):
 
         self.subheading_label = Object2D.from_surface(
             surface=render_text(
-                text=(t.splash_screen.nodes_from_functions),
+                text=(t.nodes_from_functions),
                 ## text settings w/ different
                 ## font height
                 **{**TEXT_SETTINGS, "font_height": SUBHEADING_FONT_HEIGHT},

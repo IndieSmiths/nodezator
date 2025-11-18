@@ -11,7 +11,7 @@ from itertools import cycle
 
 from ..config import APP_REFS
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..pygamesetup import SCREEN_RECT
 
@@ -25,7 +25,11 @@ from ..colorsman.colors import WM_LABEL_FG, WM_LABEL_BG
 from ..textman.label.autolabel import AutoLabel
 
 
-##### constant definition
+
+### translations
+t = TRANSLATIONS.window_manager
+
+### constant definition
 
 AUTOLABEL_KWARGS = {
     "font_height": FIRA_MONO_BOLD_FONT_HEIGHT,
@@ -66,7 +70,7 @@ class MonitorLabelSetup:
 
         self.status_label = AutoLabel(
             partial(getattr, APP_REFS, "status_message"),
-            formatter=(t.window_manager.status + ": {}").format,
+            formatter=(t.status + ": {}").format,
             text="Opened file",
             **AUTOLABEL_KWARGS,
         )

@@ -34,7 +34,7 @@ from pygame.locals import (
 
 from ..pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..dialog import create_and_show_dialog
 
@@ -53,6 +53,12 @@ from ..surfsman.cache import UNHIGHLIGHT_SURF_MAP
 from ..classes2d.single import Object2D
 
 
+
+### translations
+t = TRANSLATIONS.file_manager
+
+
+### class definition
 
 class FileManagerOperations(Object2D):
     """Operations for file manager class."""
@@ -97,7 +103,7 @@ class FileManagerOperations(Object2D):
 
             caption
             if caption
-            else t.file_manager.select_paths
+            else t.select_paths
 
         )
 

@@ -20,7 +20,7 @@ from pygame.math import Vector2
 
 from ...config import APP_REFS
 
-from ...translation import TRANSLATION_HOLDER as t
+from ...translatedtext import TRANSLATIONS
 
 from ...pygamesetup import SERVICES_NS, SCREEN_RECT
 
@@ -67,6 +67,9 @@ from ...widget.stringentry import StringEntry
 
 ### create logger for module
 logger = get_new_logger(__name__)
+
+### translations
+t = TRANSLATIONS.file_manager
 
 
 ### XXX
@@ -125,7 +128,7 @@ class PathForm(Object2D):
         ### instantiate a caption for the form
 
         self.caption_label = Label(
-            text=(t.file_manager.new_path_form.caption),
+            text=(t.new_path_form.caption),
             font_height=ENC_SANS_BOLD_FONT_HEIGHT,
             foreground_color=WINDOW_FG,
             background_color=WINDOW_BG,
@@ -154,7 +157,7 @@ class PathForm(Object2D):
         ### instantiate type name label
 
         self.type_name_label = Label(
-            text=(t.file_manager.new_path_form.type_path_name + ":"),
+            text=(t.new_path_form.type_path_name + ":"),
             font_height=ENC_SANS_BOLD_FONT_HEIGHT,
             foreground_color=WINDOW_FG,
             background_color=WINDOW_BG,
@@ -197,10 +200,10 @@ class PathForm(Object2D):
         for attr_name, text, mouse_release_action in (
             (
                 "create_button",
-                t.file_manager.new_path_form.create,
+                t.new_path_form.create,
                 self.submit_form,
             ),
-            ("cancel_button", t.file_manager.new_path_form.cancel, self.cancel_form),
+            ("cancel_button", t.new_path_form.cancel, self.cancel_form),
         ):
 
             ## create button
@@ -305,9 +308,9 @@ class PathForm(Object2D):
         ## caption label
 
         self.caption_label.set(
-            t.file_manager.new_path_form.get_new_file
+            t.new_path_form.get_new_file
             if is_file
-            else t.file_manager.new_path_form.get_new_folder
+            else t.new_path_form.get_new_folder
         )
 
         draw_border(self.caption_label.image, color=WINDOW_FG, thickness=2)
@@ -315,9 +318,9 @@ class PathForm(Object2D):
         ## type name label
 
         self.type_name_label.set(
-            t.file_manager.new_path_form.type_file_name
+            t.new_path_form.type_file_name
             if is_file
-            else t.file_manager.new_path_form.type_folder_name
+            else t.new_path_form.type_folder_name
         )
 
         ### set new path to None

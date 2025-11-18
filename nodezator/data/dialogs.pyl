@@ -1,0 +1,69 @@
+{
+
+  'close_file' : {
+    'buttons' : [
+      ['discard_changes', 'close'],
+      ['save_and_close', 'save_and_close'],
+      ['cancel_closing', None],
+    ],
+    'level_name': 'warning',
+  },
+
+  'quit_app' : {
+    'buttons' : [
+      ['discard_changes', 'quit'],
+      ['cancel_quitting', None],
+    ],
+    'level_name': 'warning',
+  },
+
+  'swap_exists' : {
+    'buttons' : [
+      ['load_original', 'load_original'],
+      ['load_swap', 'load_swap'],
+      ['cancel_loading', None],
+    ],
+    'level_name': 'warning',
+  },
+
+  'create_new_while_unsaved' : {
+    'buttons' : [
+      ['open_new', 'open_new'],
+      ['save_first', 'save_first'],
+      ['abort', None],
+    ],
+    'level_name': 'warning',
+  },
+
+  'replace_existing_file' : {
+    'buttons' : [
+      ['abort', 'abort'],
+      ['replace', 'replace'],
+    ],
+    'level_name': 'warning',
+  },
+
+  'open_new_while_unsaved' : {
+    'buttons' : [
+      ['open_new', 'open new'],
+      ['save_first', "save first"],
+      ['abort', None],
+    ],
+    'level_name': 'warning',
+  },
+
+  'reload_unsaved' : {
+    'buttons' : [
+      ['reload', 'reload'],
+      ['abort', None],
+    ],
+    'level_name': 'warning',
+  },
+
+  'cancelled_file_loading': {'level_name': 'info'},
+
+  'expected_single_path': {'level_name': 'warning'},
+
+  'error_while_loading_node_packs' : {'level_name': 'error'},
+
+}

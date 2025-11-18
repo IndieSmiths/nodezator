@@ -1,0 +1,115 @@
+
+caption
+    en-us Colors editor
+    pt-br Editor de cores
+    zh-cn 颜色编辑器
+current_colors
+    en-us Current colors
+    pt-br Cores atuais
+    zh-cn 当前颜色
+
+html_colors
+    en-us HTML colors
+    pt-br cores HTML
+    zh-cn HTML颜色
+pygame_colors
+    en-us pygame colors
+    pt-br cores pygame
+    zh-cn pygame颜色
+import
+    en-us Import
+    pt-br Importar
+    zh-cn 导入
+export
+    en-us Export
+    pt-br Exportar
+    zh-cn 导出
+
+hue_lower
+    en-us hue
+    pt-br matiz
+    zh-cn 色相
+hue_title
+    en-us Hue
+    pt-br Matiz
+    zh-cn 色相
+
+lightness_lower
+    en-us lightness
+    pt-br luminosidade
+    zh-cn 明度
+lightness_title
+    en-us Lightness
+    pt-br Luminosidade
+    zh-cn 明度
+saturation_lower
+    en-us saturation
+    pt-br saturação
+    zh-cn 饱和度
+saturation_title
+    en-us Saturation
+    pt-br Saturação
+    zh-cn 饱和度
+
+value_lower
+    en-us value
+    pt-br valor
+    zh-cn 亮度
+value_title
+    en-us Value
+    pt-br Valor
+    zh-cn 亮度
+
+red_lower
+    en-us red
+    pt-br vermelho
+    zh-cn 红
+red_title
+    en-us Red
+    pt-br Vermelho
+    zh-cn 红色
+
+green_lower
+    en-us green
+    pt-br verde
+    zh-cn 绿
+green_title
+    en-us Green
+    pt-br Verde
+    zh-cn 绿色
+
+blue_lower
+    en-us blue
+    pt-br azul
+    zh-cn 蓝
+blue_title
+    en-us Blue
+    pt-br Azul
+    zh-cn 蓝色
+
+alpha_lower
+    en-us alpha
+    pt-br alpha
+    zh-cn 透明度
+alpha_title
+    en-us Alpha
+    pt-br Alpha
+    zh-cn 透明度
+
+use_alpha
+    en-us Use alpha
+    pt-br Usar alpha
+    zh-cn 使用透明度
+
+hex
+    en-us Hex
+    pt-br Hex
+    zh-cn 十六进制
+html_name
+    en-us HTML name
+    pt-br Nome HTML
+    zh-cn HTML名称
+pygame_name
+    en-us pygame name
+    pt-br nome pygame
+    zh-cn pygame名称

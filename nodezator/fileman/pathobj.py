@@ -6,8 +6,6 @@ from functools import partialmethod
 
 ### local imports
 
-from ..translation import TRANSLATION_HOLDER as t
-
 from ..pygamesetup import blit_on_screen
 
 from ..appinfo import NATIVE_FILE_EXTENSION

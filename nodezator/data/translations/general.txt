@@ -1,0 +1,18 @@
+
+yes
+    en-us Yes
+    pt-br Sim
+no
+    en-us No
+    pt-br Não
+ok
+    en-us Ok
+    pt-br Ok
+
+go_back
+    en-us Go back
+    pt-br Voltar
+
+reset_to_defaults
+    en-us Reset to defaults
+    pt-br Restaurar valores
