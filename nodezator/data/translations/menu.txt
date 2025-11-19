@@ -1,60 +1,85 @@
 
 file
     en-us File
+    pt-br Arquivo
 new
     en-us New
+    pt-br Novo
 open
     en-us Open
+    pt-br Abrir
 open_recent
     en-us Open recent
+    pt-br Abrir recente
 save
     en-us Save
+    pt-br Salvar
 save_as
     en-us Save as...
+    pt-br Salvar como...
 
 export_as_image
     en-us Export as image
+    pt-br Exportar como imagem
 export_as_python
     en-us Export as python
+    pt-br Exportar como python
 view_as_python
     en-us View as python
+    pt-br Visualizar como python
 
 close_file
     en-us Close file
+    pt-br Fechar arquivo
 quit_app
     en-us Quit app
+    pt-br Fechar app
 
 edit
     en-us Edit
+    pt-br Editar
 user_preferences
     en-us User preferences
+    pt-br Preferências
 
 help
     en-us Help
+    pt-br Ajuda
 show_splash_screen
     en-us Show splash screen
+    pt-br Mostrar tela de abertura
 license
     en-us License
+    pt-br Licença
 about
     en-us About
+    pt-br Sobre
 
 graph
     en-us Graph
+    pt-br Grafo
 
 change_node_packs
     en-us Change node packs
+    pt-br Mudar pacotes de nós
 rename_node_packs
     en-us Rename node packs
+    pt-br Renomear pacotes de nós
 
 change_category_colors
     en-us Change category colors
+    pt-br Mudar cores das categorias
 load_nodes
     en-us Load nodes
+    pt-br Carregar nós
 execute_graph
     en-us Execute graph
+    pt-br Executar grafo
 
 execute_with_custom_stdout
     en-us Execute with custom stdout
+    pt-br Executar com stdout próprio
 
 text_block
     en-us Text block
+    pt-br Bloco de text

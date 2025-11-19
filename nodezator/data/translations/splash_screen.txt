@@ -1,42 +1,58 @@
 
 node_editor
     en-us Python node editor
+    pt-br Editor de nós em Python
 
 nodes_from_functions
     en-us Nodes from your own Python functions
+    pt-br Suas funções em Python transformadas em nós
 
 powered_by
     en-us Powered by
+    pt-br Movido a
 
 actions
     en-us Actions
+    pt-br Ações
 new_file
     en-us New file
+    pt-br Novo arquivo
 open_file
     en-us Open file
+    pt-br Abrir arquivo
 open_recent_files
-    Open recent files...
+    en-us Open recent files...
+    pt-br Abrir arquivos recents...
 
 links
     en-us Links
+    pt-br Links
 
 application_website
     en-us Nodezator website
+    pt-br Sítio do app
 application_website_url
     en-us https://nodezator.com
+    pt-br https://nodezator.com
 
 parent_project_website
     en-us Parent project
+    pt-br Projeto pai
 parent_project_website_url
     en-us https://indiesmiths.com
+    pt-br https://indiesmiths.com
 
 developer_website
     en-us Developer website
+    pt-br Sítio do desenvolvedor
 developer_website_url
     en-us https://kennedyrichard.com
+    pt-br https://kennedyrichard.com
 
 developer_links_social
     en-us Developer links/social/email
+    pt-br Links do desenvolvedor
 
 license_declaration_text
     en-us Nodezator is dedicated to the public domain using the Unlicense
+    pt-br Nodezator é dedicado ao domínio público usando a Unlicense
