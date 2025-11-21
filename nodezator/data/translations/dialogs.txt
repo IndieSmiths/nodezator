@@ -5,19 +5,23 @@ close_file
     message
         en-us There are unsaved changes. Are you sure you want to close the file?
         pt-br Há mudanças não salvas. Tem certeza de que quer fechar o arquivo?
+        zh-cn 当前存在未保存的更改。您确定要关闭文件吗？
 
     buttons
 
         discard_changes
             en-us Discard changes
             pt-br Descartar mudanças
+            zh-cn 忽略修改并关闭
         save_and_close
             en-us Save & close
             pt-br Salvar e fechar
+            zh-cn 保存并关闭
         cancel_closing
             # value returned is None
             en-us Cancel closing file
             pt-br Não fechar arquivo
+            zh-cn 不关闭
 
 quit_app
 # level_name warning
@@ -25,16 +29,19 @@ quit_app
     message
         en-us There are unsaved chagnes. Are you sure you want to quit?
         pt-br Há mudanças não salvas. Tem certeza que quer sair?
+        zh-cn 当前存在未保存的更改。您确定要退出吗？
 
     buttons
 
         discard_changes
             en-us Discard changes
             pt-br Descartar mudanças
+            zh-cn 忽略修改并退出
         cancel_quitting
             # value returned is None
             en-us Cancel quitting
             pt-br Cancelar saída
+            zh-cn 不退出
 
 swap_exists
 # level_name warning
@@ -42,19 +49,23 @@ swap_exists
     message
         en-us We found data indicating the file was/is being edited, which means that either (1) the application previously crashed while editing the file or (2) another instance of the application may be editing the same file. What would you like to do?
         pt-br Encontramos dados indicando que o arquivo está/estava sendo editado, o que significa que ou (1) uma falha causou o fechamento do app enquanto o arquivo estava sendo editado ou (2) outra cópia do app pode estar editando o mesmo arquivo. O que gostaria de fazer?
+        zh-cn 我们发现数据表明该文件正在编辑中，这意味着：(1) 应用程序上次编辑此文件时意外崩溃，或 (2) 可能有另一个应用程序实例正在编辑同一文件。您希望如何处理？
 
     buttons
 
         load_original
             en-us Load original file
             pt-br Carregar arquivo original
+            zh-cn 加载源文件
         load_swap
             en-us Loaded edited file
             pt-br Carregar arquivo editado
+            zh-cn 加载编辑后的文件
         cancel_loading
             # value returned is None
             en-us Cancel loading any file
             pt-br Cancelar qualquer carregamento
+            zh-cn 不加载文件
 
 create_new_while_unsaved
 # level_name warning
@@ -62,18 +73,22 @@ create_new_while_unsaved
     message
         en-us You are about to load a new file, but the current one has unsaved changes. What would you like to do?
         pt-br Você está prestes a criar um novo arquivo, mas o atual tem mudanças não salvas. O que gostaria de fazer?
+        zh-cn 您即将加载新文件，但当前文件存在未保存的更改。您希望如何处理？
 
     buttons
         open_new
             en-us Open the new file anyway
             pt-br Abrir o novo mesmo assim
+            zh-cn 忽略所有直接打开新文件
         save_first
             en-us Save current one, then open new
             pt-br Salvar o atual e abrir o novo
+            zh-cn 保存当前文件并打开新文件
         abort
             # value returned is None
             en-us Abort creating and loading the new file
             pt-br Abortar criação do arquivo novo
+            zh-cn 停止创建或加载新文件
 
 replace_existing_file
 # level_name warning
@@ -81,14 +96,17 @@ replace_existing_file
     message
         en-us A file already exists in the path you provided. What would you like to do?
         pt-br Já existe um arquivo no caminho que você proveu. O que gostaria de fazer?
+        zh-cn 新提供的目录下有文件存在，您希望如何处理？
 
     buttons
         abort
             en-us Abort creating and loading the new file
             pt-br Abortar criação e carregamento do novo arquivo
+            zh-cn 停止创建或加载新文件
         replace
             en-us Replace with new file
             pt-br Substituir com o novo arquivo
+            zh-cn 替换文件
 
 open_new_while_unsaved
 # level_name warning
@@ -96,18 +114,22 @@ open_new_while_unsaved
     message
         en-us You are about to open a new file, but the current file has unsaved changes. What would you like to do?
         pt-br Você está prestes a abrir outro arquivo, mas o atual tem mudanças não salvas. O que gostaria de fazer?
+        zh-cn 正在打开新文件，但是当前文件存在未保存修改，您希望如何处理？
 
     buttons
         open_new
             en-us Open the new file anyway
             pt-br Abrir o novo arquivo assim mesmo
+            zh-cn 忽略所有直接打开新文件
         save_first
             en-us Save current one, then open new
             pt-br Salvar o atual, depois abrir o novo
+            zh-cn 保存当前文件并打开新文件
         abort
             # return value is None
             en-us Abort opening new file
             pt-br Abortar abertura de novo arquivo
+            zh-cn 停止创建或加载新文件
 
 reload_unsaved
 # level_name warning
@@ -115,15 +137,18 @@ reload_unsaved
     message
         en-us You are about to reload the current file, but it has unsaved changes. If you proceed, the changes will be lost. What would you like to do?
         pt-br Você está prestes a recarregar o arquivo atual, mas ele tem mudanças não salvas. Se continuar, as mudanças serão perdidas. O que gostaria de fazer?
+        zh-cn 正在重新加载当前文件，但是当前文件存在未保存的修改，如果重新加载您所做的所有修改将会丢失，您希望如何处理？
 
     buttons
         reload
             en-us Reload the file anyway
             pt-br Recarregar o arquivo assim mesmo
+            zh-cn 重新加载文件
         abort
             # return value is None
             en-us Abort reloading file
             pt-br Abortar carregamento do arquivo
+            zh-cn 不重新加载
 
 cancelled_file_loading
 # level_name info
@@ -131,6 +156,7 @@ cancelled_file_loading
     message
         en-us The file loading operation was cancelled.
         pt-br A operação de carregamento do arquivo foi cancelada.
+        zh-cn 文件加载操作已取消
 
 expected_single_path
 # level_name warning
@@ -138,6 +164,7 @@ expected_single_path
     message
         en-us A single path was expected, but more than one was provided. The operation was cancelled.
         pt-br Esperávamos um único caminho, porém mais de um foi provido. A operação foi cancelada.
+        zh-cn 仅接受单个路径，但是您输入了多个文件路径，操作已取消。
 
 error_while_loading_node_packs
 # level_name error
@@ -145,3 +172,4 @@ error_while_loading_node_packs
     message
         en-us One or more errors occurred while trying to load node packs. Check the user log for more info (press Ctrl+Shift+j or access the menu "Help > Show user log").
         pt-br Um ou mais errors ocorreram enquanto tentávamos carregar os pacotes de nós. Check o log do usuário para mais informações (pressione Ctrl+Shift+j ou acesse o menu "Ajuda > Mostrar log de usuário").
+        zh-cn 加载节点包时发生了一个或多个错误。检查用户日志以获取更多信息 (按下 Ctrl+Shift+j 或者 访问菜单 "帮助 > 打开用户日志").

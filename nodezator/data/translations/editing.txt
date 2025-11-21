@@ -2,75 +2,144 @@
 objinsert
     new_text_block
         en-us New text block
+        pt-br Novo bloco de texto
+        zh-cn 新建文本块
 
 data
     no_source_available
         en-us (no source or docstring available)
+        pt-br (código-fonte ou docstring indisponível)
+        zh-cn （无可用源码或文档）
 
 category_colors_form
     caption
         en-us Category color picking form
+        pt-br Formulário para escolher cores de categorias
+        zh-cn 分类颜色选择表单
     finish
         en-us Finish
+        pt-br Finalizar
+        zh-cn 完成
     cancel
         en-us Cancel
+        pt-br 取消
 
 change_node_packs_form
+
+    # {} is replaced by the extension of the file automatically
+
     form_caption
+
         en-us Form to change node packs on {} file
+        pt-br Formulário para mudar node packs no arquivo {}
+        zh-cn 更改{}文件节点包的表单
+
     file_manager_caption
+
+
         en-us Select {} file to change its node packs
+        pt-br Selecione arquivo {} to change its node packs
+        zh-cn 选择要更改节点包的{}文件
+
     no_filepath_chosen
         en-us No filepath chosen
+        pt-br Nenhum arquivo escolhido
+        zh-cn 未选择文件路径
     cancel
         en-us Cancel
+        pt-br Cancelar
+        zh-cn 取消
 
 rename_node_packs_form
 
+    # {} is replaced by the extension of the file automatically
+
     form_caption
         en-us Form to rename node packs on {} file
+        pt-br Formulário para renomear pacotes de nós em arquivo {}
+        zh-cn 重命名{}文件节点包的表单
+
     file_manager_caption
         en-us Select {} file to rename its node packs
+        pt-br Selecione arquivo {} para renomear seus pacotes de nós
+        zh-cn 选择要重命名节点包的{}文件
 
     choose_filepath
         en-us filepath
+        pt-br caminho do arquivo
+        zh-cn 文件路径
     no_filepath_chosen
         en-us No filepath chosen
+        pt-br Nenhum arquivo escolhido
+        zh-cn 未选择文件路径
 
     submit
         en-us Submit
+        pt-br Submeter
+        zh-cn 提交
     cancel
         en-us Cancel
+        pt-br Cancelar
+        zh-cn 取消
 
 python_exporting
+
     pick_new_path
-        en-us Pick a path for new python file
+        en-us Pick a location for new python file
+        pt-br Escolha um local para o novo arquivo python
+        zh-cn 选择新Python文件路径
 
 image_export_form
+
     pick_new_path
         en-us Pick a path for new image file
+        pt-br Escolha um local para o novo arquivo de imagem
+        zh-cn 选择新图像文件路径
 
     caption
         en-us Image exporting form
+        pt-br Formulário para exportação de imagem
+        zh-cn 图像导出表单
     new_image
         en-us New image
+        pt-br Nova imagem
+        zh-cn 新图像
     change
         en-us Change
+        pt-br Mudar
+        zh-cn 更改
     background_color
         en-us Background color
+        pt-br Cor de fundo
+        zh-cn 背景颜色
     restore_default
         en-us Restore default (graph background)
+        pt-br Restaurar valor padrão (cor de fundo do grafo)
+        zh-cn 恢复默认（图表背景）
     horizontal_and_vertical
         en-us Horizontal and vertical margin
+        pt-br Margens horizontal e vertical
+        zh-cn 水平与垂直边距
     raster_for_preview
         en-us Raster for visual media preview
+        pt-br Usar raster para pré-visualização de mídia
+        zh-cn 视觉媒体预览栅格
 
     submit
         en-us Submit
+        pt-br Submeter
+        zh-cn 提交
     cancel
         en-us Cancel
+        pt-br Cancelar
+        zh-cn 取消
 
-    # it's .format() method will receive dimensions of image
-    # to be exported
+
     final_image_size
-        en-us The final image will be {} x {} pixels, plus the margins
+
+        # it's .format() method will receive dimensions of image
+        # to be exported
+
+        en-us The final image will be {} x {} pixels plus the margins
+        pt-br A imagem final terá {} x {} pixels mais as margens
+        zh-cn 最终图像尺寸为 {} x {} 像素（不含边距）
