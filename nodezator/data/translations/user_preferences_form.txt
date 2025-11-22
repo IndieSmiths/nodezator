@@ -1,16 +1,30 @@
 
 caption
     en-us User preferences editing form
+    pt-br Formulário para editar preferências
+    zh-cn 用户偏好设置表单
 language
     en-us Language
+    pt-br Idioma
+    zh-cn 语言
 backup_files
     en-us Backup files
+    pt-br Arquivos de backup
+    zh-cn 备份文件
 user_logger_lines
     en-us User logger lines
+    pt-br Linhas no log do usuário
+    zh-cn 用户日志行数
 custom_stdout_lines
     en-us Custom stdout lines
+    pt-br Linhas no stdout personalizado
+    zh-cn 自定义标准输出行数
 
 finish
     en-us Finish
+    pt-br Finalizar
+    zh-cn 完成
 cancel
     en-us Cancel
+    pt-br Cancelar
+    zh-cn 取消

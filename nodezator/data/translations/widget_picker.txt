@@ -6,6 +6,7 @@ caption
 chosen_widget
     en-us Chosen widget
     pt-br Widget escolhido
+    zh-cn 已选部件
 cancel
     en-us Cancel
     pt-br Cancelar

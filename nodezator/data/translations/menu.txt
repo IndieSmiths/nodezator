@@ -2,84 +2,109 @@
 file
     en-us File
     pt-br Arquivo
+    zh-cn 文件
 new
     en-us New
     pt-br Novo
+    zh-cn 新建
 open
     en-us Open
     pt-br Abrir
+    zh-cn 打开
 open_recent
     en-us Open recent
     pt-br Abrir recente
+    zh-cn 打开最近
 save
     en-us Save
     pt-br Salvar
+    zh-cn 保存
 save_as
     en-us Save as...
     pt-br Salvar como...
+    zh-cn 另存为...
 
 export_as_image
     en-us Export as image
     pt-br Exportar como imagem
+    zh-cn 导出为图像
 export_as_python
     en-us Export as python
     pt-br Exportar como python
+    zh-cn 导出为Python
 view_as_python
     en-us View as python
     pt-br Visualizar como python
+    zh-cn 以Python查看
 
 close_file
     en-us Close file
     pt-br Fechar arquivo
+    zh-cn 关闭文件
 quit_app
     en-us Quit app
     pt-br Fechar app
+    zh-cn 退出应用
 
 edit
     en-us Edit
     pt-br Editar
+    zh-cn 编辑
 user_preferences
     en-us User preferences
     pt-br Preferências
+    zh-cn 用户偏好设置
 
 help
     en-us Help
     pt-br Ajuda
+    zh-cn 帮助
 show_splash_screen
     en-us Show splash screen
     pt-br Mostrar tela de abertura
+    zh-cn 显示启动画面
 license
     en-us License
     pt-br Licença
+    zh-cn 许可证
 about
     en-us About
     pt-br Sobre
+    zh-cn 关于
 
 graph
     en-us Graph
     pt-br Grafo
+    zh-cn 图表
 
 change_node_packs
     en-us Change node packs
     pt-br Mudar pacotes de nós
+    zh-cn 更换节点包
 rename_node_packs
     en-us Rename node packs
     pt-br Renomear pacotes de nós
+    zh-cn 重命名节点包
 
 change_category_colors
     en-us Change category colors
     pt-br Mudar cores das categorias
+    zh-cn 更改分类颜色
 load_nodes
     en-us Load nodes
     pt-br Carregar nós
+    zh-cn 加载节点
 execute_graph
     en-us Execute graph
     pt-br Executar grafo
+    zh-cn 执行图表
 
 execute_with_custom_stdout
     en-us Execute with custom stdout
     pt-br Executar com stdout próprio
+    zh-cn 使用自定义标准输出执行
 
 text_block
     en-us Text block
     pt-br Bloco de text
+    zh-cn 文本块

@@ -2,57 +2,73 @@
 node_editor
     en-us Python node editor
     pt-br Editor de nós em Python
+    zh-cn Python节点编辑器
 
 nodes_from_functions
     en-us Nodes from your own Python functions
     pt-br Suas funções em Python transformadas em nós
+    zh-cn 从您的Python函数创建节点
 
 powered_by
     en-us Powered by
     pt-br Movido a
+    zh-cn 技术支持
 
 actions
     en-us Actions
     pt-br Ações
+    zh-cn 操作
 new_file
     en-us New file
     pt-br Novo arquivo
+    zh-cn 新建文件
 open_file
     en-us Open file
     pt-br Abrir arquivo
+    zh-cn 打开文件
 open_recent_files
     en-us Open recent files...
     pt-br Abrir arquivos recents...
+    zh-cn 打开最近文件...
 
 links
     en-us Links
     pt-br Links
+    zh-cn 相关链接
 
 application_website
     en-us Nodezator website
     pt-br Sítio do app
+    zh-cn Nodezator官网
 application_website_url
     en-us https://nodezator.com
     pt-br https://nodezator.com
+    zh-cn https://nodezator.com
 
 parent_project_website
     en-us Parent project
     pt-br Projeto pai
+    zh-cn 父级项目
 parent_project_website_url
     en-us https://indiesmiths.com
     pt-br https://indiesmiths.com
+    zh-cn https://indiesmiths.com
 
 developer_website
     en-us Developer website
     pt-br Sítio do desenvolvedor
+    zh-cn 开发者网站
 developer_website_url
     en-us https://kennedyrichard.com
     pt-br https://kennedyrichard.com
+    zh-cn https://kennedyrichard.com
 
 developer_links_social
     en-us Developer links/social/email
     pt-br Links do desenvolvedor
+    zh-cn 开发者链接/社交/邮箱
 
 license_declaration_text
     en-us Nodezator is dedicated to the public domain using the Unlicense
     pt-br Nodezator é dedicado ao domínio público usando a Unlicense
+    zh-cn Nodezator采用The Unlicense许可，已贡献至公共领域

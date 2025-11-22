@@ -1,9 +1,17 @@
 
 click_to_select
     en-us click to select/deselect colors
+    pt-br clique para selecionar/desselecionar cores
+    zh-cn 点击选择/取消选择颜色
 ok
     en-us Ok
+    pt-br Ok
+    zh-cn 确定
 cancel
     en-us Cancel
+    pt-br Cancelar
+    zh-cn 取消
 hover_color
     en-us Hover color for info to appear
+    pt-br Passe o mouse sobre a cor para mais informações
+    zh-cn 悬停显示颜色信息
