@@ -83,6 +83,7 @@ APP_COLORS_FILE = DATA_DIR / "app_themes" / "emeralds_on_coal.pyl"
 
 TRANSLATIONS_DIR = DATA_DIR / 'translations'
 LANGUAGE_NAMES_FILEPATH = TRANSLATIONS_DIR / 'language_native_names.pyl'
+DIALOGS_DATA_PATH = DATA_DIR / 'dialogs.pyl'
 
 
 ### writeable paths for config/logs, etc.

@@ -12,10 +12,7 @@ from ..userprefsman.main import USER_PREFS, TEMP_FILE_SWAP
 
 from ..appinfo import NATIVE_FILE_EXTENSION
 
-from ..dialog import (
-    create_and_show_dialog,
-    show_dialog_from_key,
-)
+from ..dialog import create_and_show_dialog, show_dialog_from_key
 
 from ..fileman.main import select_paths
 
@@ -116,11 +113,7 @@ class FileOperations:
 
                 ## XXX review comments in this block
 
-                answer = (
-                    show_dialog_from_key(
-                        "create_new_while_unsaved_dialog",
-                    )
-                )
+                answer = show_dialog_from_key("create_new_while_unsaved")
 
                 if answer == "open_new":
 
@@ -190,9 +183,7 @@ class FileOperations:
 
             elif length > 1:
 
-                show_dialog_from_key(
-                    "expected_single_path_dialog"
-                )
+                show_dialog_from_key('expected_single_path')
                 return
 
             else:
@@ -208,11 +199,7 @@ class FileOperations:
 
         if filepath and not are_changes_saved():
 
-            answer = (
-                show_dialog_from_key(
-                    "open_new_while_unsaved_dialog",
-                )
-            )
+            answer = show_dialog_from_key('open_new_while_unsaved')
 
             if answer == "open new":
                 pass
@@ -276,7 +263,7 @@ class FileOperations:
 
                 if swap_path.is_file():
 
-                    answer = show_dialog_from_key("swap_exists_dialog")
+                    answer = show_dialog_from_key('swap_exists')
 
                     # load original file (ignore swap)
 
@@ -792,7 +779,7 @@ class FileOperations:
 
         if not are_changes_saved():
 
-            answer = show_dialog_from_key("reload_unsaved_dialog")
+            answer = show_dialog_from_key('reload_unsaved_dialog')
 
             if answer == "reload":
 

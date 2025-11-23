@@ -939,7 +939,7 @@ class NodePacksSelectionChangeForm(Object2D):
         except Exception as err:
 
             ## report problem to user
-            show_dialog_from_key("error_while_loading_node_packs_dialog")
+            show_dialog_from_key("error_while_loading_node_packs")
 
             ## also log it
 

@@ -158,7 +158,7 @@ def run_app(filepath=None):
                 ## ask user
 
                 try:
-                    answer = show_dialog_from_key("quit_app_dialog")
+                    answer = show_dialog_from_key('quit_app')
 
                 ## if a QuitAppException is raised here,
                 ## it means the user tried closing the
@@ -241,7 +241,7 @@ def run_app(filepath=None):
                 ## ask user
 
                 try:
-                    answer = show_dialog_from_key("close_file_dialog")
+                    answer = show_dialog_from_key('close_file')
 
                 ## if a QuitAppException is raised here,
                 ## it means the user tried closing the

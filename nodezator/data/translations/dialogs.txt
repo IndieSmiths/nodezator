@@ -1,6 +1,5 @@
 
 close_file
-# level_name warning
 
     message
         en-us There are unsaved changes. Are you sure you want to close the file?
@@ -18,13 +17,11 @@ close_file
             pt-br Salvar e fechar
             zh-cn 保存并关闭
         cancel_closing
-            # value returned is None
             en-us Cancel closing file
             pt-br Não fechar arquivo
             zh-cn 不关闭
 
 quit_app
-# level_name warning
 
     message
         en-us There are unsaved chagnes. Are you sure you want to quit?
@@ -38,13 +35,11 @@ quit_app
             pt-br Descartar mudanças
             zh-cn 忽略修改并退出
         cancel_quitting
-            # value returned is None
             en-us Cancel quitting
             pt-br Cancelar saída
             zh-cn 不退出
 
 swap_exists
-# level_name warning
 
     message
         en-us We found data indicating the file was/is being edited, which means that either (1) the application previously crashed while editing the file or (2) another instance of the application may be editing the same file. What would you like to do?
@@ -62,13 +57,11 @@ swap_exists
             pt-br Carregar arquivo editado
             zh-cn 加载编辑后的文件
         cancel_loading
-            # value returned is None
             en-us Cancel loading any file
             pt-br Cancelar qualquer carregamento
             zh-cn 不加载文件
 
 create_new_while_unsaved
-# level_name warning
 
     message
         en-us You are about to load a new file, but the current one has unsaved changes. What would you like to do?
@@ -85,13 +78,11 @@ create_new_while_unsaved
             pt-br Salvar o atual e abrir o novo
             zh-cn 保存当前文件并打开新文件
         abort
-            # value returned is None
             en-us Abort creating and loading the new file
             pt-br Abortar criação do arquivo novo
             zh-cn 停止创建或加载新文件
 
 replace_existing_file
-# level_name warning
 
     message
         en-us A file already exists in the path you provided. What would you like to do?
@@ -109,7 +100,6 @@ replace_existing_file
             zh-cn 替换文件
 
 open_new_while_unsaved
-# level_name warning
 
     message
         en-us You are about to open a new file, but the current file has unsaved changes. What would you like to do?
@@ -126,13 +116,11 @@ open_new_while_unsaved
             pt-br Salvar o atual, depois abrir o novo
             zh-cn 保存当前文件并打开新文件
         abort
-            # return value is None
             en-us Abort opening new file
             pt-br Abortar abertura de novo arquivo
             zh-cn 停止创建或加载新文件
 
 reload_unsaved
-# level_name warning
 
     message
         en-us You are about to reload the current file, but it has unsaved changes. If you proceed, the changes will be lost. What would you like to do?
@@ -145,13 +133,11 @@ reload_unsaved
             pt-br Recarregar o arquivo assim mesmo
             zh-cn 重新加载文件
         abort
-            # return value is None
             en-us Abort reloading file
             pt-br Abortar carregamento do arquivo
             zh-cn 不重新加载
 
 cancelled_file_loading
-# level_name info
 
     message
         en-us The file loading operation was cancelled.
@@ -159,7 +145,6 @@ cancelled_file_loading
         zh-cn 文件加载操作已取消
 
 expected_single_path
-# level_name warning
 
     message
         en-us A single path was expected, but more than one was provided. The operation was cancelled.
@@ -167,7 +152,6 @@ expected_single_path
         zh-cn 仅接受单个路径，但是您输入了多个文件路径，操作已取消。
 
 error_while_loading_node_packs
-# level_name error
 
     message
         en-us One or more errors occurred while trying to load node packs. Check the user log for more info (press Ctrl+Shift+j or access the menu "Help > Show user log").

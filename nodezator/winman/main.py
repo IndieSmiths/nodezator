@@ -15,10 +15,7 @@ from ..config import APP_REFS
 
 from ..userprefsman.main import USER_PREFS
 
-from ..dialog import (
-    create_and_show_dialog,
-    show_dialog_from_key,
-)
+from ..dialog import create_and_show_dialog, show_dialog_from_key
 
 from ..pygamesetup import SCREEN_RECT, blit_on_screen, reset_caption
 
@@ -359,7 +356,7 @@ class WindowManager(
 
                     ## report problem to user
 
-                    show_dialog_from_key("error_while_loading_node_packs_dialog")
+                    show_dialog_from_key('error_while_loading_node_packs')
 
                     ## also log it
 
@@ -396,7 +393,7 @@ class WindowManager(
 
             else:
 
-                show_dialog_from_key("cancelled_file_loading_dialog")
+                show_dialog_from_key('cancelled_file_loading')
 
                 self.clean_loaded_file_data()
 
