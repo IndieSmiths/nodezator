@@ -29,7 +29,7 @@ from ..config import APP_REFS
 
 from ..appinfo import NODE_CATEGORY_METADATA_FILENAME
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..dialog import create_and_show_dialog
 
@@ -90,6 +90,8 @@ from ..colorsman.picker.main import pick_colors
 ### create logger for module
 logger = get_new_logger(__name__)
 
+### translations
+t = TRANSLATIONS.editing
 
 ### constants
 
@@ -168,7 +170,7 @@ class CategoryColorsPicking(Object2D, LoopHolder):
         caption_label = Object2D.from_surface(
             surface=(
                 render_text(
-                    text=(t.editing.category_colors_form.caption),
+                    text=(t.category_colors_form.caption),
                     border_thickness=2,
                     border_color=TEXT_SETTINGS["foreground_color"],
                     **TEXT_SETTINGS
@@ -239,7 +241,7 @@ class CategoryColorsPicking(Object2D, LoopHolder):
         ## submit button
 
         self.finish_button = Button.from_text(
-            text=(t.editing.category_colors_form.finish),
+            text=(t.category_colors_form.finish),
             command=CallList(
                 [
                     self.finish_form,
@@ -256,7 +258,7 @@ class CategoryColorsPicking(Object2D, LoopHolder):
         ## cancel button
 
         self.cancel_button = Button.from_text(
-            text=(t.editing.category_colors_form.cancel),
+            text=(t.category_colors_form.cancel),
             command=self.exit_loop,
             **BUTTON_SETTINGS
         )

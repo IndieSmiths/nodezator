@@ -26,7 +26,7 @@ from pygame.math import Vector2
 
 from ...config import APP_REFS
 
-from ...translation import TRANSLATION_HOLDER as t
+from ...translatedtext import TRANSLATIONS
 
 from ...pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
@@ -82,6 +82,9 @@ from ...widget.optiontray.main import OptionTray
 
 
 
+### translations
+t = TRANSLATIONS.editing
+
 ### constants
 
 TEXT_SETTINGS = {
@@ -102,7 +105,7 @@ BUTTON_SETTINGS = {
 }
 
 NEW_IMAGEPATH_CAPTION = (
-    t.editing.image_export_form.pick_new_path
+    t.image_export_form.pick_new_path
 ) + " (.html/.svg/.png)"
 
 
@@ -172,7 +175,7 @@ class ImageExportForm(Object2D):
         caption_label = Object2D.from_surface(
             surface=(
                 render_text(
-                    text=(t.editing.image_export_form.caption),
+                    text=(t.image_export_form.caption),
                     border_thickness=2,
                     border_color=(TEXT_SETTINGS["foreground_color"]),
                     **TEXT_SETTINGS,
@@ -195,7 +198,7 @@ class ImageExportForm(Object2D):
 
         new_file_label = Object2D.from_surface(
             surface=render_text(
-                text=(t.editing.image_export_form.new_image) + ":", **TEXT_SETTINGS
+                text=(t.image_export_form.new_image) + ":", **TEXT_SETTINGS
             ),
             coordinates_name="topleft",
             coordinates_value=topleft,
@@ -208,7 +211,7 @@ class ImageExportForm(Object2D):
         midleft = new_file_label.rect.move(5, 0).midright
 
         change_filepath_button = Button.from_text(
-            text=(t.editing.image_export_form.change),
+            text=(t.image_export_form.change),
             command=self.change_filepath,
             coordinates_name="midleft",
             coordinates_value=midleft,
@@ -278,7 +281,7 @@ class ImageExportForm(Object2D):
 
         bg_color_label = Object2D.from_surface(
             surface=render_text(
-                text=(t.editing.image_export_form.background_color) + ":",
+                text=(t.image_export_form.background_color) + ":",
                 **TEXT_SETTINGS,
             ),
             coordinates_name="topleft",
@@ -307,7 +310,7 @@ class ImageExportForm(Object2D):
         command = partial(bg_colorbutton.set, GRAPH_BG)
 
         set_bg_button = Button.from_text(
-            text=(t.editing.image_export_form.restore_default),
+            text=(t.image_export_form.restore_default),
             command=command,
             coordinates_name="midleft",
             coordinates_value=midleft,
@@ -327,7 +330,7 @@ class ImageExportForm(Object2D):
 
         ## margins label
 
-        text = (t.editing.image_export_form.horizontal_and_vertical) + ":"
+        text = (t.image_export_form.horizontal_and_vertical) + ":"
 
         margins_label = Object2D.from_surface(
             surface=render_text(text=text, **TEXT_SETTINGS),
@@ -368,7 +371,7 @@ class ImageExportForm(Object2D):
         self.preview_kind_label = Object2D.from_surface(
             surface=(
                 render_text(
-                    text=(t.editing.image_export_form.raster_for_preview) + ":",
+                    text=(t.image_export_form.raster_for_preview) + ":",
                     **TEXT_SETTINGS,
                 )
             ),
@@ -407,7 +410,7 @@ class ImageExportForm(Object2D):
         ## submit button
 
         self.submit_button = Button.from_text(
-            text=(t.editing.image_export_form.submit),
+            text=(t.image_export_form.submit),
             command=self.submit_form,
             **BUTTON_SETTINGS,
         )
@@ -419,7 +422,7 @@ class ImageExportForm(Object2D):
         ## cancel button
 
         self.cancel_button = Button.from_text(
-            text=(t.editing.image_export_form.cancel),
+            text=(t.image_export_form.cancel),
             command=self.cancel,
             **BUTTON_SETTINGS,
         )
@@ -540,7 +543,7 @@ class ImageExportForm(Object2D):
         ### create and store a label informing the image
         ### size to the user
 
-        text = (t.editing.image_export_form.final_image_size).format(*size)
+        text = (t.image_export_form.final_image_size).format(*size)
 
         bottomleft = self.rect.move(5, -50).bottomleft
 

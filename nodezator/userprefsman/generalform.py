@@ -23,11 +23,11 @@ from ..pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
 from ..config import APP_REFS
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from .main import USER_PREFS, CONFIG_FILEPATH
 
-from .validation import AVAILABLE_LANGUAGES, validate_prefs_data
+from .validation import AVAILABLE_LOCALES, validate_prefs_data
 
 from ..dialog import create_and_show_dialog
 
@@ -73,6 +73,10 @@ from ..colorsman.colors import (
     WINDOW_BG,
 )
 
+
+
+### translations
+t = TRANSLATIONS.user_preferences_form
 
 ### constants
 
@@ -141,7 +145,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         caption_label = Object2D.from_surface(
             surface=(
                 render_text(
-                    text=(t.user_preferences_form.caption),
+                    text=(t.caption),
                     border_thickness=2,
                     border_color=(TEXT_SETTINGS["foreground_color"]),
                     **TEXT_SETTINGS,
@@ -156,10 +160,10 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         ### create specific widgets to edit user preferences
 
         for label_text in (
-            t.user_preferences_form.language,
-            t.user_preferences_form.backup_files,
-            t.user_preferences_form.user_logger_lines,
-            t.user_preferences_form.custom_stdout_lines,
+            t.language,
+            t.backup_files,
+            t.user_logger_lines,
+            t.custom_stdout_lines,
             "Text editor behavior",
         ):
 
@@ -171,10 +175,10 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         lang_option_menu = OptionMenu(
             loop_holder=self,
-            options=AVAILABLE_LANGUAGES,
-            value=USER_PREFS["LANGUAGE"],
+            options=AVAILABLE_LOCALES,
+            value=USER_PREFS["LOCALE"],
             draw_on_window_resize=self.draw,
-            name="LANGUAGE",
+            name="LOCALE",
             max_width=0,
         )
 
@@ -255,7 +259,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         ## submit button
 
         self.finish_button = Button.from_text(
-            text=(t.user_preferences_form.finish),
+            text=(t.finish),
             command=self.finish_form,
             **BUTTON_SETTINGS,
         )
@@ -267,7 +271,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         ## cancel button
 
         self.cancel_button = Button.from_text(
-            text=(t.user_preferences_form.cancel),
+            text=(t.cancel),
             command=self.exit_loop,
             **BUTTON_SETTINGS,
         )

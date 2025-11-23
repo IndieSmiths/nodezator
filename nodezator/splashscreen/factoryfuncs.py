@@ -13,7 +13,7 @@ from ..config import APP_REFS
 
 from ..appinfo import APP_VERSION
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..logman.main import get_new_logger
 
@@ -56,6 +56,8 @@ from .constants import TEXT_SETTINGS
 ### create logger for module
 logger = get_new_logger(__name__)
 
+### translations
+t = TRANSLATIONS.splash_screen
 
 ### surfs
 
@@ -215,8 +217,8 @@ def get_project_link_objs():
 
     project_links_data = (
         (
-            t.splash_screen.application_website,
-            t.splash_screen.application_website_url,
+            t.application_website,
+            t.application_website_url,
         ),
         (
             "Source code",
@@ -231,15 +233,15 @@ def get_project_link_objs():
             "https://gallery.nodezator.com",
         ),
         (
-            t.splash_screen.parent_project_website,
-            t.splash_screen.parent_project_website_url,
+            t.parent_project_website,
+            t.parent_project_website_url,
         ),
         (
-            t.splash_screen.developer_website,
-            t.splash_screen.developer_website_url,
+            t.developer_website,
+            t.developer_website_url,
         ),
         (
-            t.splash_screen.developer_links_social,
+            t.developer_links_social,
             "https://kennedyrichard.com/links",
         ),
         (
@@ -304,7 +306,7 @@ def get_project_link_objs():
     ### to the links
 
     project_links_caption = Object2D.from_surface(
-        surface=(render_text(text=t.splash_screen.links, **TEXT_SETTINGS))
+        surface=(render_text(text=t.links, **TEXT_SETTINGS))
     )
 
     project_links_caption.rect.bottomleft = project_link_objs.rect.move(-10, -5).topleft
@@ -382,7 +384,7 @@ def get_powered_link_objs():
     ### to the links
 
     powered_links_caption = Object2D.from_surface(
-        surface=(render_text(text=t.splash_screen.powered_by, **TEXT_SETTINGS))
+        surface=(render_text(text=t.powered_by, **TEXT_SETTINGS))
     )
 
     powered_links_caption.rect.midbottom = powered_link_objs.rect.move(0, -5).midtop
@@ -407,7 +409,7 @@ def get_action_objs():
     ### its text
 
     actions_label = Object2D.from_surface(
-        render_text(text=t.splash_screen.actions, **TEXT_SETTINGS)
+        render_text(text=t.actions, **TEXT_SETTINGS)
     )
 
     objs.append(actions_label)
@@ -420,8 +422,8 @@ def get_action_objs():
     ### by the object, respectively
 
     actions_data = (
-        (NEW_NATIVE_FILE_ICON, t.splash_screen.new_file, APP_REFS.wm.new),
-        (FOLDER_ICON, t.splash_screen.open_file, APP_REFS.wm.open),
+        (NEW_NATIVE_FILE_ICON, t.new_file, APP_REFS.wm.new),
+        (FOLDER_ICON, t.open_file, APP_REFS.wm.open),
         (
             AWW_ICON,
             "Read manual",
@@ -504,7 +506,7 @@ def get_recent_file_objs(recent_files):
     ## 'Open recent files..' as its text
 
     recent_files_label = Object2D.from_surface(
-        render_text(text=t.splash_screen.open_recent_files, **TEXT_SETTINGS)
+        render_text(text=t.open_recent_files, **TEXT_SETTINGS)
     )
 
     objs.append(recent_files_label)
@@ -587,7 +589,7 @@ def get_license_declaration_obj():
 
     text_obj = Object2D.from_surface(
         render_multiline_text(
-            text=(t.splash_screen.license_declaration_text),
+            text=(t.license_declaration_text),
             max_character_no=40,
             retrieve_pos_from="bottomleft",
             assign_pos_to="topleft",

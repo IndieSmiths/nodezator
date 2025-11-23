@@ -32,7 +32,7 @@ from pygame.draw import rect as draw_rect
 
 ### local imports
 
-from .translation import DIALOGS_MAP
+#from .translatedtext import DIALOGS_MAP
 
 from .pygamesetup import (
     SERVICES_NS,

@@ -15,7 +15,7 @@ from ..dialog import create_and_show_dialog
 
 from ..appinfo import NODES_KEY
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..logman.main import get_new_logger
 
@@ -42,6 +42,9 @@ from .widgetpicker.main import pick_widget
 
 ### create logger for module
 logger = get_new_logger(__name__)
+
+### translations
+t = TRANSLATIONS.editing
 
 
 class ObjectInsertionRemoval:
@@ -296,7 +299,7 @@ class ObjectInsertionRemoval:
 
     def insert_text_block(
         self,
-        text_block_hint=(t.editing.objinsert.new_text_block),
+        text_block_hint=(t.objinsert.new_text_block),
         absolute_midtop=None,
     ):
         """Trigger text block insertion on graph manager.

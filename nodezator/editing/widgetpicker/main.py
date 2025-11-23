@@ -25,7 +25,7 @@ from pygame.math import Vector2
 
 from ...config import APP_REFS
 
-from ...translation import TRANSLATION_HOLDER as t
+from ...translatedtext import TRANSLATIONS
 
 from ...pygamesetup import SERVICES_NS, SCREEN_RECT
 
@@ -71,6 +71,8 @@ from .subforms import SubformCreation
 ### create logger for module
 logger = get_new_logger(__name__)
 
+### translations
+t = TRANSLATIONS.graph_manager
 
 ### constants
 
@@ -131,7 +133,7 @@ class WidgetPicker(Object2D, SubformCreation):
         self.caption = Object2D.from_surface(
             surface=(
                 render_text(
-                    text=(t.graph_manager.widget_picker.caption),
+                    text=(t.widget_picker.caption),
                     font_height=17,
                     padding=5,
                     foreground_color=WINDOW_FG,
@@ -158,7 +160,7 @@ class WidgetPicker(Object2D, SubformCreation):
         ### create and store form related buttons
 
         self.cancel_button = Button.from_text(
-            text=(t.graph_manager.widget_picker.cancel),
+            text=(t.widget_picker.cancel),
             padding=5,
             foreground_color=BUTTON_FG,
             background_color=BUTTON_BG,
@@ -167,7 +169,7 @@ class WidgetPicker(Object2D, SubformCreation):
         )
 
         self.submit_button = Button.from_text(
-            text=(t.graph_manager.widget_picker.submit),
+            text=(t.widget_picker.submit),
             padding=5,
             foreground_color=BUTTON_FG,
             background_color=BUTTON_BG,

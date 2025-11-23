@@ -11,7 +11,7 @@ from itertools import takewhile
 
 from .config import TRANSLATIONS_DIR
 
-from .ourstdlibs.behaviour import CallList
+from .ourstdlibs.collections.general import CallList
 
 
 

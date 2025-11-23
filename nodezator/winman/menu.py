@@ -19,7 +19,7 @@ from ..dialog import create_and_show_dialog
 
 from ..pygamesetup import SCREEN
 
-from ..translation import TRANSLATION_HOLDER as t
+from ..translatedtext import TRANSLATIONS
 
 from ..ourstdlibs.collections.general import CallList
 
@@ -66,6 +66,9 @@ from ..systemtesting.reportviewer import report_viewer
 
 
 
+### translations
+t = TRANSLATIONS.menu
+
 ### class definition
 
 
@@ -78,29 +81,29 @@ class MenuSetup:
 
         menu_list = [
             {
-                "label": t.menu.file,
+                "label": t.file,
                 "children": [
                     {
-                        "label": t.menu.new,
+                        "label": t.new,
                         "key_text": "Ctrl+N",
                         "icon": "new_native_file",
                         "command": self.new,
                     },
                     {
-                        "label": t.menu.open,
+                        "label": t.open,
                         "key_text": "Ctrl+O",
                         "icon": "folder",
                         "command": self.open,
                     },
                     {"label": "------"},
                     {
-                        "label": t.menu.close_file,
+                        "label": t.close_file,
                         "key_text": "Ctrl+W",
                         "icon": "close_native_file",
                         "command": close_loaded_file,
                     },
                     {
-                        "label": t.menu.quit_app,
+                        "label": t.quit_app,
                         "key_text": "Ctrl+Q",
                         "icon": "quit",
                         "command": quit_app,
@@ -108,10 +111,10 @@ class MenuSetup:
                 ],
             },
             {
-                "label": t.menu.help,
+                "label": t.help,
                 "children": [
                     {
-                        "label": t.menu.help,
+                        "label": t.help,
                         "key_text": "F1",
                         "icon": "question",
                         "command": (
@@ -149,11 +152,11 @@ class MenuSetup:
                         ),
                     },
                     {
-                        "label": t.menu.show_splash_screen,
+                        "label": t.show_splash_screen,
                         "command": self.splash_screen.get_focus,
                     },
                     {
-                        "label": t.menu.license,
+                        "label": t.license,
                         "icon": "badge",
                         "command": (
                             partial(
@@ -173,7 +176,7 @@ class MenuSetup:
                     },
                     {"label": "------"},
                     {
-                        "label": t.menu.about,
+                        "label": t.about,
                         "icon": "info",
                         "command": (
                             partial(
@@ -204,7 +207,7 @@ class MenuSetup:
             menu_list[0]["children"].insert(
                 2,
                 {
-                    "label": t.menu.open_recent,
+                    "label": t.open_recent,
                     "icon": "folder",
                     "children": [
                         {
@@ -233,10 +236,10 @@ class MenuSetup:
         except AttributeError:
 
             graph_menu = {
-                "label": t.menu.graph,
+                "label": t.graph,
                 "children": [
                     {
-                        "label": (t.menu.rename_node_packs),
+                        "label": (t.rename_node_packs),
                         "command": (APP_REFS.ea.present_rename_node_packs_form),
                     },
                 ],
@@ -259,14 +262,14 @@ class MenuSetup:
             # "Save as" commands
 
             save_command_data = {
-                "label": t.menu.save,
+                "label": t.save,
                 "key_text": "Ctrl+S",
                 "icon": "save",
                 "command": self.save,
             }
 
             save_as_command_data = {
-                "label": t.menu.save_as,
+                "label": t.save_as,
                 "key_text": "Shift+Ctrl+S",
                 "icon": "save_as",
                 "command": self.save_as,
@@ -287,21 +290,21 @@ class MenuSetup:
             for (index, label_text, icon_key, key_text, command_callable,) in (
                 (
                     7,
-                    t.menu.export_as_image,
+                    t.export_as_image,
                     "image",
                     "Ctrl+E",
                     APP_REFS.ea.export_as_image,
                 ),
                 (
                     8,
-                    t.menu.export_as_python,
+                    t.export_as_python,
                     "python",
                     "Ctrl+P",
                     APP_REFS.ea.export_as_python,
                 ),
                 (
                     9,
-                    t.menu.view_as_python,
+                    t.view_as_python,
                     "python_viewing",
                     "Shift+Ctrl+P",
                     APP_REFS.ea.view_as_python,
@@ -331,10 +334,10 @@ class MenuSetup:
             # build top menu data
 
             edit_menu = {
-                "label": t.menu.edit,
+                "label": t.edit,
                 "children": [
                     {
-                        "label": t.menu.user_preferences,
+                        "label": t.user_preferences,
                         "icon": "tools",
                         "command": edit_user_preferences,
                     },
@@ -354,14 +357,14 @@ class MenuSetup:
             # structure, etc.), that is, after instantiation;
 
             graph_menu = {
-                "label": t.menu.graph,
+                "label": t.graph,
                 "children": [
                     {
-                        "label": (t.menu.change_category_colors),
+                        "label": (t.change_category_colors),
                         "command": (APP_REFS.ea.change_category_colors),
                     },
                     {
-                        "label": (t.menu.load_nodes),
+                        "label": (t.load_nodes),
                         "command": (APP_REFS.ea.present_change_node_packs_form),
                     },
                     {
@@ -404,13 +407,13 @@ class MenuSetup:
                     },
                     {"label": "------"},
                     {
-                        "label": t.menu.execute_graph,
+                        "label": t.execute_graph,
                         "key_text": "F12",
                         "command": APP_REFS.gm.execute_graph,
                         "icon": "execute",
                     },
                     {
-                        "label": (t.menu.execute_with_custom_stdout),
+                        "label": (t.execute_with_custom_stdout),
                         "key_text": "Shift+F12",
                         "command": (APP_REFS.gm.execute_with_custom_stdout),
                         "icon": "execute_with_text",
@@ -499,7 +502,7 @@ class MenuSetup:
 
         menu_list.append(
             {
-                "label": t.menu.text_block,
+                "label": t.text_block,
                 "icon": "new_text_block",
                 "command": APP_REFS.ea.insert_text_block,
             }
