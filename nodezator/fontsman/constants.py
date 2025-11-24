@@ -8,14 +8,14 @@ from ..config import FONTS_DIR
 
 ENC_SANS_BOLD_FONT_HEIGHT = 17
 
-ENC_SANS_BOLD_FONT_PATH = str(FONTS_DIR / "enc_sans_sexp_bold_mplus_1p_2000em_med.ttf")
+ENC_SANS_BOLD_FONT_PATH = str(FONTS_DIR / "encode_sans_semi_expanded_bold.ttf")
 
 
 ### fira mono bold text
 
 FIRA_MONO_BOLD_FONT_HEIGHT = 20
 
-FIRA_MONO_BOLD_FONT_PATH = str(FONTS_DIR / "fira_mono_bold_mplus_1m_med.ttf")
+FIRA_MONO_BOLD_FONT_PATH = str(FONTS_DIR / "fira_mono_bold.ttf")
 
 
 ### nodezator icons font
