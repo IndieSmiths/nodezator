@@ -17,12 +17,16 @@ font file in the given path, which renders text
 surfaces with the given height in pixels.
 """
 
+### standard library imports
+
+from pathlib import Path
+
+from warnings import warn
+
+
 ### third-party import
 from pygame.font import Font
 
-
-### local import
-from .exception import UnattainableFontHeight
 
 
 class FontsDatabase(dict):
@@ -203,7 +207,6 @@ def get_font(font_path, desired_height):
         ### than the desired one;
 
         else:
-
             size += 1 if surf_height < desired_height else -1
 
         ### if the height of the text surface is higher
@@ -218,11 +221,17 @@ def get_font(font_path, desired_height):
             chosen_font = font
 
     ### if the highest height achieved isn't the desired
-    ### one, raise an error to notify the user
+    ### one, issue an warning to notify the user and return
+    ### the respective font
 
     if highest_achieved != desired_height:
 
-        raise UnattainableFontHeight(font_path, desired_height)
+        font_name = Path(font_path).name
+
+        warn(
+            f"Couldn't get height {desired_height} from {font_name},"
+            f" using {highest_achieved} instead"
+        )
 
     ### finally return the chosen font
     return chosen_font
@@ -236,4 +245,9 @@ def raise_if_unattainable(desired_height, attempted_size, font_path):
 
     if any(map(lambda s: s < 0 or s >= 65536, sizes)):
 
-        raise UnattainableFontHeight(font_path, desired_height)
+        font_name = Path(font_path).name
+
+        raise ValueError(
+            f"Font of height {desired_height}"
+            " can't be achieved with {font_name}"
+        )
