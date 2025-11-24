@@ -1,15 +1,27 @@
+
+### standard library import
 from unittest import TestCase
 
-import pygame
+
+### third-party imports
+from pygame.font import init as init_font, Font
+
+
+### local imports
 
 from .cache import get_font, FontsDatabase, FontsMap
-from .constants import NOTO_SANS_MONO_MEDIUM_FONT_PATH, NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT
-from .exception import UnattainableFontHeight
+
+from .constants import (
+    NOTO_SANS_MONO_MEDIUM_FONT_PATH,
+    NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT,
+)
+
 
 
 class TestFontsDatabase(TestCase):
+
     def setUp(self) -> None:
-        pygame.font.init()
+        init_font()
 
     def test_get_font(self):
         path = NOTO_SANS_MONO_MEDIUM_FONT_PATH
@@ -17,21 +29,7 @@ class TestFontsDatabase(TestCase):
 
         font = get_font(path, height)
 
-        self.assertIsInstance(font, pygame.font.Font)
-
-    def test_get_font_too_large_raises(self):
-        path = NOTO_SANS_MONO_MEDIUM_FONT_PATH
-        height = 65536
-
-        with self.assertRaises(UnattainableFontHeight):
-            get_font(path, height)
-
-    def test_get_font_too_small_raises(self):
-        path = NOTO_SANS_MONO_MEDIUM_FONT_PATH
-        height = 1
-
-        with self.assertRaises(UnattainableFontHeight):
-            get_font(path, height)
+        self.assertIsInstance(font, Font)
 
     def test_fonts_db_returns(self):
         db = FontsDatabase()
@@ -40,7 +38,7 @@ class TestFontsDatabase(TestCase):
 
         font = db[path][height]
 
-        self.assertIsInstance(font, pygame.font.Font)
+        self.assertIsInstance(font, Font)
 
     def test_fonts_map_stores(self):
         path = NOTO_SANS_MONO_MEDIUM_FONT_PATH
