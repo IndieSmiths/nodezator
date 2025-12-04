@@ -19,6 +19,9 @@ custom_stdout_lines
     en-us Custom stdout lines
     pt-br Linhas no stdout personalizado
     zh-cn 自定义标准输出行数
+text_editor_behavior
+    en-us Text editor behavior
+    pt-br Comportamento do editor de texto
 
 finish
     en-us Finish

@@ -4,7 +4,7 @@
 from functools import partialmethod
 
 
-### third-paraty imports
+### third-party imports
 
 from pygame.locals import (
     QUIT,
@@ -145,7 +145,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         caption_label = Object2D.from_surface(
             surface=(
                 render_text(
-                    text=(t.caption),
+                    text=t.caption,
                     border_thickness=2,
                     border_color=(TEXT_SETTINGS["foreground_color"]),
                     **TEXT_SETTINGS,
@@ -160,11 +160,11 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         ### create specific widgets to edit user preferences
 
         for label_text in (
-            t.language,
             t.backup_files,
             t.user_logger_lines,
             t.custom_stdout_lines,
-            "Text editor behavior",
+            t.text_editor_behavior,
+            t.language,
         ):
 
             label_obj = Object2D.from_surface(
@@ -173,19 +173,22 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
             labels.append(label_obj)
 
-        lang_option_menu = OptionMenu(
-            loop_holder=self,
-            options=AVAILABLE_LOCALES,
-            value=USER_PREFS["LOCALE"],
-            draw_on_window_resize=self.draw,
-            name="LOCALE",
-            max_width=0,
+        labels.rect.snap_rects_ip(
+            retrieve_pos_from='bottomleft',
+            assign_pos_to='topleft',
+            offset_pos_by=(0, 5),
         )
+
+        labels.rect.topleft = widgets.rect.move(0, 5).bottomleft
+
+        widgets.extend(labels)
+
+        ###
 
         number_backups_intfloat_entry = IntFloatEntry(
             loop_holder=self,
-            value=USER_PREFS["NUMBER_OF_BACKUPS"],
-            name="NUMBER_OF_BACKUPS",
+            value=USER_PREFS['NUMBER_OF_BACKUPS'],
+            name='NUMBER_OF_BACKUPS',
             width=65,
             min_value=0,
             numeric_classes_hint="int",
@@ -195,71 +198,67 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         user_logger_lines_intfloat_entry = IntFloatEntry(
             loop_holder=self,
-            value=USER_PREFS["USER_LOGGER_MAX_LINES"],
-            name="USER_LOGGER_MAX_LINES",
+            value=USER_PREFS['USER_LOGGER_MAX_LINES'],
+            name='USER_LOGGER_MAX_LINES',
             min_value=0,
             width=90,
-            numeric_classes_hint="int",
+            numeric_classes_hint='int',
             allow_none=False,
             draw_on_window_resize=self.draw,
         )
 
         custom_stdout_lines_intfloat_entry = IntFloatEntry(
             loop_holder=self,
-            value=USER_PREFS["CUSTOM_STDOUT_MAX_LINES"],
-            name="CUSTOM_STDOUT_MAX_LINES",
+            value=USER_PREFS['CUSTOM_STDOUT_MAX_LINES'],
+            name='CUSTOM_STDOUT_MAX_LINES',
             min_value=0,
             width=90,
-            numeric_classes_hint="int",
+            numeric_classes_hint='int',
             allow_none=False,
             draw_on_window_resize=self.draw,
         )
 
         text_editor_behavior_option_menu = OptionMenu(
             loop_holder=self,
-            options=("default", "vim-like"),
-            value=USER_PREFS["TEXT_EDITOR_BEHAVIOR"],
-            name="TEXT_EDITOR_BEHAVIOR",
+            options=('default', 'vim-like'),
+            value=USER_PREFS['TEXT_EDITOR_BEHAVIOR'],
+            name='TEXT_EDITOR_BEHAVIOR',
             draw_on_window_resize=self.draw,
             max_width=0,
         )
 
-        labels.rect.snap_rects_ip(
-            retrieve_pos_from="bottomleft",
-            assign_pos_to="topleft",
-            offset_pos_by=(0, 5),
+        lang_option_menu = OptionMenu(
+            loop_holder=self,
+            options=AVAILABLE_LOCALES,
+            value=USER_PREFS['LOCALE'],
+            draw_on_window_resize=self.draw,
+            name='LOCALE',
+            max_width=0,
         )
-
-        labels.rect.topleft = widgets.rect.move(0, 5).bottomleft
-
-        widgets.extend(labels)
 
         self.prefs_widgets = prefs_widgets = List2D(
             [
-                lang_option_menu,
                 number_backups_intfloat_entry,
                 user_logger_lines_intfloat_entry,
                 custom_stdout_lines_intfloat_entry,
                 text_editor_behavior_option_menu,
+                lang_option_menu,
             ]
         )
 
         right = max(label.rect.right for label in labels) + 5
 
-        for (pref_widget, label) in zip(prefs_widgets, labels):
-
+        for pref_widget, label in zip(prefs_widgets, labels):
             pref_widget.rect.midleft = (right, label.rect.centery)
 
         widgets.extend(prefs_widgets)
 
         ### create, position and store form related buttons
 
-        ### create form buttons
-
         ## submit button
 
         self.finish_button = Button.from_text(
-            text=(t.finish),
+            text=t.finish,
             command=self.finish_form,
             **BUTTON_SETTINGS,
         )
@@ -271,7 +270,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         ## cancel button
 
         self.cancel_button = Button.from_text(
-            text=(t.cancel),
+            text=t.cancel,
             command=self.exit_loop,
             **BUTTON_SETTINGS,
         )
