@@ -1,4 +1,4 @@
-"""Form for user preferences editing."""
+"""Form for lang and font preferences editing."""
 
 ### standard library import
 from functools import partialmethod
@@ -27,7 +27,13 @@ from ..translatedtext import TRANSLATIONS
 
 from .main import USER_PREFS, CONFIG_FILEPATH
 
-from .validation import TEXT_EDITOR_BEHAVIOR_OPTIONS, validate_prefs_data
+from .validation import (
+    AVAILABLE_LOCALES,
+    GENERAL_FONT_HEIGHT_RANGE,
+    MONO_FONT_HEIGHT_RANGE,
+    FONT_KIND_OPTIONS,
+    validate_prefs_data,
+)
 
 from ..dialog import create_and_show_dialog
 
@@ -76,30 +82,30 @@ from ..colorsman.colors import (
 
 
 ### translations
-t = TRANSLATIONS.user_preferences_form
+t = TRANSLATIONS.language_and_fonts_form
 
 ### constants
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_path': ENC_SANS_BOLD_FONT_PATH,
-    'padding': 5,
-    'foreground_color': WINDOW_FG,
-    'background_color': WINDOW_BG,
+    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
+    "font_path": ENC_SANS_BOLD_FONT_PATH,
+    "padding": 5,
+    "foreground_color": WINDOW_FG,
+    "background_color": WINDOW_BG,
 }
 
 BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_path': ENC_SANS_BOLD_FONT_PATH,
-    'padding': 5,
-    'depth_finish_thickness': 1,
-    'foreground_color': BUTTON_FG,
-    'background_color': BUTTON_BG,
+    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
+    "font_path": ENC_SANS_BOLD_FONT_PATH,
+    "padding": 5,
+    "depth_finish_thickness": 1,
+    "foreground_color": BUTTON_FG,
+    "background_color": BUTTON_BG,
 }
 
 
-class UserPreferencesEditingForm(Object2D, LoopHolder):
-    """Form for editing user preferences."""
+class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
+    """Form for editing user preferences for language and fonts."""
 
     def __init__(self):
         """Setup form objects."""
@@ -117,7 +123,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         self.rect_size_semitransp_obj = Object2D.from_surface(
             surface=render_rect(*self.rect.size, (*CONTRAST_LAYER_COLOR, 130)),
-            coordinates_name='center',
+            coordinates_name="center",
             coordinates_value=SCREEN_RECT.center,
         )
 
@@ -132,7 +138,6 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         APP_REFS.window_resize_setups.append(self.center_preferences_form)
 
     def center_preferences_form(self):
-
         self.rect.center = self.widgets.rect.center = SCREEN_RECT.center
 
     def build_form_widgets(self):
@@ -147,7 +152,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
                 render_text(
                     text=t.caption,
                     border_thickness=2,
-                    border_color=(TEXT_SETTINGS['foreground_color']),
+                    border_color=(TEXT_SETTINGS["foreground_color"]),
                     **TEXT_SETTINGS,
                 )
             ),
@@ -160,10 +165,11 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         ### create specific widgets to edit user preferences
 
         for label_text in (
-            t.backup_files,
-            t.user_logger_lines,
-            t.custom_stdout_lines,
-            t.text_editor_behavior,
+            t.language,
+            t.general_font_height,
+            t.mono_font_height,
+            t.general_font,
+            t.mono_font,
         ):
 
             label_obj = Object2D.from_surface(
@@ -184,54 +190,64 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         ###
 
-        number_backups_intfloat_entry = IntFloatEntry(
+        lang_option_menu = OptionMenu(
             loop_holder=self,
-            value=USER_PREFS['NUMBER_OF_BACKUPS'],
-            name='NUMBER_OF_BACKUPS',
-            width=65,
-            min_value=0,
+            options=AVAILABLE_LOCALES,
+            value=USER_PREFS['LOCALE'],
+            draw_on_window_resize=self.draw,
+            name='LOCALE',
+            max_width=0,
+        )
+
+        general_font_size_intfloat_entry = IntFloatEntry(
+            loop_holder=self,
+            value=USER_PREFS['GENERAL_FONT_HEIGHT'],
+            name='GENERAL_FONT_HEIGHT',
+            width=90,
+            min_value=min(GENERAL_FONT_HEIGHT_RANGE),
+            max_value=max(GENERAL_FONT_HEIGHT_RANGE),
             numeric_classes_hint='int',
             allow_none=False,
             draw_on_window_resize=self.draw,
         )
 
-        user_logger_lines_intfloat_entry = IntFloatEntry(
+        mono_font_size_intfloat_entry = IntFloatEntry(
             loop_holder=self,
-            value=USER_PREFS['USER_LOGGER_MAX_LINES'],
-            name='USER_LOGGER_MAX_LINES',
-            min_value=0,
+            value=USER_PREFS['MONO_FONT_HEIGHT'],
+            name='MONO_FONT_HEIGHT',
+            min_value=min(MONO_FONT_HEIGHT_RANGE),
+            max_value=max(MONO_FONT_HEIGHT_RANGE),
             width=90,
             numeric_classes_hint='int',
             allow_none=False,
             draw_on_window_resize=self.draw,
         )
 
-        custom_stdout_lines_intfloat_entry = IntFloatEntry(
+        general_font_to_use_option_menu = self.gen_font_option = OptionMenu(
             loop_holder=self,
-            value=USER_PREFS['CUSTOM_STDOUT_MAX_LINES'],
-            name='CUSTOM_STDOUT_MAX_LINES',
-            min_value=0,
-            width=90,
-            numeric_classes_hint='int',
-            allow_none=False,
+            options=FONT_KIND_OPTIONS,
+            value=USER_PREFS['GENERAL_FONT_KIND'],
+            name='GENERAL_FONT_KIND',
             draw_on_window_resize=self.draw,
+            max_width=0,
         )
 
-        text_editor_behavior_option_menu = OptionMenu(
+        mono_font_to_use_option_menu = self.mono_font_option = OptionMenu(
             loop_holder=self,
-            options=TEXT_EDITOR_BEHAVIOR_OPTIONS,
-            value=USER_PREFS['TEXT_EDITOR_BEHAVIOR'],
-            name='TEXT_EDITOR_BEHAVIOR',
+            options=FONT_KIND_OPTIONS,
+            value=USER_PREFS['MONO_FONT_KIND'],
+            name='MONO_FONT_KIND',
             draw_on_window_resize=self.draw,
             max_width=0,
         )
 
         self.prefs_widgets = prefs_widgets = List2D(
             [
-                number_backups_intfloat_entry,
-                user_logger_lines_intfloat_entry,
-                custom_stdout_lines_intfloat_entry,
-                text_editor_behavior_option_menu,
+                lang_option_menu,
+                general_font_size_intfloat_entry,
+                mono_font_size_intfloat_entry,
+                general_font_to_use_option_menu,
+                mono_font_to_use_option_menu,
             ]
         )
 
@@ -241,6 +257,8 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
             pref_widget.rect.midleft = (right, label.rect.centery)
 
         widgets.extend(prefs_widgets)
+
+        ###
 
         ### create, position and store form related buttons
 
@@ -276,11 +294,10 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         widgets.extend((self.cancel_button, self.finish_button))
 
-    def edit_user_preferences(self):
+    def edit_lang_and_fonts_settings(self):
 
         ### blit the screen-size semitransparent surf in the
         ### canvas to increase constrast
-
         blit_on_screen(UNHIGHLIGHT_SURF_MAP[SCREEN_RECT.size], (0, 0))
 
         ###
@@ -471,4 +488,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         blit_on_screen(UNHIGHLIGHT_SURF_MAP[self.rect.size], self.rect)
 
 
-edit_user_preferences = UserPreferencesEditingForm().edit_user_preferences
+edit_lang_and_fonts_settings = (
+    UserPreferencesLanguageAndFontsForm()
+    .edit_lang_and_fonts_settings
+)

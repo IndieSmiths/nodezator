@@ -3,10 +3,6 @@ caption
     en-us User preferences editing form
     pt-br Formulário para editar preferências
     zh-cn 用户偏好设置表单
-language
-    en-us Language
-    pt-br Idioma
-    zh-cn 语言
 backup_files
     en-us Backup files
     pt-br Arquivos de backup

@@ -54,6 +54,9 @@ user_preferences
     en-us User preferences
     pt-br Preferências
     zh-cn 用户偏好设置
+lang_and_fonts
+    en-us Language and fonts
+    pt-br Idioma e fontes
 
 help
     en-us Help
