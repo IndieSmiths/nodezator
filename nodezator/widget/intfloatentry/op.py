@@ -142,14 +142,21 @@ class IntFloatOperations(Object2D):
             image.blit(obj.image, obj.rect.move(offset))
 
     def update_image_like_range(self):
-        """"""
+        """Draw colored background with width proportional to value.
+
+        That is, proportional to how much of the possible range the value
+        represents, i. e., the percentage.
+
+        For instance, if min_value
+        """
+
         if self.value is None:
             return
 
         value = self.evaluate_string(self.cursor.get())
 
         try:
-            factor = value / self.difference
+            factor = (value - self.min_value) / self.difference
         except ZeroDivisionError:
             factor = 1
 
@@ -451,12 +458,17 @@ class IntFloatOperations(Object2D):
         max_value,
         update_image=True,
     ):
-        """"""
+        """Proc"""
         value = self.value
 
         ### process range constraining arguments
 
-        range_is_constrained = min_value is not None and max_value is not None
+        range_is_constrained = (
+
+            min_value is not None
+            and max_value is not None
+
+        )
 
         ## make extra checks/assignments depending on
         ## whether or not the range is constrained
@@ -472,16 +484,26 @@ class IntFloatOperations(Object2D):
                     "arguments must follow rule:" " max_value >= min_value."
                 )
 
-            ## store difference between maximum and
-            ## minimum values
+            ## store values that will be needed for the
+            ## update_image_like_range method
+
+            # difference between maximum and minimum values
             self.difference = max_value - min_value
+
+            # mininum value
+            self.min_value = min_value
 
         ## define extra operation to update the widget's
         ## surface, depending on whether the widget's
         ## range is constrained or not
 
         self.range_like_image_update_operation = (
-            self.update_image_like_range if range_is_constrained else empty_function
+
+            self.update_image_like_range
+            if range_is_constrained
+
+            else empty_function
+
         )
 
         ## define minimum and maximum value clamping
@@ -511,7 +533,9 @@ class IntFloatOperations(Object2D):
 
             if type(min_value) not in self.num_classes:
 
-                raise ValueError(RANGE_ERROR_FORMATTER("min_value", self.num_classes))
+                raise ValueError(
+                    RANGE_ERROR_FORMATTER("min_value", self.num_classes)
+                )
 
             ## otherwise, we store a partial of the max
             ## function with the minimum value as the
@@ -568,7 +592,9 @@ class IntFloatOperations(Object2D):
 
             if type(max_value) not in self.num_classes:
 
-                raise ValueError(RANGE_ERROR_FORMATTER("max_value", self.num_classes))
+                raise ValueError(
+                    RANGE_ERROR_FORMATTER("max_value", self.num_classes)
+                )
 
             ## otherwise, we store a partial of the min
             ## function with the maximum value as the
