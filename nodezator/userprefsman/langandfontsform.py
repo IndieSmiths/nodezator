@@ -1,7 +1,10 @@
 """Form for lang and font preferences editing."""
 
-### standard library import
+### standard library imports
+
 from functools import partialmethod
+
+from itertools import chain
 
 
 ### third-party imports
@@ -70,6 +73,8 @@ from ..loopman.main import LoopHolder
 from ..widget.intfloatentry.main import IntFloatEntry
 
 from ..widget.optionmenu.main import OptionMenu
+
+from ..widget.pathpreview.font import FontPreview
 
 from ..colorsman.colors import (
     CONTRAST_LAYER_COLOR,
@@ -223,7 +228,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
             draw_on_window_resize=self.draw,
         )
 
-        general_font_to_use_option_menu = self.gen_font_option = OptionMenu(
+        general_font_kind_option_menu = self.gen_font_option = OptionMenu(
             loop_holder=self,
             options=FONT_KIND_OPTIONS,
             value=USER_PREFS['GENERAL_FONT_KIND'],
@@ -232,7 +237,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
             max_width=0,
         )
 
-        mono_font_to_use_option_menu = self.mono_font_option = OptionMenu(
+        mono_font_kind_option_menu = self.mono_font_option = OptionMenu(
             loop_holder=self,
             options=FONT_KIND_OPTIONS,
             value=USER_PREFS['MONO_FONT_KIND'],
@@ -246,8 +251,8 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
                 lang_option_menu,
                 general_font_size_intfloat_entry,
                 mono_font_size_intfloat_entry,
-                general_font_to_use_option_menu,
-                mono_font_to_use_option_menu,
+                general_font_kind_option_menu,
+                mono_font_kind_option_menu,
             ]
         )
 
@@ -258,7 +263,66 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         widgets.extend(prefs_widgets)
 
-        ###
+        ### TODO add widgets to use beside the "font_to_use" option menus
+
+        self.general_font_widget_map = general_font_widget_map = {}
+        self.mono_font_widget_map = mono_font_widget_map = {}
+
+        for widget, value_key, widget_map in (
+
+            (
+                general_font_kind_option_menu,
+                'GENERAL_FONT_TO_USE',
+                general_font_widget_map,
+            ),
+
+            (
+                mono_font_kind_option_menu,
+                'MONO_FONT_TO_USE',
+                mono_font_widget_map,
+            ),
+        ):
+
+            kind = widget.get()
+
+            value = USER_PREFS[value_key] if kind == 'font file' else '.'
+
+            fp = FontPreview(
+                value=value,
+                loop_holder=self,
+                draw_on_window_resize=self.draw,
+            )
+
+            widget_map['font file'] = fp
+
+        ### calculate extra width and height used by "font_to_use" widgets
+
+        widths, heights = zip(
+
+            *(
+                widget.rect.size
+
+                for widget in chain(
+                    general_font_widget_map.values(),
+                    mono_font_widget_map.values(),
+                )
+
+            )
+
+        )
+
+        extra_width_required = max(widths)
+
+        extra_height_used_by_single_widget = (
+            max(heights) - general_font_kind_option_menu.rect.height
+        )
+
+        ### move last widget and label further down to make space for one of
+        ### the extra widgets (from the maps we just created) that might be
+        ### used
+
+        prefs_widgets[-1].rect.y += extra_height_used_by_single_widget
+        labels[-1].rect.y += extra_height_used_by_single_widget
 
         ### create, position and store form related buttons
 
@@ -272,7 +336,18 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         draw_depth_finish(self.finish_button.image)
 
-        self.finish_button.rect.topright = widgets.rect.move(0, 5).bottomright
+        self.finish_button.rect.top = (
+            widgets.rect.move(0, 5).bottom
+            + extra_height_used_by_single_widget
+        )
+
+        self.finish_button.rect.right = (
+            widgets.rect.move(0, 5).right
+            + extra_width_required
+        )
+
+
+        #self.finish_button.rect.topright = widgets.rect.move(0, 5).bottomright
 
         ## cancel button
 
@@ -284,14 +359,11 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         draw_depth_finish(self.cancel_button.image)
 
-        self.cancel_button.rect.midright = self.finish_button.rect.move(-5, 0).midleft
+        self.cancel_button.rect.midright = (
+            self.finish_button.rect.move(-5, 0).midleft
+        )
 
         ## store
-
-        self.finish_button.rect.topright = widgets.rect.move(0, 5).bottomright
-
-        self.cancel_button.rect.topright = self.finish_button.rect.move(-5, 0).topleft
-
         widgets.extend((self.cancel_button, self.finish_button))
 
     def edit_lang_and_fonts_settings(self):
