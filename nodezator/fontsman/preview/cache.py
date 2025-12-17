@@ -17,8 +17,8 @@ The ones you want to import are:
      )
 
      In other words, here we obtain a cached image surface
-     for the image in the given path, rendered according to
-     the given image settings.
+     for the font in the given path, rendered according to
+     the given font settings.
 
 02) the update_cache_for_font_preview() function;
 """
@@ -36,6 +36,7 @@ from ...ourstdlibs.dictutils import (
 )
 
 from .render import render_font_preview
+
 
 
 class FontPreviewsDatabase(dict):
