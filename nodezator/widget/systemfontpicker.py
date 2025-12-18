@@ -6,12 +6,16 @@ from pygame.font import SysFont, get_fonts
 
 ### local imports
 
+from ..ourstdlibs.behaviour import empty_function
+
+from ..surfsman.cache import NOT_FOUND_SURF_MAP
+
 from ..fontsman.preview.cache import (
     FONT_PREVIEWS_DB,
     update_cache_for_font_preview,
 )
 
-from ..surfsman.cache import NOT_FOUND_SURF_MAP
+from ..textman.render import render_text
 
 
 
@@ -53,10 +57,17 @@ class SystemFontPicker:
         self.command = command
         self.loop_holder = loop_holder
 
-        ### create and position rect
-        rect = Rect(0, 0, width, height=155)
+        ### create image and rect, then position rect
 
-        ### create/update surface
+        self.image = Surface((width, 195)).convert()
+        self.image.fill('grey')
+        self.rect = self.image.get_rect()
+
+        setattr(
+            self.rect,
+            coordinates_name,
+            coordinates_value,
+        )
 
     def validate(self, value):
 
@@ -75,6 +86,51 @@ class SystemFontPicker:
             update_cache_for_font_preview(font_name)
 
         self.update_image()
+
+    def update_image(self):
+        """Update widget image."""
+        ###
+        image = self.image
+
+        ### clean image surface
+        image.fill('grey')
+
+        ###
+        value = self.value
+
+        ### create variable specifying whether the value
+        ### is a string
+        value_is_string = isinstance(value, str)
+
+        ### create variable specifying whether there's more
+        ### than one font name
+
+        multiple_names = not value_is_string and len(value) > 1
+
+        ### if there are multiple font names...
+
+        if multiple_names:
+
+            ### define current font name
+            self.current_font_name = value[self.value_index]
+
+        ### if there's just one font name, though...
+
+        else:
+
+            ### define font name
+            self.current_font_name = value if value_is_string else value[0]
+
+        ### blit all buttons
+
+        for surf, rect in zip(self.button_surfs, self.button_rects):
+            image.blit(surf, rect)
+
+        ### blit font representation
+        self.blit_path_representation()
+
+        ### draw depth finish
+        draw_depth_finish(image)
 
     def blit_value_representation(self):
         """Blit representation of video in current path."""
@@ -111,7 +167,46 @@ class SystemFontPicker:
 
         image.blit(preview_surf, rect)
 
-        super().blit_path_representation()
+        ### blit rest of elements
+
+        rect = self.image.get_rect()
+        rect.topleft = rect.move(1, -BUTTON_HEIGHT).bottomleft
+        rect.height = BUTTON_HEIGHT - 2
+        rect.move_ip(0, 1)
+
+        draw_rect(self.image, 'grey', rect)
+
+        ###
+
+        blit_aligned(
+
+            surface_to_blit=(
+
+                render_text(
+                    text=str(self.current_font_name),
+                    font_path=ENC_SANS_BOLD_FONT_PATH,
+                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                    padding=1,
+                    max_width=152,
+                    ommit_direction="left",
+                )
+
+            ),
+
+            target_surface=self.image,
+            retrieve_pos_from="bottomright",
+            assign_pos_to="bottomright",
+            offset_pos_by=(-1, -1),
+        )
+
+        if isinstance(self.value, str) or len(self.value) == 1:
+            return
+
+        ### blit entry
+
+        self.image.blit(
+            self.index_entry.image, self.button_rects[1].move(1, 0).topright
+        )
 
     def preview_paths(self):
         """Preview font(s) from path(s)."""
@@ -132,3 +227,66 @@ class SystemFontPicker:
 
             print(error_msg)
             set_status_message(error_msg)
+
+    def get(self):
+        """Return the widget value."""
+        return self.value
+
+    def set(
+        self,
+        value,
+        custom_command=True,
+        update_image=True,
+    ):
+        """Set the value of the widget.
+
+        value (string or tuple of strings representing paths)
+            new value for widget.
+        custom_command (boolean)
+            indicates whether the custom command stored
+            upon instantiation should be called after
+            updating the value.
+        update_image (boolean)
+            indicates whether the update_image method
+            should be called after updating the value.
+        """
+        ### validate value received
+        try:
+            self.validate_value(value)
+
+        ### if it doesn't validate, report error and exit
+        ### method by returning
+
+        except (TypeError, ValueError) as err:
+
+            print(err)
+            return
+
+        ### changes are only performed if the new value is
+        ### indeed different from the current one
+
+        if self.value != value:
+
+            ### store new value
+            self.value = value
+
+            ### reset index
+            self.value_index = 0
+
+            ### reset index value and max value
+
+            entry = self.index_entry
+
+            entry.set(0, False)
+
+            max_value = 0 if isinstance(value, str) else len(value) - 1
+
+            entry.set_range(0, max_value)
+
+            ### if requested, execute the custom command
+            if custom_command:
+                self.command()
+
+            ### if requested, update the widget image
+            if update_image:
+                self.update_image()
