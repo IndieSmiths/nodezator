@@ -1,4 +1,4 @@
-"""Facility for system font picker widget."""
+"""Facility for system font option menu widget."""
 
 ### third-party imports
 from pygame.font import SysFont, get_fonts
@@ -26,7 +26,7 @@ SYS_FONTS_MAP = {}
 BUTTON_HEIGHT = 18
 
 
-class SystemFontPicker:
+class SystemFontOptionMenu:
     """Helps users pick system fonts and display them."""
 
     def __init__(
@@ -35,7 +35,7 @@ class SystemFontPicker:
         string_when_single=True,
         loop_holder=None,
         width=155,
-        name='system_font_picker',
+        name='system_font_option_menu',
         command=empty_function,
         update_behind=empty_function,
         draw_behind=empty_function,
@@ -83,55 +83,61 @@ class SystemFontPicker:
 
         value_type = type(value)
 
-        ### if value is string, it doesn't validate if it is empty or
-        ### if 'string_when_single' attribute is False
+        ### if value is a string, it can be any value, so we don't need
+        ### to do anything else
 
         if value_type is str:
+            pass
 
-            if not value:
-
-                raise ValueError("if 'value' is of 'str' type, it" " must not be empty")
-
-            elif not self.string_when_single:
-
-                raise ValueError(
-                    "if 'string_when_single' is"
-                    " False, 'value' must always"
-                    " be a tuple"
-                )
-
-        ### if it is a tuple , more conditions need to be
-        ### checked
+        ### if value is a tuple, though, more conditions need to be checked
 
         elif value_type is tuple:
 
             ## it must not be empty
 
-            if not len(value):
+            if not value:
+                raise ValueError("if 'value' is a tuple, it must not be empty")
 
-                raise ValueError(
-                    "if 'value' is of 'tuple' type, it must" " not be empty"
+            ## all of its items must be strings
+
+            elif any(
+
+                not isinstance(item, str)
+                for item in value
+
+            ):
+
+                raise TypeError(
+                    "if 'value' is a tuple, all of its items must be strings"
                 )
 
-            ## all of its items must be non-empty strings
+            ## if 'string_when_single' flag is on, it cannot have a single value
+            ## (otherwise it should be a string instead)
 
-            if any(type(item) is not str or not item for item in value):
+            elif self.string_when_single and len(value) == 1:
+
                 raise TypeError(
-                    "if 'value' is of 'tuple' type, its items"
-                    " must all be non-empty strings"
+                    "with 'string_when_single' enabled, when the value"
+                    " contains a single font name, it must be a string,"
+                    " not a tuple"
                 )
 
         ### if type isn't one of the allowed types, raise
         ### TypeError with suitable message
 
         else:
-            raise TypeError("'value' must be of type 'str' or 'tuple'")
-
-        return True
+            raise TypeError("'value' must be a string or tuple of strings")
 
     def update_previews(self):
         """"""
-        font_names = (self.value,) if isinstance(self.value, str) else self.value
+        font_names = (
+
+            (self.value,)
+            if isinstance(self.value, str)
+
+            else self.value
+
+        )
 
         for font_name in font_names:
             update_cache_for_font_preview(font_name)
