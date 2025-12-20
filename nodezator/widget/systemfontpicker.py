@@ -23,6 +23,8 @@ SYS_FONTS_SET = set(get_fonts())
 SYS_FONTS_SORTED = sorted(SYS_FONTS_SET)
 SYS_FONTS_MAP = {}
 
+BUTTON_HEIGHT = 18
+
 
 class SystemFontPicker:
     """Helps users pick system fonts and display them."""
@@ -30,6 +32,7 @@ class SystemFontPicker:
     def __init__(
         self,
         value='',
+        string_when_single=True,
         loop_holder=None,
         width=155,
         name='system_font_picker',
@@ -41,15 +44,13 @@ class SystemFontPicker:
         coordinates_value=(0, 0),
     ):
 
-        ### ensure value argument received is a python literal
+        ### store string_when_single argument
+        self.string_when_single = string_when_single
 
-        if not self.validate(value):
-            raise TypeError("'value' received must be a python literal")
+        ### ensure value argument received is valid
+        self.validate_value(value)
 
-        ### create placeholder surface, used whenever we need to display a
-        ### font which wasn't loaded yet
-
-        ### store some of the arguments in their own
+        ### store more of the arguments in their own
         ### attributes
 
         self.name = name
@@ -59,7 +60,7 @@ class SystemFontPicker:
 
         ### create image and rect, then position rect
 
-        self.image = Surface((width, 195)).convert()
+        self.image = Surface((width, 100)).convert()
         self.image.fill('grey')
         self.rect = self.image.get_rect()
 
@@ -69,14 +70,64 @@ class SystemFontPicker:
             coordinates_value,
         )
 
-    def validate(self, value):
+        ###
+        self.update_image()
+
+    def validate_value(self, value):
 
         try:
             literal_eval(repr(value))
-        except:
-            return False
+
+        except Exception as err:
+            raise ValueError("Value is not a Python literal") from err
+
+        value_type = type(value)
+
+        ### if value is string, it doesn't validate if it is empty or
+        ### if 'string_when_single' attribute is False
+
+        if value_type is str:
+
+            if not value:
+
+                raise ValueError("if 'value' is of 'str' type, it" " must not be empty")
+
+            elif not self.string_when_single:
+
+                raise ValueError(
+                    "if 'string_when_single' is"
+                    " False, 'value' must always"
+                    " be a tuple"
+                )
+
+        ### if it is a tuple , more conditions need to be
+        ### checked
+
+        elif value_type is tuple:
+
+            ## it must not be empty
+
+            if not len(value):
+
+                raise ValueError(
+                    "if 'value' is of 'tuple' type, it must" " not be empty"
+                )
+
+            ## all of its items must be non-empty strings
+
+            if any(type(item) is not str or not item for item in value):
+                raise TypeError(
+                    "if 'value' is of 'tuple' type, its items"
+                    " must all be non-empty strings"
+                )
+
+        ### if type isn't one of the allowed types, raise
+        ### TypeError with suitable message
+
         else:
-            return True
+            raise TypeError("'value' must be of type 'str' or 'tuple'")
+
+        return True
 
     def update_previews(self):
         """"""
@@ -123,27 +174,27 @@ class SystemFontPicker:
 
         ### blit all buttons
 
-        for surf, rect in zip(self.button_surfs, self.button_rects):
-            image.blit(surf, rect)
+        #for surf, rect in zip(self.button_surfs, self.button_rects):
+        #    image.blit(surf, rect)
 
         ### blit font representation
-        self.blit_path_representation()
+        self.blit_value_representation()
 
         ### draw depth finish
         draw_depth_finish(image)
 
     def blit_value_representation(self):
-        """Blit representation of video in current path."""
+        """Blit representation of current font."""
         image = self.image
 
         rect = (
             1,
             BUTTON_HEIGHT + 2,
-            self.width - 2,
-            self.height - ((BUTTON_HEIGHT * 2) + 2),
+            self.rect.width - 2,
+            self.rect.height - ((BUTTON_HEIGHT * 2) + 2),
         )
 
-        draw_rect(image, PATHPREVIEW_BG, rect)
+        draw_rect(image, 'grey', rect)
 
         ###
 
@@ -154,7 +205,7 @@ class SystemFontPicker:
 
         else:
 
-            preview_surf = FONT_PREVIEWS_DB[self.current_value][
+            preview_surf = FONT_PREVIEWS_DB[self.current_font_name][
                 {
                     "font_size": 20,
                     "chars": PREVIEW_CHARS,
@@ -204,21 +255,24 @@ class SystemFontPicker:
 
         ### blit entry
 
-        self.image.blit(
-            self.index_entry.image, self.button_rects[1].move(1, 0).topright
-        )
+        #self.image.blit(
+        #    self.index_entry.image, self.button_rects[1].move(1, 0).topright
+        #)
 
-    def preview_paths(self):
-        """Preview font(s) from path(s)."""
+    def preview_fonts(self):
+        """Preview font(s) from system."""
 
         try:
             view_fonts(self.value)
 
         except FileNotFoundError:
-            error_msg = "Font file wasn't found."
+            error_msg = "System font wasn't found."
 
         except PygameError:
             error_msg = "Couldn't load font file"
+
+        except Exception as err:
+            error_msg = str(err)
 
         else:
             error_msg = ''
