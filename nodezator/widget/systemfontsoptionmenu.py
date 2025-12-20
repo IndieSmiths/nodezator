@@ -15,13 +15,11 @@ from ..fontsman.preview.cache import (
     update_cache_for_font_preview,
 )
 
+from ..fontsman.systemfontspicker import pick_system_fonts
+
 from ..textman.render import render_text
 
 
-
-SYS_FONTS_SET = set(get_fonts())
-SYS_FONTS_SORTED = sorted(SYS_FONTS_SET)
-SYS_FONTS_MAP = {}
 
 BUTTON_HEIGHT = 18
 
