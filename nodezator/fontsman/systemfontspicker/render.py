@@ -1,10 +1,12 @@
 """Facility for character info rendering."""
 
+### third-party import
+from pygame import Surface
+
+
 ### local imports
 
 from ...classes2d.single import Object2D
-
-from ..constants import FIRA_MONO_BOLD_FONT_HEIGHT, FIRA_MONO_BOLD_FONT_PATH
 
 from ...textman.render import render_text
 
@@ -13,10 +15,15 @@ from ...surfsman.render import combine_surfaces
 from ...colorsman.colors import BLACK, WHITE
 
 
-SIZE_FORMATTER = "{}x{}".format
+
+FONT_PREVIEW_SIZE = (200, 100)
+
+PLACEHOLDER_PREVIEW_SURF = Surface(FONT_PREVIEW_SIZE).convert()
+PLACEHOLDER_PREVIEW_SURF.fill('white')
 
 
-def render_char_info(char, font):
+
+def render_font_preview(char, font):
 
     char_surf = font.render(char, True, BLACK, WHITE)
 

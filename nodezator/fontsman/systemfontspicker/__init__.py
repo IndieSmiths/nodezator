@@ -49,11 +49,11 @@ from ...classes2d.single import Object2D
 
 from ...classes2d.collections import List2D
 
-from ...surfsman.render import render_rect
+from ...surfsman.render import render_rect, render_not_found_icon
 
 from ...textman.render import render_text
 
-from .render import render_char_info
+from .render import PLACEHOLDER_PREVIEW_SURF, render_char_info
 
 
 
@@ -63,9 +63,9 @@ CHARS = ascii_uppercase + ascii_lowercase + digits + punctuation
 logger = get_new_logger(__name__)
 
 
-SYS_FONTS_SET = set(get_fonts())
-SYS_FONTS_SORTED = sorted(SYS_FONTS_SET)
-SYS_FONTS_MAP = {}
+SYS_FONT_NAMES_SET = set(get_fonts())
+SYS_FONT_NAMES_SORTED = sorted(SYS_FONTS_SET)
+SYS_FONT_NAMES_MAP = {}
 
 
 class SystemFontsPicker(Object2D, LoopHolder):
@@ -89,8 +89,8 @@ class SystemFontsPicker(Object2D, LoopHolder):
             Object2D.from_surface(render_rect(640, 640, (180, 180, 180)))
         )
 
-        font_preview_panel = (
-            Object2D.from_surface(render_rect(420, 640, (180, 180, 180)))
+        font_preview_panel = self.font_preview_panel = (
+            Object2D.from_surface(render_not_found_icon((420, 640)))
         )
 
         selected_fonts_pane.rect.topleft = caption.rect.move(0, 10).bottomleft
@@ -122,7 +122,36 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         self.clean_image = self.image.copy()
 
-        ### center font viewer and append centering method
+        ###
+        self.no_preview_surf = font_preview_panel.image
+
+        ###
+
+        sys_font_2d_objs = self.sys_font_2d_objs = List2D(
+
+            Object2D.from_surface(
+                PLACEHOLDER_PREVIEW_SURF,
+                font_name = font_name,
+            )
+
+            for font_name in SYS_FONT_NAMES_SORTED
+
+        )
+
+        sys_font_2d_objs.rect.lay_rects_like_table_ip(
+            dimension_name='width',
+            dimension_unit='pixels',
+            max_dimension_value=640,
+            cell_padding=20,
+        )
+
+        sys_font_2d_objs.rect.topleft = all_fonts_panel.rect.topleft
+
+        ###
+        self.selected_font_2d_objs = List2D()
+        self.font_names = ('',)
+
+        ### center system fonts picker and append centering method
         ### as a window resize setup
 
         self.center_font_viewer()
@@ -138,14 +167,10 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         self.offset = -Vector2(self.rect.topleft)
 
-        self.preview_panel.rect.move_ip(diff)
+        self.sys_font_2d_objs.rect.move_ip(diff)
 
-        try:
-            self.char_objs
-        except AttributeError:
-            pass
-        else:
-            self.char_objs.rect.move_ip(diff)
+        if any(item for item in self.font_names):
+            self.selected_font_2d_objs.rect.move_ip(diff)
 
     def pick_system_fonts(self, font_names, index=0):
 
@@ -171,6 +196,8 @@ class SystemFontsPicker(Object2D, LoopHolder):
         ###
         if self.font_name:
             self.prepare_preview()
+        else:
+            self.font_preview_panel.image = self.no_preview_surf
 
         ###
         self.loop()
