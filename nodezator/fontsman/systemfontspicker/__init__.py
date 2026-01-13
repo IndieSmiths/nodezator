@@ -57,7 +57,12 @@ from .render import PLACEHOLDER_PREVIEW_SURF, render_char_info
 
 
 
-CHARS = ascii_uppercase + ascii_lowercase + digits + punctuation
+CHARS = (
+    ascii_uppercase
+    + ascii_lowercase
+    + digits
+    + punctuation
+)
 
 ### create logger for module
 logger = get_new_logger(__name__)
@@ -65,7 +70,7 @@ logger = get_new_logger(__name__)
 
 SYS_FONT_NAMES_SET = set(get_fonts())
 SYS_FONT_NAMES_SORTED = sorted(SYS_FONTS_SET)
-SYS_FONT_NAMES_MAP = {}
+SYS_FONTS_MAP = {}
 
 
 class SystemFontsPicker(Object2D, LoopHolder):
@@ -194,25 +199,36 @@ class SystemFontsPicker(Object2D, LoopHolder):
         )
 
         ###
+
         if self.font_name:
             self.prepare_preview()
+
         else:
             self.font_preview_panel.image = self.no_preview_surf
 
         ###
         self.loop()
 
+        ###
+        return self.font_names
+
     def prepare_preview(self):
 
-        font = self.font_obj_map[self.font_path]
+        font = SYS_FONTS_MAP[self.font_name]
 
         self.char_objs = List2D(
-            Object2D.from_surface(render_char_info(char, font)) for char in CHARS
+
+            Object2D.from_surface(
+                render_char_info(char, font)
+            )
+
+            for char in CHARS
+
         )
 
         self.char_objs.rect.lay_rects_like_table_ip(
-            dimension_name="width",
-            dimension_unit="pixels",
+            dimension_name='width',
+            dimension_unit='pixels',
             max_dimension_value=780,
             cell_padding=5,
         )
@@ -250,16 +266,15 @@ class SystemFontsPicker(Object2D, LoopHolder):
             elif event.type == KEYUP:
 
                 if event.key in (K_RETURN, K_KP_ENTER, K_ESCAPE):
-                    self.running = False
 
-    ### TODO create methods to automatically
-    ### scroll objects within an scroll area
-    ### in the RectsManager class;
+                    self.running = False
+                    self.font_names = None
+
+    ### TODO create methods in the RectsManager class to automatically scroll
+    ### objects within a scroll area;
     ###
-    ### make sure classes2d/collections.py
-    ### has a suitable way to draw objects
-    ### in such arrangement (within a scroll
-    ### area); maybe a thourough review of
+    ### make sure classes2d/collections.py has a suitable way to draw objects
+    ### in such arrangement (within a scroll area); maybe a thourough review of
     ### classesman/collections.py is needed;
 
     def draw(self):
@@ -283,4 +298,4 @@ class SystemFontsPicker(Object2D, LoopHolder):
         SERVICES_NS.update_screen()
 
 
-pick_system_fonts = SystemFontsPicker().view_fonts
+pick_system_fonts = SystemFontsPicker().pick_system_fonts
