@@ -14,7 +14,7 @@ from string import (
 
 ### third-party imports
 
-from pygame import Surface
+from pygame import Surface, error as PygameError
 
 from pygame.font import SysFont, get_fonts
 
@@ -25,11 +25,15 @@ from pygame.draw import rect as draw_rect
 
 from ..ourstdlibs.behaviour import empty_function
 
+from ..our3rdlibs.behaviour import set_status_message
+
 from ..classes2d.single import Object2D
 
 from ..surfsman.cache import NOT_FOUND_SURF_MAP
 
 from ..surfsman.draw import blit_aligned, draw_depth_finish
+
+from ..fontsman.viewer.main import view_fonts
 
 from ..fontsman.preview.cache import (
     FONT_PREVIEWS_DB,
@@ -47,6 +51,8 @@ from ..textman.render import render_text
 
 
 
+BUTTON_SURF = Surface((20, 20)).convert()
+BUTTON_SURF.fill('blue')
 BUTTON_HEIGHT = 18
 
 PREVIEW_CHARS = (
@@ -94,7 +100,7 @@ class SystemFontsOptionMenu(Object2D):
 
         ### create image and rect, then position rect
 
-        self.image = Surface((width, 100)).convert()
+        self.image = Surface((width, 170)).convert()
         self.image.fill('grey')
         self.rect = self.image.get_rect()
 
@@ -186,6 +192,8 @@ class SystemFontsOptionMenu(Object2D):
         ### clean image surface
         image.fill('grey')
 
+        image.blit(BUTTON_SURF, (0, 0))
+
         ###
         value = self.value
 
@@ -238,21 +246,19 @@ class SystemFontsOptionMenu(Object2D):
 
         ###
 
-        if self.value == '':
+        if self.current_font_name == '':
             preview_surf = NOT_FOUND_SURF_MAP[(rect[2], rect[3])]
-
-        ###
 
         else:
 
             preview_surf = FONT_PREVIEWS_DB[self.current_font_name][
                 {
-                    "font_size": 20,
-                    "chars": PREVIEW_CHARS,
-                    "width": rect[2],
-                    "height": rect[3],
-                    "not_found_width": rect[2],
-                    "not_found_height": rect[3],
+                    'font_size': 20,
+                    'chars': PREVIEW_CHARS,
+                    'width': rect[2],
+                    'height': rect[3],
+                    'not_found_width': rect[2],
+                    'not_found_height': rect[3],
                 }
             ]
 
@@ -279,14 +285,14 @@ class SystemFontsOptionMenu(Object2D):
                     font_height=ENC_SANS_BOLD_FONT_HEIGHT,
                     padding=1,
                     max_width=152,
-                    ommit_direction="left",
+                    ommit_direction='left',
                 )
 
             ),
 
             target_surface=self.image,
-            retrieve_pos_from="bottomright",
-            assign_pos_to="bottomright",
+            retrieve_pos_from='bottomright',
+            assign_pos_to='bottomright',
             offset_pos_by=(-1, -1),
         )
 
@@ -369,13 +375,13 @@ class SystemFontsOptionMenu(Object2D):
 
             ### reset index value and max value
 
-            entry = self.index_entry
+            #entry = self.index_entry
 
-            entry.set(0, False)
+            #entry.set(0, False)
 
-            max_value = 0 if isinstance(value, str) else len(value) - 1
+            #max_value = 0 if isinstance(value, str) else len(value) - 1
 
-            entry.set_range(0, max_value)
+            #entry.set_range(0, max_value)
 
             ### if requested, execute the custom command
             if custom_command:
@@ -384,3 +390,38 @@ class SystemFontsOptionMenu(Object2D):
             ### if requested, update the widget image
             if update_image:
                 self.update_image()
+
+    def on_mouse_release(self, event):
+
+        pos = event.pos
+
+        rect = self.rect.copy()
+
+        rect.width = 20
+        rect.height = 20
+
+        if rect.collidepoint(pos):
+
+            font_names = (
+
+                (self.value,)
+                if isinstance(self.value, str)
+
+                else self.value
+
+            )
+
+            new_font_names = pick_system_fonts(font_names)
+
+            if new_font_names is not None:
+
+                new_value = (
+                    new_font_names[0]
+                    if len(new_font_names) == 1 and self.string_when_single
+                    else new_font_names
+                )
+
+                self.set(new_value)
+            
+        else:
+            self.preview_fonts()

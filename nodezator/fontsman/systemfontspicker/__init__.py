@@ -91,11 +91,11 @@ class SystemFontsPicker(Object2D, LoopHolder):
         )
 
         all_fonts_panel = (
-            Object2D.from_surface(render_rect(640, 640, (180, 180, 180)))
+            Object2D.from_surface(render_rect(640, 560, (180, 180, 180)))
         )
 
         font_preview_panel = self.font_preview_panel = (
-            Object2D.from_surface(render_not_found_icon((420, 640)))
+            Object2D.from_surface(render_not_found_icon((420, 560)))
         )
 
         selected_fonts_panel.rect.topleft = caption.rect.move(0, 10).bottomleft
@@ -123,9 +123,9 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         self.all_panels.rect.center = SCREEN_RECT.center
 
-        self.image = Surface(self.all_panels.rect.size).convert()
-        self.image.fill('grey')
         self.rect = self.all_panels.rect.inflate(10, 10)
+        self.image = Surface(self.rect.size).convert()
+        self.image.fill('grey')
 
         self.clean_image = self.image.copy()
 
@@ -189,7 +189,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         )
 
-        max_index = len(font_paths) - 1
+        max_index = len(font_names) - 1
         index = max(0, min(index, max_index))
 
         self.font_name = (
@@ -218,52 +218,26 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         font = SYS_FONTS_MAP[self.font_name]
 
-        self.char_objs = List2D(
-
-            Object2D.from_surface(
-                render_char_info(char, font)
-            )
-
-            for char in CHARS
-
-        )
-
-        self.char_objs.rect.lay_rects_like_table_ip(
-            dimension_name='width',
-            dimension_unit='pixels',
-            max_dimension_value=780,
-            cell_padding=5,
-        )
-
-        self.char_objs.rect.topleft = self.rect.move(10, 10).topleft
+        #self.char_objs.rect.lay_rects_like_table_ip(
+        #    dimension_name='width',
+        #    dimension_unit='pixels',
+        #    max_dimension_value=780,
+        #    cell_padding=5,
+        #)
 
     def handle_input(self):
 
         self.handle_events()
         self.handle_key_states()
 
-    def handle_key_states(self):
-
-        key_pressed_states = SERVICES_NS.get_pressed_keys()
-
-        if key_pressed_states[K_a]:
-            self.char_objs.rect.move_ip(-20, 0)
-
-        elif key_pressed_states[K_s]:
-            self.char_objs.rect.move_ip(0, 20)
-
-        elif key_pressed_states[K_w]:
-            self.char_objs.rect.move_ip(0, -20)
-
-        elif key_pressed_states[K_d]:
-            self.char_objs.rect.move_ip(20, 0)
-
     def handle_events(self):
 
         for event in SERVICES_NS.get_events():
 
             if event.type == QUIT:
-                self.quit()
+
+                self.running = False
+                self.font_names = None
 
             elif event.type == KEYUP:
 
@@ -279,22 +253,28 @@ class SystemFontsPicker(Object2D, LoopHolder):
     ### in such arrangement (within a scroll area); maybe a thourough review of
     ### classesman/collections.py is needed;
 
+    def handle_key_states(self):
+
+        key_pressed_states = SERVICES_NS.get_pressed_keys()
+
+        if key_pressed_states[K_a]:
+            ... #self.char_objs.rect.move_ip(-20, 0)
+
+        elif key_pressed_states[K_s]:
+            ... #self.char_objs.rect.move_ip(0, 20)
+
+        elif key_pressed_states[K_w]:
+            ... #self.char_objs.rect.move_ip(0, -20)
+
+        elif key_pressed_states[K_d]:
+            ... #self.char_objs.rect.move_ip(20, 0)
+
     def draw(self):
 
-        image = self.image
-        image.blit(self.clean_image, (0, 0))
-
-        rect_touches_viewer = self.rect.colliderect
-
-        offset = self.offset
-
-        for obj in self.char_objs:
-
-            if rect_touches_viewer(obj.rect):
-
-                image.blit(obj.image, obj.rect.move(offset))
-
         super().draw()
+
+        for obj in self.all_panels:
+            obj.draw()
 
         ### update screen
         SERVICES_NS.update_screen()
