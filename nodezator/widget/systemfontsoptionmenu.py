@@ -1,14 +1,35 @@
 """Facility for system font option menu widget."""
 
+### standard library imports
+
+from ast import literal_eval
+
+from string import (
+    ascii_uppercase,
+    ascii_lowercase,
+    digits,
+    punctuation,
+)
+
+
 ### third-party imports
+
+from pygame import Surface
+
 from pygame.font import SysFont, get_fonts
+
+from pygame.draw import rect as draw_rect
 
 
 ### local imports
 
 from ..ourstdlibs.behaviour import empty_function
 
+from ..classes2d.single import Object2D
+
 from ..surfsman.cache import NOT_FOUND_SURF_MAP
+
+from ..surfsman.draw import blit_aligned, draw_depth_finish
 
 from ..fontsman.preview.cache import (
     FONT_PREVIEWS_DB,
@@ -17,14 +38,29 @@ from ..fontsman.preview.cache import (
 
 from ..fontsman.systemfontspicker import pick_system_fonts
 
+from ..fontsman.constants import (
+    ENC_SANS_BOLD_FONT_PATH,
+    ENC_SANS_BOLD_FONT_HEIGHT,
+)
+
 from ..textman.render import render_text
 
 
 
 BUTTON_HEIGHT = 18
 
+PREVIEW_CHARS = (
+    digits
+    + "".join(
+        sorted(ascii_uppercase + ascii_lowercase, key=str.lower)[
+            : 2 * 9
+        ]  # only first 9 pairs
+    )
+    + punctuation
+)
 
-class SystemFontOptionMenu:
+
+class SystemFontsOptionMenu(Object2D):
     """Helps users pick system fonts and display them."""
 
     def __init__(
@@ -69,7 +105,7 @@ class SystemFontOptionMenu:
         )
 
         ###
-        self.update_image()
+        self.update_previews()
 
     def validate_value(self, value):
 

@@ -76,6 +76,11 @@ from ..widget.optionmenu.main import OptionMenu
 
 from ..widget.pathpreview.font import FontPreview
 
+from ..widget.systemfontsoptionmenu import SystemFontsOptionMenu
+
+from ..widget.defaultholder import DefaultHolder
+
+
 from ..colorsman.colors import (
     CONTRAST_LAYER_COLOR,
     BUTTON_FG,
@@ -165,23 +170,24 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         widgets.append(caption_label)
 
-        labels = List2D()
+        ### instantiate labels
 
-        ### create specific widgets to edit user preferences
+        labels = List2D(
 
-        for label_text in (
-            t.language,
-            t.general_font_height,
-            t.mono_font_height,
-            t.general_font,
-            t.mono_font,
-        ):
 
-            label_obj = Object2D.from_surface(
+            Object2D.from_surface(
                 render_text(text=f"{label_text}:", **TEXT_SETTINGS)
             )
 
-            labels.append(label_obj)
+            for label_text in (
+                t.language,
+                t.general_font_height,
+                t.mono_font_height,
+                t.general_font,
+                t.mono_font,
+            )
+        )
+
 
         labels.rect.snap_rects_ip(
             retrieve_pos_from='bottomleft',
@@ -193,7 +199,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         widgets.extend(labels)
 
-        ###
+        ### create specific widgets to edit user preferences
 
         lang_option_menu = OptionMenu(
             loop_holder=self,
@@ -234,6 +240,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
             value=USER_PREFS['GENERAL_FONT_KIND'],
             name='GENERAL_FONT_KIND',
             draw_on_window_resize=self.draw,
+            command=self.switch_general_font_use_widget,
             max_width=0,
         )
 
@@ -243,17 +250,18 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
             value=USER_PREFS['MONO_FONT_KIND'],
             name='MONO_FONT_KIND',
             draw_on_window_resize=self.draw,
+            command=self.switch_mono_font_use_widget,
             max_width=0,
         )
 
         self.prefs_widgets = prefs_widgets = List2D(
-            [
+            (
                 lang_option_menu,
                 general_font_size_intfloat_entry,
                 mono_font_size_intfloat_entry,
                 general_font_kind_option_menu,
                 mono_font_kind_option_menu,
-            ]
+            )
         )
 
         right = max(label.rect.right for label in labels) + 5
@@ -263,29 +271,31 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         widgets.extend(prefs_widgets)
 
-        ### TODO add widgets to use beside the "font_to_use" option menus
+        ###
 
         self.general_font_widget_map = general_font_widget_map = {}
         self.mono_font_widget_map = mono_font_widget_map = {}
 
-        for widget, value_key, widget_map in (
+        for font_kind, value_key, widget_map in (
 
             (
-                general_font_kind_option_menu,
+                USER_PREFS['GENERAL_FONT_KIND'],
                 'GENERAL_FONT_TO_USE',
                 general_font_widget_map,
             ),
 
             (
-                mono_font_kind_option_menu,
+                USER_PREFS['MONO_FONT_KIND'],
                 'MONO_FONT_TO_USE',
                 mono_font_widget_map,
             ),
         ):
 
-            kind = widget.get()
+            user_value = USER_PREFS[value_key]
 
-            value = USER_PREFS[value_key] if kind == 'font file' else '.'
+            ## font preview
+
+            value = user_value if font_kind == 'font file' else '.'
 
             fp = FontPreview(
                 value=value,
@@ -294,6 +304,36 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
             )
 
             widget_map['font file'] = fp
+
+            ## system fonts option menu
+
+            value = user_value if font_kind == 'system font' else ''
+
+            sfom = SystemFontsOptionMenu(
+                value=value,
+                loop_holder=self,
+                string_when_single=True,
+                draw_on_window_resize=self.draw,
+            )
+
+            widget_map['system font'] = sfom
+
+            ## default holder (when user chooses default font to be used)
+
+            value = (
+
+                "Encode Sans Semi-expanded Bold"
+                if value_key == 'GENERAL_FONT_TO_USE'
+
+                else "Fira Mono Bold"
+
+            )
+
+            dh = DefaultHolder(value=value, max_width=400)
+
+            widget_map['default'] = dh
+
+
 
         ### calculate extra width and height used by "font_to_use" widgets
 
@@ -323,6 +363,12 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         prefs_widgets[-1].rect.y += extra_height_used_by_single_widget
         labels[-1].rect.y += extra_height_used_by_single_widget
+
+        ### add and position "font_use" widgets beside their respective option
+        ### menus
+
+        self.switch_general_font_use_widget()
+        self.switch_mono_font_use_widget()
 
         ### create, position and store form related buttons
 
@@ -365,6 +411,62 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         ## store
         widgets.extend((self.cancel_button, self.finish_button))
+
+    def switch_font_use_widget(self, font_role):
+
+        if font_role == 'general':
+
+            widgets_to_remove = self.general_font_widget_map.values()
+
+            widget_to_add = (
+
+                self.general_font_widget_map[
+                    self.gen_font_option.get()
+                ]
+
+            )
+
+            topright = self.gen_font_option.rect.topright
+
+        elif font_role == 'mono':
+
+            widgets_to_remove = self.mono_font_widget_map.values()
+
+            widget_to_add = (
+
+                self.mono_font_widget_map[
+                    self.mono_font_option.get()
+                ]
+
+            )
+
+            topright = self.mono_font_option.rect.topright
+
+        else:
+
+            return RuntimeError(
+                "This block should never execute, since the 'font_role'"
+                " argument must be either 'general' or 'mono'."
+            )
+
+
+        widgets = self.widgets
+
+        for widget in widgets_to_remove:
+            if widget in widgets:
+                widgets.remove(widget)
+
+        widget_to_add.rect.topleft = topright
+        widget_to_add.rect.move_ip(5, 0)
+
+        widgets.append(widget_to_add)
+
+
+    switch_general_font_use_widget = (
+        partialmethod(switch_font_use_widget, 'general')
+    )
+
+    switch_mono_font_use_widget = partialmethod(switch_font_use_widget, 'mono')
 
     def edit_lang_and_fonts_settings(self):
 

@@ -12,7 +12,7 @@ from string import (
 
 ### third-party imports
 
-from pygame import Rect
+from pygame import Rect, Surface
 
 from pygame.locals import (
     QUIT,
@@ -69,7 +69,7 @@ logger = get_new_logger(__name__)
 
 
 SYS_FONT_NAMES_SET = set(get_fonts())
-SYS_FONT_NAMES_SORTED = sorted(SYS_FONTS_SET)
+SYS_FONT_NAMES_SORTED = sorted(SYS_FONT_NAMES_SET)
 SYS_FONTS_MAP = {}
 
 
@@ -98,13 +98,15 @@ class SystemFontsPicker(Object2D, LoopHolder):
             Object2D.from_surface(render_not_found_icon((420, 640)))
         )
 
-        selected_fonts_pane.rect.topleft = caption.rect.move(0, 10).bottomleft
+        selected_fonts_panel.rect.topleft = caption.rect.move(0, 10).bottomleft
 
         all_fonts_panel.rect.topleft = (
             selected_fonts_panel.rect.move(0, 20).bottomleft
         )
 
-        font_preview_panel.rect.topleft = all_fonts_panel.move(20, 0).topright
+        font_preview_panel.rect.topleft = (
+            all_fonts_panel.rect.move(20, 0).topright
+        )
 
         ###
 

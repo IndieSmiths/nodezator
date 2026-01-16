@@ -49,8 +49,9 @@ class FontPreviewsDatabase(dict):
 
         Parameters
         ==========
-        key (string)
-            represents the path wherein to find the image.
+        key (string or pathlib.Path)
+            represents name of system font (if a string) or path to font file
+            (if a pathlib.Path), for font to be loaded.
         """
         ### we create a surface map for the key, store and
         ### return it
