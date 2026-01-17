@@ -85,6 +85,8 @@ TRANSLATIONS_DIR = DATA_DIR / 'translations'
 LANGUAGE_NAMES_FILEPATH = TRANSLATIONS_DIR / 'language_native_names.pyl'
 DIALOGS_DATA_PATH = DATA_DIR / 'dialogs.pyl'
 
+SAMPLE_UNICODE_CHARS_PATH = DATA_DIR / 'sample_unicode_characters.pyl'
+
 
 ### writeable paths for config/logs, etc.
 WRITEABLE_PATH = Path(get_pref_path(ORG_DIR_NAME, APP_DIR_NAME))

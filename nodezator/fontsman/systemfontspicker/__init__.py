@@ -33,13 +33,15 @@ from pygame.math import Vector2
 
 ### local imports
 
-from ...config import APP_REFS
+from ...config import APP_REFS, SAMPLE_UNICODE_CHARACTERS_PATH
 
 from ...pygamesetup import SCREEN_RECT, SERVICES_NS
 
 from ...dialog import create_and_show_dialog
 
 from ...logman.main import get_new_logger
+
+from ...ourstdlibs.pyl import load_pyl
 
 from ...our3rdlibs.userlogger import USER_LOGGER
 
@@ -53,7 +55,6 @@ from ...surfsman.render import render_rect, render_not_found_icon
 
 from ...textman.render import render_text
 
-from .render import PLACEHOLDER_PREVIEW_SURF, render_char_info
 
 
 
@@ -64,6 +65,11 @@ CHARS = (
     + punctuation
 )
 
+FONT_PREVIEW_SIZE = (200, 100)
+
+PLACEHOLDER_PREVIEW_SURF = Surface(FONT_PREVIEW_SIZE).convert()
+PLACEHOLDER_PREVIEW_SURF.fill('white')
+
 ### create logger for module
 logger = get_new_logger(__name__)
 
@@ -71,6 +77,12 @@ logger = get_new_logger(__name__)
 SYS_FONT_NAMES_SET = set(get_fonts())
 SYS_FONT_NAMES_SORTED = sorted(SYS_FONT_NAMES_SET)
 SYS_FONTS_MAP = {}
+
+try:
+    SAMPLE_UNICODE_CHARS_DATA = load_pyl(SAMPLE_UNICODE_CHARACTERS_PATH)
+
+except Exception as err:
+    raise RuntimeError("Couldn't load sample unicode characters") from err
 
 
 class SystemFontsPicker(Object2D, LoopHolder):
@@ -218,12 +230,6 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         font = SYS_FONTS_MAP[self.font_name]
 
-        #self.char_objs.rect.lay_rects_like_table_ip(
-        #    dimension_name='width',
-        #    dimension_unit='pixels',
-        #    max_dimension_value=780,
-        #    cell_padding=5,
-        #)
 
     def handle_input(self):
 

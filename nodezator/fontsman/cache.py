@@ -1,20 +1,30 @@
-"""Facility for pygame.font.Font objects storage/sharing.
+"""Facility for pygame.font.Font/SysFont objects storage/sharing.
 
-This module provides 01 object of interest for when
-we want to reuse font. The other objects are support
-objects not meant to be imported/touched in any way.
+In other words, here we obtain a cached fonts for font files or fonts
+available in the system. Such fonts will render text surfaces with the
+given height in pixels, or at least as close as possible without
+surpassing that height.
 
-The one you want to import is:
+This module provides 01 object of interest for when we want to reuse fonts.
+The other objects are support objects not meant to be imported/touched in
+any way.
 
-The FontsDatabase instance called FONTS_DB.
+The one you want to import is the FontsDatabase instance called FONTS_DB.
 
 This is an example of its usage:
 
-font = FONTS_DB[font_path][height]
+font = FONTS_DB[font_key][height]
 
-In other words, here we obtain a cached font for the
-font file in the given path, which renders text
-surfaces with the given height in pixels.
+The font_key can be a pathlib.Path object or a string. When the font is to
+be created from a font file, you should use a pathlib.Path object pointing
+to that file. When the font is to be created from a system font, that is,
+a font available in your system, then you just need to provide a string
+representing the name of that font.
+
+You can get the names of all available system fonts with a call to
+pygame.font.get_fonts(), which returns a list of strings representing
+such names. According to pygame-ce's documentation, this works on most
+systems, but not in some, in which case an empty list is returned instead.
 """
 
 ### standard library imports
@@ -24,9 +34,12 @@ from pathlib import Path
 from warnings import warn
 
 
-### third-party import
-from pygame.font import Font
+### third-party imports
+from pygame.font import Font, SysFont
 
+
+
+SPACE_CHARACTER = '\N{space}'
 
 
 class FontsDatabase(dict):
@@ -35,7 +48,7 @@ class FontsDatabase(dict):
     Extends the built-in dict.
     """
 
-    def __missing__(self, key):
+    def __missing__(self, font_key):
         """Create, store and return dict for given key.
 
         That is, the key is a string representing a path
@@ -43,11 +56,13 @@ class FontsDatabase(dict):
 
         Parameters
         ==========
-        key (string)
-            represents the path wherein to find the image.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when
+            a pathlib.Path is used) or the name of a font available
+            in the system (when a string is used).
         """
-        ### we create a font map for the key, store and
-        ### return it
+        ### we create a font map for the key, store and return it
+
         font_map = FontsMap(key)
         self[key] = font_map
         return font_map
@@ -57,17 +72,19 @@ FONTS_DB = FontsDatabase()
 
 
 class FontsMap(dict):
-    """Map to store pygame.font.Font instances."""
+    """Map to store pygame.font.Font/SysFont instances."""
 
-    def __init__(self, font_path):
+    def __init__(self, font_key):
         """Store image path.
 
         Parameters
         ==========
-        font_path (string)
-            represents path of image to be loaded.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when
+            a pathlib.Path is used) or the name of a font available
+            in the system (when a string is used).
         """
-        self.font_path = font_path
+        self.font_key = font_key
 
     def __missing__(self, height):
         """Store and return font rendered w/ given height.
@@ -75,69 +92,67 @@ class FontsMap(dict):
         Parameters
         ==========
         height (positive integer)
-            define at which height the font must be rendered.
+            represents the height in pixels of text surfaces created from
+            this font.
         """
-        font = get_font(self.font_path, height)
+        font = get_font(self.font_key, height)
         self[height] = font
         return font
 
 
-def get_font(font_path, desired_height):
-    """Return font obj whose surfaces are of desired height.
+def get_font(font_key, desired_height):
+    """Return font obj whose text surfs are equal or close to desired height.
 
-    Otherwise raises a custom exception notifying that the
-    height couldn't be obtained for the font.
+    The font object will be a pygame.font.Font or SysFont instance. That is,
+    a Font when font_key is a pathlib.Path instance pointing to a font file,
+    or a SysFont when font_key is a string representing the name of a font
+    available in the system.
 
-    The font object is a pygame.font.Font instance.
-
-    This is achieved by trial and error, that is,
+    This equal or close height is achieved by trial and error, that is,
     instantiating fonts and using their 'size' method.
-    This is so because each font has a different ratio
-    between the size argument provided and the actual
-    height in pixels of its rendered text surfaces.
-    Such ratio even changes within the font itself
-    depending on the specific size used.
 
-    Since instantiating pygame.font.Font and using its
-    'size' method is very quick, this is fast enough as
-    to not be noticeable.
+    This is so because each font has a different ratio between the size
+    argument provided and the actual height in pixels of its rendered
+    text surfaces. Such ratio even changes within the font itself depending on
+    the specific size used.
 
-    Furthermore, this is done only once per font and
-    desired height, since the resulting font object
-    is stored for future reference in the FontsMap
-    object that makes use of this funtion.
+    Since instantiating pygame.font.Font/SysFont and using its .size() method
+    is very quick, this is fast enough as to not be noticeable.
 
-    Coming up with a font which renders text surfaces
-    of the exact desired height is not always possible.
+    Furthermore, this is done only once per font and desired height, since the
+    resulting font object is cached for reuse in the FontsMap object that
+    makes use of this funtion.
 
-    For instance, you cannot have a pygame.font.Font
-    from an "ubuntu medium" font file with surfaces of
-    height 36. This is so because such font, when
-    instantiated with size 31 renders surfaces of
-    height 35 and when instantiated with size 32
-    renders surfaces with height 37.
+    Coming up with a font which renders text surfaces of the exact
+    desired height is not always possible.
 
-    In such case, as explained above, we raise a custom
-    error so the person can choose another height and
-    try checking whether it is possible to obtain a
-    font which renders surface of that height.
+    For instance, you cannot have a pygame.font.Font from an "ubuntu medium"
+    font file with surfaces of height 36. This is so because such font, when
+    instantiated with size 31, renders surfaces of height 35 and
+    when instantiated with size 32 renders surfaces of height 37.
 
-    However, it must be noted that obtaining a font
-    for a specific height doesn't mean all rendered
-    text surfaces will have that height. It depends
-    on the characters being rendered.
+    In such case, as explained earlier, we will return the font whose surfaces
+    get as close as possible to 37 in height, which is the one instantiated
+    with size 31 and whose surfaces are of height 35.
 
-    Also note that we don't use pygame.font.Font.get_height()
-    because it returns the average of the height of each
-    glyph in the font. We, on the other hand, prefer to
-    measure the height based on the height of a space
-    character.
+    However, it must be noted that obtaining a font for a specific height
+    doesn't mean all rendered text surfaces will have that height. It depends
+    on the characters being rendered. For our calculations we use the height
+    of a text surface rendered containing a single space character.
+
+    Also note that we don't use pygame.font.Font.get_height() because it
+    returns the average of the height of each glyph in the font. Instead, as
+    explained earlier, we use the height of a text surface rendered from a
+    single space character (using .size() to simulate the rendering process).
     """
     ### create a set to keep track of the attempted sizes
     attempted_sizes = set()
 
     ### create variable to store the chosen font
     chosen_font = None
+
+    ### pick the font class to use based on the class of the font key
+    font_class = Font if isinstance(font_key, Path) else SysFont
 
     ### create variable to store highest height achieved
     ### which doesn't surpass the desired height (but
@@ -153,7 +168,7 @@ def get_font(font_path, desired_height):
     raise_if_unattainable(desired_height, desired_height, font_path)
 
     font = Font(font_path, desired_height)
-    _, surf_height = font.size(" ")
+    _, surf_height = font.size(SPACE_CHARACTER)
 
     diff = desired_height - surf_height
 
@@ -181,7 +196,7 @@ def get_font(font_path, desired_height):
         raise_if_unattainable(desired_height, size, font_path)
 
         font = Font(font_path, size)
-        _, surf_height = font.size(" ")
+        _, surf_height = font.size(SPACE_CHARACTER)
 
         ### store current size as an attempted one since
         ### we just tried it

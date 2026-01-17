@@ -16,11 +16,6 @@ from ...colorsman.colors import BLACK, WHITE
 
 
 
-FONT_PREVIEW_SIZE = (200, 100)
-
-PLACEHOLDER_PREVIEW_SURF = Surface(FONT_PREVIEW_SIZE).convert()
-PLACEHOLDER_PREVIEW_SURF.fill('white')
-
 
 
 def render_char_info(char, font):
