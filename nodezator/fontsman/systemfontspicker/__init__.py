@@ -1,15 +1,5 @@
 """Facility w/ class for visualizing and picking system fonts."""
 
-### standard library imports
-
-from string import (
-    ascii_uppercase,
-    ascii_lowercase,
-    digits,
-    punctuation,
-)
-
-
 ### third-party imports
 
 from pygame import Rect, Surface
@@ -55,28 +45,23 @@ from ...surfsman.render import render_rect, render_not_found_icon
 
 from ...textman.render import render_text
 
+from ...fontsman.constants import ENC_SANS_BOLD_FONT_PATH
 
 
 
-CHARS = (
-    ascii_uppercase
-    + ascii_lowercase
-    + digits
-    + punctuation
-)
+### module level contants/values/objects
 
 FONT_PREVIEW_SIZE = (200, 100)
 
 PLACEHOLDER_PREVIEW_SURF = Surface(FONT_PREVIEW_SIZE).convert()
 PLACEHOLDER_PREVIEW_SURF.fill('white')
 
-### create logger for module
+## create logger for module
 logger = get_new_logger(__name__)
 
 
 SYS_FONT_NAMES_SET = set(get_fonts())
 SYS_FONT_NAMES_SORTED = sorted(SYS_FONT_NAMES_SET)
-SYS_FONTS_MAP = {}
 
 try:
     SAMPLE_UNICODE_CHARS_DATA = load_pyl(SAMPLE_UNICODE_CHARACTERS_PATH)
@@ -228,8 +213,82 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
     def prepare_preview(self):
 
-        font = SYS_FONTS_MAP[self.font_name]
+        ### render and align text objects
 
+        label_texts, char_texts = zip(*SAMPLE_UNICODE_CHARS_DATA.items())
+
+        labels_2d = List2D(
+
+            Object2D.from_surface(
+
+                render_text(
+                    f'{label_text}:',
+                    font_height=17,
+                    font_key=ENC_SANS_BOLD_FONT_PATH,
+                )
+
+            )
+
+            for label_text in label_texts
+
+        )
+
+        char_groups = [
+            char_text.replace(',', '').replace(' ', '')
+            for char_text in char_texts
+        ]
+
+        char_groups_2d = List2D(
+
+            List2D(
+
+                Object2D.from_surface(
+                    render_text(
+                        text=char,
+                        font_height=17,
+                        font_key=self.font_name,
+                    )
+                )
+
+                for char in char_group
+            )
+
+            for char_group in char_groups
+
+        )
+
+        labels_2d.rect.snap_rects_ip(
+            retrieve_pos_from='bottomleft',
+            assign_pos_to='topleft',
+        )
+
+        labels_2d.rect.move_ip(4, 4)
+
+        for char_group in char_groups_2d:
+
+            char_group.rect.snap_rects_ip(
+                retrieve_pos_from='topleft',
+                assign_pos_to='topright',
+                offset_pos_by=(4, 0),
+            )
+
+        padded_max_right = (
+            max(label_2d.rect.right for label_2d in labels_2d) + 4
+        )
+
+        for label_2d, char_group in zip(labels_2d, char_groups):
+            char_group.rect.topleft = (padded_max_right, label_2d.rect.top)
+
+        ### blit onto preview surface
+
+        blit_on_preview = self.font_preview_panel.image.blit
+
+        for label_2d, char_group in zip(labels_2d, char_groups):
+
+            blit_on_preview(label_2d.image, label_2d.rect)
+
+            for char_obj in char_group:
+                blit_on_preview(char_obj.image, char_obj.rect)
 
     def handle_input(self):
 

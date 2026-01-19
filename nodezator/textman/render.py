@@ -26,10 +26,11 @@ from ..rectsman.main import RectsManager
 from ..colorsman.colors import BLACK
 
 
+
 def get_text_size(
     text,
     font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-    font_path=ENC_SANS_BOLD_FONT_PATH,
+    font_key=ENC_SANS_BOLD_FONT_PATH,
     padding=0,
 ):
     """Return surf size of text as if it were rendered.
@@ -38,11 +39,12 @@ def get_text_size(
         Any string.
     font_height
         Integer indicating desired font height in pixels.
-    font_path
-        either ENC_SANS_BOLD_FONT_PATH for default font or any other key
-        from the font path map found on the font.py module.
+    font_key
+        represents the path wherein to find the font (when a pathlib.Path is
+        used) or the name of a font available in the system (when a string is
+        used).
     """
-    font = FONTS_DB[font_path][font_height]
+    font = FONTS_DB[font_key][font_height]
 
     width, height = (dimension + (padding * 2) for dimension in font.size(text))
 
@@ -58,12 +60,12 @@ def fit_text(
     max_width,
     ommit_direction,
     font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-    font_path=ENC_SANS_BOLD_FONT_PATH,
+    font_key=ENC_SANS_BOLD_FONT_PATH,
     padding=0,
 ):
     """Return optimal text to fit max_width passed."""
     ### get font
-    font = FONTS_DB[font_path][font_height]
+    font = FONTS_DB[font_key][font_height]
 
     ### update max_width to take padding into account
     max_width += -padding * 2
@@ -138,7 +140,7 @@ def fit_text(
 def render_text(
     text,
     font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-    font_path=ENC_SANS_BOLD_FONT_PATH,
+    font_key=ENC_SANS_BOLD_FONT_PATH,
     antialiased=True,
     padding=0,
     foreground_color=BLACK,
@@ -159,10 +161,10 @@ def render_text(
         text to be rendered.
     font_height (integer)
         integer indicating desired font height in pixels.
-    font_path (string)
-        represents the font to be used. Check sibling
-        font.py module to see available values. In doubt,
-        use ENC_SANS_BOLD_FONT_PATH for the default font.
+    font_key (pathlib.Path or string)
+        represents the path wherein to find the font (when a pathlib.Path is
+        used) or the name of a font available in the system (when a string is
+        used).
     antialiased (boolean)
         indicates whether or not the text on the surface
         should be antialiased.
@@ -205,7 +207,7 @@ def render_text(
     """
     ### retrieve the suitable font according to the desired
     ### height and style
-    font = FONTS_DB[font_path][font_height]
+    font = FONTS_DB[font_key][font_height]
 
     ### if a maximum width is required, fit the text
     ### in such width if the text surpasses it once
@@ -214,7 +216,17 @@ def render_text(
 
     if max_width:
 
-        text = fit_text(text, max_width, ommit_direction, font_height, font_path)
+        text = (
+
+            fit_text(
+                text,
+                max_width,
+                ommit_direction,
+                font_height,
+                font_key,
+            )
+
+        )
 
     ### define whether the background has transparency
 
@@ -294,10 +306,13 @@ def render_text(
 
 
 def render_multiline_text(
+
     text,
+
     ## same parameters as render_text()
+
     font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-    font_path=ENC_SANS_BOLD_FONT_PATH,
+    font_key=ENC_SANS_BOLD_FONT_PATH,
     antialiased=True,
     padding=0,
     foreground_color=BLACK,
@@ -306,17 +321,22 @@ def render_multiline_text(
     depth_finish_outset=True,
     border_thickness=0,
     border_color=BLACK,
+
     ## multiline-related parameters
+
     max_character_no=0,  # number of characters,
     retrieve_pos_from="bottomleft",
     assign_pos_to="topleft",
     offset_pos_by=(0, 0),
-    ## extra styles
+
+    ## extra style
     text_padding=0,
+
 ):
+
     ### retrieve the suitable font according to the desired
     ### height and style
-    font = FONTS_DB[font_path][font_height]
+    font = FONTS_DB[font_key][font_height]
 
     ### split the text into multiple lines
 
