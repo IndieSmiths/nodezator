@@ -23,21 +23,21 @@ BROWSER_TITLE = "Local Pages Browser"
 
 ### tags used in htsl
 
-HEADING_TAGS = frozenset(f"h{i}" for i in range(1, 7))
+HEADING_TAGS = frozenset(f'h{i}' for i in range(1, 7))
 
 KNOWN_TAGS = (
-    "p",
+    'p',
     *HEADING_TAGS,
-    "python",
-    "pre",
-    "ol",
-    "ul",
-    "a",
-    "img",
-    "surfdef",
-    "blockquote",
-    "table",
-    "dl",
+    'python',
+    'pre',
+    'ol',
+    'ul',
+    'a',
+    'img',
+    'surfdef',
+    'blockquote',
+    'table',
+    'dl',
 )
 
 PRE_PYTHON_TAGS = {'pre', 'python'}
@@ -47,39 +47,39 @@ PRE_PYTHON_TAGS = {'pre', 'python'}
 ## anchor minus fg
 
 ANCHOR_TEXT_SETTINGS_MINUS_FG = {
-    "font_path": NOTO_SANS_REGULAR_FONT_PATH,
-    "font_height": NOTO_SANS_FONT_HEIGHT,
-    "background_color": HTSL_CANVAS_BG,
+    'font_key': NOTO_SANS_REGULAR_FONT_PATH,
+    'font_height': NOTO_SANS_FONT_HEIGHT,
+    'background_color': HTSL_CANVAS_BG,
 }
 
 ### normal text settings
 
 NORMAL_TEXT_SETTINGS = {
-    "font_path": NOTO_SANS_REGULAR_FONT_PATH,
-    "font_height": NOTO_SANS_FONT_HEIGHT,
-    "foreground_color": HTSL_GENERAL_TEXT_FG,
-    "background_color": HTSL_CANVAS_BG,
+    'font_key': NOTO_SANS_REGULAR_FONT_PATH,
+    'font_height': NOTO_SANS_FONT_HEIGHT,
+    'foreground_color': HTSL_GENERAL_TEXT_FG,
+    'background_color': HTSL_CANVAS_BG,
 }
 
 BOLD_TEXT_SETTINGS = {
-    "font_path": NOTO_SANS_BOLD_FONT_PATH,
-    "font_height": NOTO_SANS_FONT_HEIGHT,
-    "foreground_color": HTSL_GENERAL_TEXT_FG,
-    "background_color": HTSL_CANVAS_BG,
+    'font_key': NOTO_SANS_BOLD_FONT_PATH,
+    'font_height': NOTO_SANS_FONT_HEIGHT,
+    'foreground_color': HTSL_GENERAL_TEXT_FG,
+    'background_color': HTSL_CANVAS_BG,
 }
 
 ITALIC_TEXT_SETTINGS = {
-    "font_path": NOTO_SANS_ITALIC_FONT_PATH,
-    "font_height": NOTO_SANS_FONT_HEIGHT,
-    "foreground_color": HTSL_GENERAL_TEXT_FG,
-    "background_color": HTSL_CANVAS_BG,
+    'font_key': NOTO_SANS_ITALIC_FONT_PATH,
+    'font_height': NOTO_SANS_FONT_HEIGHT,
+    'foreground_color': HTSL_GENERAL_TEXT_FG,
+    'background_color': HTSL_CANVAS_BG,
 }
 
 MARKED_TEXT_SETTINGS = {
-    "font_path": NOTO_SANS_REGULAR_FONT_PATH,
-    "font_height": NOTO_SANS_FONT_HEIGHT,
-    "foreground_color": HTSL_GENERAL_TEXT_FG,
-    "background_color": HTSL_MARKED_TEXT_BG,
+    'font_key': NOTO_SANS_REGULAR_FONT_PATH,
+    'font_height': NOTO_SANS_FONT_HEIGHT,
+    'foreground_color': HTSL_GENERAL_TEXT_FG,
+    'background_color': HTSL_MARKED_TEXT_BG,
 }
 
 TAG_TO_TEXT_SETTINGS = {
@@ -92,9 +92,9 @@ TAG_TO_TEXT_SETTINGS = {
 ### heading text settings
 
 HEADING_TEXT_SETTINGS_MINUS_HEIGHT = {
-    "font_path": NOTO_SANS_BOLD_FONT_PATH,
-    "foreground_color": HTSL_HEADING_TEXT_FG,
-    "background_color": HTSL_CANVAS_BG,
+    'font_key': NOTO_SANS_BOLD_FONT_PATH,
+    'foreground_color': HTSL_HEADING_TEXT_FG,
+    'background_color': HTSL_CANVAS_BG,
 }
 
 
@@ -123,17 +123,17 @@ for i in range(1, 7):
 ### general code text settings
 
 GENERAL_CODE_TEXT_SETTINGS = {
-    "font_height": NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT,
-    "font_path": NOTO_SANS_MONO_MEDIUM_FONT_PATH,
-    "foreground_color": (235, 235, 235),
-    "background_color": (15, 15, 15),
+    'font_height': NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT,
+    'font_key': NOTO_SANS_MONO_MEDIUM_FONT_PATH,
+    'foreground_color': (235, 235, 235),
+    'background_color': (15, 15, 15),
 }
 
 PRE_TEXT_SETTINGS = {
-    "font_height": NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT,
-    "font_path": NOTO_SANS_MONO_MEDIUM_FONT_PATH,
-    "foreground_color": (15, 15, 15),
-    "background_color": (230, 230, 235),
+    'font_height': NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT,
+    'font_key': NOTO_SANS_MONO_MEDIUM_FONT_PATH,
+    'foreground_color': (15, 15, 15),
+    'background_color': (230, 230, 235),
 }
 
 PRE_TEXT_BORDER = (145, 145, 145)

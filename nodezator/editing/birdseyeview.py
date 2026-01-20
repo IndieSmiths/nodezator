@@ -52,7 +52,7 @@ VIEW_BG = (0, 0, 0, VIEW_ALPHA)
 
 LABEL_SETTINGS = {
     'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_path': ENC_SANS_BOLD_FONT_PATH,
+    'font_key': ENC_SANS_BOLD_FONT_PATH,
     'padding': 5,
     'foreground_color': WINDOW_FG,
 }

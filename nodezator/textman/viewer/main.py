@@ -74,27 +74,27 @@ from .constants import (
 ### constants
 
 CAPTION_TEXT_KWARGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
-    "padding": 5,
-    "foreground_color": TEXT_VIEWER_FG,
-    "background_color": TEXT_VIEWER_BG,
+    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
+    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'padding': 5,
+    'foreground_color': TEXT_VIEWER_FG,
+    'background_color': TEXT_VIEWER_BG,
 }
 
 HEADER_TEXT_KWARGS = {
     **CAPTION_TEXT_KWARGS,
-    "max_width": 500,
+    'max_width': 500,
 }
 
 HELP_TEXT_KWARGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
-    "padding": 5,
-    "foreground_color": TEXT_VIEWER_HELP_FG,
-    "background_color": TEXT_VIEWER_HELP_BG,
-    "retrieve_pos_from": "bottomleft",
-    "assign_pos_to": "topleft",
-    "text_padding": 6,
+    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
+    'font_path': ENC_SANS_BOLD_FONT_PATH,
+    'padding': 5,
+    'foreground_color': TEXT_VIEWER_HELP_FG,
+    'background_color': TEXT_VIEWER_HELP_BG,
+    'retrieve_pos_from': 'bottomleft',
+    'assign_pos_to': 'topleft',
+    'text_padding': 6,
 }
 
 

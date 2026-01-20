@@ -420,7 +420,7 @@ class _BasePreview(Object2D):
         blit_aligned(
             surface_to_blit=render_text(
                 text=str(self.current_path),
-                font_path=ENC_SANS_BOLD_FONT_PATH,
+                font_key=ENC_SANS_BOLD_FONT_PATH,
                 font_height=ENC_SANS_BOLD_FONT_HEIGHT,
                 padding=1,
                 max_width=152,
@@ -514,8 +514,8 @@ class _BasePreview(Object2D):
 
         text_element.text = fit_text(
             text=str(self.current_path),
-            font_path=ENC_SANS_BOLD_FONT_PATH,
             font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+            font_key=ENC_SANS_BOLD_FONT_PATH,
             padding=1,
             max_width=143,
             ommit_direction="left",

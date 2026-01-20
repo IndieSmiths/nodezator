@@ -281,8 +281,8 @@ class SystemFontsOptionMenu(Object2D):
 
                 render_text(
                     text=str(self.current_font_name),
-                    font_path=ENC_SANS_BOLD_FONT_PATH,
                     font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                    font_key=ENC_SANS_BOLD_FONT_PATH,
                     padding=1,
                     max_width=152,
                     ommit_direction='left',

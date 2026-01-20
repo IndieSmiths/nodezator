@@ -86,7 +86,7 @@ class Cursor(
 
     ### methods
 
-    def __init__(self, text_editor, text, font_path, syntax_highlighting):
+    def __init__(self, text_editor, text, font_key, syntax_highlighting):
         """Store variables and perform setups.
 
         Parameters
@@ -98,9 +98,10 @@ class Cursor(
             classes.
         text (string)
             text being edited.
-        font_path (string)
-            indicates the font style to be used when
-            editing the contents.
+        font_key
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         syntax_highlighting (string)
             represents the name of a syntax used to
             highlight the text (for instance, 'python');
@@ -138,7 +139,7 @@ class Cursor(
         ### set normal render settings based on the
         ### font style and syntax highlighting used
 
-        Line.set_normal_render_settings(font_path, syntax_highlighting)
+        Line.set_normal_render_settings(font_key, syntax_highlighting)
 
         ### store the attribute char_height of the Line
         ### class locally
@@ -211,7 +212,7 @@ class Cursor(
         ## set syntax highlighting; this may enable or
         ## disable syntax highlighting, depending on the
         ## given arguments
-        self.set_syntax_highlighting(font_path, syntax_highlighting)
+        self.set_syntax_highlighting(font_key, syntax_highlighting)
 
         ## create and store surfaces to show line number
         self.create_line_number_surfaces()
@@ -264,7 +265,7 @@ class Cursor(
                 render_text(
                     digit,
                     font_height=Line.char_height,
-                    font_path=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=FIRA_MONO_BOLD_FONT_PATH,
                     foreground_color=self.lineno_fg,
                     background_color=self.lineno_bg,
                 ),

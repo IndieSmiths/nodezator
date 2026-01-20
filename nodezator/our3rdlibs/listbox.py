@@ -46,7 +46,7 @@ class ListBox(Object2D):
         no_of_visible_lines = 7,
         width=100,
         font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_path=ENC_SANS_BOLD_FONT_PATH,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
         padding=0,
         normal_foreground_color = BLACK,
         normal_background_color_a = (245, 245, 245),
@@ -82,7 +82,7 @@ class ListBox(Object2D):
         self.no_of_visible_lines = no_of_visible_lines
 
         self.font_height = font_height
-        self.font_path = font_path
+        self.font_key = font_key
         self.padding = padding
         self.width = width
         self.ommit_direction = ommit_direction
@@ -131,7 +131,7 @@ class ListBox(Object2D):
                         render_text(
                             str(value),
                             font_height = self.font_height,
-                            font_path = self.font_path,
+                            font_key = self.font_key,
                             padding = padding,
                             foreground_color=fg,
                             background_color=bg,

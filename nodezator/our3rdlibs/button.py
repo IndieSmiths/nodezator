@@ -118,7 +118,7 @@ class Button(Object2D):
         cls,
         text,
         font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_path=ENC_SANS_BOLD_FONT_PATH,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
         foreground_color=BUTTON_FG,
         background_color=BUTTON_BG,
         antialiased=True,
@@ -140,10 +140,10 @@ class Button(Object2D):
             text to be rendered as the button surface.
         font_height (positive integer)
             height of the text surface in pixels.
-        font_path (string)
-            represents the font used. Check local font.py
-            module to see available values. In doubt, use
-            'default' for the default font.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         foreground_color
             A tuple or list of r, g, b values which are
             integers ranging from 0 to 255.
@@ -154,7 +154,7 @@ class Button(Object2D):
         surface = render_text(
             text=text,
             font_height=font_height,
-            font_path=font_path,
+            font_key=font_key,
             foreground_color=foreground_color,
             background_color=background_color,
             antialiased=antialiased,

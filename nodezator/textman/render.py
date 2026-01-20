@@ -39,7 +39,7 @@ def get_text_size(
         Any string.
     font_height
         Integer indicating desired font height in pixels.
-    font_key
+    font_key (pathlib.Path or string)
         represents the path wherein to find the font (when a pathlib.Path is
         used) or the name of a font available in the system (when a string is
         used).
