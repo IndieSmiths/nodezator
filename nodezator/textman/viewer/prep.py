@@ -126,8 +126,8 @@ class TextPreparation:
 
         _, self.line_height = get_text_size(
             "dummy text",
-            general_text_settings["font_height"],
-            general_text_settings["font_key"],
+            general_text_settings['font_height'],
+            general_text_settings['font_key'],
         )
 
         ### store rect

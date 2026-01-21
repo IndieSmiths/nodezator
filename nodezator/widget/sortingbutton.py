@@ -436,8 +436,8 @@ class SortingButton(Object2D):
 
         text_element.text = fit_text(
             text=str(self.value),
-            font_path=ENC_SANS_BOLD_FONT_PATH,
             font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+            font_key=ENC_SANS_BOLD_FONT_PATH,
             padding=1,
             max_width=143 - 20,
             ommit_direction="right",

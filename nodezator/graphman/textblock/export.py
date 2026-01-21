@@ -13,26 +13,22 @@ from ...syntaxman.utils import (
     get_ready_theme,
 )
 
-from .constants import (
-    OUTLINE_THICKNESS,
-    FONT_HEIGHT,
-)
-
-from .constants import (
-    FONT_HEIGHT,
-    FONT_PATH,
-)
+from .constants import OUTLINE_THICKNESS, FONT_HEIGHT, FONT_KEY
 
 from ...colorsman.colors import TEXT_BLOCK_OUTLINE
 
 
-GENERAL_TEXT_KWARGS = {"font_height": FONT_HEIGHT, "font_path": FONT_PATH}
 
-COMMENT_THEME_MAP = get_ready_theme("comment", GENERAL_TEXT_KWARGS)
+GENERAL_TEXT_KWARGS = {
+    'font_height': FONT_HEIGHT,
+    'font_key': FONT_KEY,
+}
 
-get_syntax_map = SYNTAX_TO_MAPPING_FUNCTION["comment"]
+COMMENT_THEME_MAP = get_ready_theme('comment', GENERAL_TEXT_KWARGS)
 
-TEXT_BLOCK_BG = COMMENT_THEME_MAP["background_color"]
+get_syntax_map = SYNTAX_TO_MAPPING_FUNCTION['comment']
+
+TEXT_BLOCK_BG = COMMENT_THEME_MAP['background_color']
 
 
 TEXT_BLOCK_CSS = f"""
@@ -123,7 +119,7 @@ def svg_repr(self):
                 x_increment, _ = get_text_size(
                     string,
                     font_height=FONT_HEIGHT,
-                    font_path=FONT_PATH,
+                    font_key=FONT_KEY,
                 )
 
                 text_fg = text_settings["foreground_color"]

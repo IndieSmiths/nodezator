@@ -208,11 +208,11 @@ class DefaultHolder(Label):
 
         text_element.text = fit_text(
             text=repr(self.value),
+            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+            font_key=ENC_SANS_BOLD_FONT_PATH,
+            padding=1,
             max_width=145,
             ommit_direction="right",
-            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-            font_path=ENC_SANS_BOLD_FONT_PATH,
-            padding=1,
         )
 
         group.append(text_element)

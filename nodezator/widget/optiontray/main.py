@@ -79,7 +79,7 @@ def isliteral(value):
 ##        'True',            # antialiased
 ##        '(38, 38, 38)',    # background_color
 ##        '17',              # font_height
-##        ENC_SANS_BOLD_FONT_PATH,       # font_path
+##        ENC_SANS_BOLD_FONT_PATH,       # font_key
 ##        '(238, 238, 238)', # foreground_color
 ##        '(90, 90, 110)',   # selected_background_color
 ##        '(210, 110, 210)'  # selected_foreground_color
@@ -126,7 +126,7 @@ OPTIONS_TO_STYLE_DATA = {}
 ##      (
 ##
 ##        '17',       # font_height
-##        ENC_SANS_BOLD_FONT_PATH # font_path
+##        ENC_SANS_BOLD_FONT_PATH # font_key
 ##
 ##      ) : (
 ##
@@ -146,7 +146,10 @@ RIGHT_COORDINATES_MAP = {}
 ### class definition
 
 
-class OptionTray(OptionTrayLifetimeOperations, OptionTrayCreationOperations):
+class OptionTray(
+    OptionTrayLifetimeOperations,
+    OptionTrayCreationOperations,
+):
     """Like an OptionMenu, but w/ values side by side.
 
     It doesn't collapse like the option menu, so the sum
@@ -162,8 +165,8 @@ class OptionTray(OptionTrayLifetimeOperations, OptionTrayCreationOperations):
         value="",
         options=("",),
         max_width=155,
-        font_path=ENC_SANS_BOLD_FONT_PATH,
         font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
         antialiased=True,
         foreground_color=OPTION_TRAY_FG,
         background_color=OPTION_TRAY_BG,
@@ -188,12 +191,12 @@ class OptionTray(OptionTrayLifetimeOperations, OptionTrayCreationOperations):
             float, bool or must be None.
         max_width (integer)
             maximum widget width in pixels.
-        font_path (string)
-            a key used to define which font file to used;
-            for available keys, check the FONT_PATH_MAP
-            dictionary in textman/font.py.
         font_height (integer)
             font height in pixels.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         antialiased (boolean)
             indicates whether the text should be antialiased
             or not.
@@ -229,7 +232,7 @@ class OptionTray(OptionTrayLifetimeOperations, OptionTrayCreationOperations):
 
         self.max_width = max_width
         self.font_height = font_height
-        self.font_path = font_path
+        self.font_key = font_key
 
         ### make sure options is a list
         options = list(options)
@@ -251,7 +254,7 @@ class OptionTray(OptionTrayLifetimeOperations, OptionTrayCreationOperations):
         ### surfaces to be created
 
         self.normal_text_settings = {
-            "font_path": font_path,
+            "font_key": font_key,
             "font_height": font_height,
             "antialiased": antialiased,
             "foreground_color": foreground_color,
@@ -259,7 +262,7 @@ class OptionTray(OptionTrayLifetimeOperations, OptionTrayCreationOperations):
         }
 
         self.selected_text_settings = {
-            "font_path": font_path,
+            "font_key": font_key,
             "font_height": font_height,
             "antialiased": antialiased,
             "foreground_color": selected_foreground_color,
@@ -316,7 +319,7 @@ class OptionTray(OptionTrayLifetimeOperations, OptionTrayCreationOperations):
                 get_text_size(
                     str(option),
                     font_height=self.font_height,
-                    font_path=self.font_path,
+                    font_key=self.font_key,
                 )[0]
                 + 6
                 for option in options
@@ -405,7 +408,10 @@ class OptionTray(OptionTrayLifetimeOperations, OptionTrayCreationOperations):
         ## affect appearance;
 
         right_key = settings_to_hashable_repr(
-            {"font_path": self.font_path, "font_height": self.font_height}
+            {
+                "font_key": self.font_key,
+                "font_height": self.font_height,
+            }
         )
 
         ## iterate over the gathered data, retrieving and
@@ -465,7 +471,7 @@ class OptionTray(OptionTrayLifetimeOperations, OptionTrayCreationOperations):
                 get_text_size(
                     str(option),
                     font_height=self.font_height,
-                    font_path=self.font_path,
+                    font_key=self.font_key,
                 ),
             )
             for option in self.options

@@ -724,11 +724,11 @@ class LiteralDisplay(Object2D):
 
                             string = fit_text(
                                 text=string,
-                                max_width=max_right - temp_x,
-                                ommit_direction="right",
                                 font_height=font_height,
                                 font_key=FIRA_MONO_BOLD_FONT_PATH,
                                 padding=0,
+                                max_width=max_right - temp_x,
+                                ommit_direction="right",
                             )
 
                         except ValueError:

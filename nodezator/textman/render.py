@@ -33,7 +33,7 @@ def get_text_size(
     font_key=ENC_SANS_BOLD_FONT_PATH,
     padding=0,
 ):
-    """Return surf size of text as if it were rendered.
+    """Return size of text as if rendered as text surface.
 
     text
         Any string.
@@ -44,11 +44,14 @@ def get_text_size(
         used) or the name of a font available in the system (when a string is
         used).
     """
-    font = FONTS_DB[font_key][font_height]
+    return tuple(
 
-    width, height = (dimension + (padding * 2) for dimension in font.size(text))
+        dimension + (padding * 2)
 
-    return width, height
+        for dimension
+        in FONTS_DB[font_key][font_height].size(text) # size of text for font
+
+    )
 
 
 ### XXX refactor: list and explain parameters, review
