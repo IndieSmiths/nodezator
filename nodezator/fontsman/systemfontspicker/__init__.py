@@ -1,5 +1,9 @@
 """Facility w/ class for visualizing and picking system fonts."""
 
+### standard library import
+from itertools import chain
+
+
 ### third-party imports
 
 from pygame import Rect, Surface
@@ -45,16 +49,46 @@ from ...surfsman.render import render_rect, render_not_found_icon
 
 from ...textman.render import render_text
 
+from ...fontsman.preview.cache import FONT_PREVIEWS_DB
+
 from ...fontsman.constants import ENC_SANS_BOLD_FONT_PATH
 
 
 
 ### module level contants/values/objects
 
+try:
+    SAMPLE_UNICODE_CHARS_DATA = load_pyl(SAMPLE_UNICODE_CHARS_PATH)
+
+except Exception as err:
+    raise RuntimeError("Couldn't load sample unicode characters") from err
+
+
 FONT_PREVIEW_SIZE = (200, 100)
 
 PLACEHOLDER_PREVIEW_SURF = Surface(FONT_PREVIEW_SIZE).convert()
 PLACEHOLDER_PREVIEW_SURF.fill('white')
+
+PREVIEW_CHARS = ' '.join(
+
+    chain(
+
+        char_group.replace(',', '').replace(' ', '') + ' '
+
+        for _, char_group in SAMPLE_UNICODE_CHARS_DATA
+
+    )
+
+)
+
+FONT_PREVIEW_SETTINGS = {
+    'font_size': 20,
+    'chars': PREVIEW_CHARS,
+    'width': FONT_PREVIEW_SIZE[0],
+    'height': FONT_PREVIEW_SIZE[1],
+    'not_found_width': FONT_PREVIEW_SIZE[0],
+    'not_found_height': FONT_PREVIEW_SIZE[1],
+}
 
 ## create logger for module
 logger = get_new_logger(__name__)
@@ -62,12 +96,6 @@ logger = get_new_logger(__name__)
 
 SYS_FONT_NAMES_SET = set(get_fonts())
 SYS_FONT_NAMES_SORTED = sorted(SYS_FONT_NAMES_SET)
-
-try:
-    SAMPLE_UNICODE_CHARS_DATA = load_pyl(SAMPLE_UNICODE_CHARS_PATH)
-
-except Exception as err:
-    raise RuntimeError("Couldn't load sample unicode characters") from err
 
 
 class SystemFontsPicker(Object2D, LoopHolder):
@@ -126,8 +154,15 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         self.clean_image = self.image.copy()
 
-        ###
+        ### reference important objects
+
         self.no_preview_surf = font_preview_panel.image
+
+        self.blit_onto_all_fonts_panel = all_fonts_panel.image.blit
+        self.fill_all_fonts_panel = all_fonts_panel.image.fill
+
+        self.all_fonts_rect = all_fonts_panel.rect
+        self.all_fonts_panel_colliderect = all_fonts_panel.rect.colliderect
 
         ###
 
@@ -142,11 +177,25 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         )
 
-        sys_font_2d_objs.rect.lay_rects_like_table_ip(
+        sys_font_2d_objs.rect.snap_rects_intermittently_ip(
+
+            ### interval
             dimension_name='width',
-            dimension_unit='pixels',
-            max_dimension_value=640,
-            cell_padding=20,
+            dimension_unit='rects',
+            max_dimension_value=3,
+
+            ### rect positioning
+
+            retrieve_pos_from='topright',
+            assign_pos_to='topleft',
+            offset_pos_by=(20, 0),
+
+            ### intermittent rect positioning
+
+            intermittent_pos_from='bottomleft',
+            intermittent_pos_to='topleft',
+            intermittent_offset_by=(0, 20),
+
         )
 
         sys_font_2d_objs.rect.topleft = all_fonts_panel.rect.topleft
@@ -338,6 +387,24 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         super().draw()
 
+        offset = -Vector2(self.all_fonts_rect.topleft)
+        colliderect = self.all_fonts_panel_colliderect
+        blit_operation = self.blit_onto_all_fonts_panel
+
+        self.fill_all_fonts_panel('green')
+
+        for obj in self.sys_font_2d_objs:
+
+            if colliderect(obj.rect):
+
+                if obj.image is PLACEHOLDER_PREVIEW_SURF:
+
+                    obj.image = (
+                        FONT_PREVIEWS_DB[obj.font_name][FONT_PREVIEW_SETTINGS]
+                    )
+
+                blit_operation(obj.image, obj.rect.move(offset))
+
         for obj in self.all_panels:
             obj.draw()
 
@@ -346,3 +413,4 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
 
 pick_system_fonts = SystemFontsPicker().pick_system_fonts
+

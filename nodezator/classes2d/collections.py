@@ -33,7 +33,13 @@ class Collection2D:
         super().__init__(*args, **kwargs)
         self._rects_man = RectsManager(self.get_all_rects)
 
+
     ### methods related to collision
+
+    ### XXX some of the methods below could be further improved with a bit
+    ### bit of refactoring; some could use better, more descriptive names
+    ### and some new more general ones could be written from existing ones
+    ### that could perhaps replace some of them
 
     def get_on_screen(self):
         """Return iterator with all objects on screen.
@@ -82,7 +88,7 @@ class Collection2D:
 
             yield [rect_id_to_obj[id(rect)] for rect in cluster]
 
-    ## method to update
+    ### method to update
 
     def call_update(self):
         """Call the update method on all objects.
@@ -94,7 +100,7 @@ class Collection2D:
         for obj in self:
             obj.update()
 
-    ## mouse related methods
+    ### mouse related methods
 
     def mouse_method_on_collision(self, method_name, event):
         """Invoke inner widget if it collides with mouse.
@@ -156,7 +162,12 @@ class Collection2D:
         "on_mouse_release",
     )
 
-    ## methods related to drawing
+    ### methods related to drawing
+
+    ### XXX some of the methods below could be further improved with a bit
+    ### bit of refactoring; some could use better, more descriptive names
+    ### and some new more general ones could be written from existing ones
+    ### that could perhaps replace some of them
 
     def draw(self):
         """Blit obj.image at obj.rect coordinates.
@@ -215,10 +226,14 @@ class Collection2D:
     def draw_relative(self, obj):
         """Draw objects relative to position of given one."""
         negative_topleft = -Vector2(obj.rect.topleft)
+        blit_operation = obj.image.blit
 
         for current_obj in self:
 
-            obj.image.blit(current_obj.image, current_obj.rect.move(negative_topleft))
+            blit_operation(
+                current_obj.image,
+                current_obj.rect.move(negative_topleft),
+            )
 
     def call_draw(self):
         """Call the draw method on all objects."""
