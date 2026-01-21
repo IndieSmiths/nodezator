@@ -32,10 +32,10 @@ t = TRANSLATIONS.window_manager
 ### constant definition
 
 AUTOLABEL_KWARGS = {
-    "font_height": FIRA_MONO_BOLD_FONT_HEIGHT,
-    "font_path": FIRA_MONO_BOLD_FONT_PATH,
-    "foreground_color": WM_LABEL_FG,
-    "background_color": (*WM_LABEL_BG, 130),
+    'font_height': FIRA_MONO_BOLD_FONT_HEIGHT,
+    'font_key': FIRA_MONO_BOLD_FONT_PATH,
+    'foreground_color': WM_LABEL_FG,
+    'background_color': (*WM_LABEL_BG, 130),
 }
 
 ##### utility functions and objects

@@ -63,8 +63,8 @@ class FontsDatabase(dict):
         """
         ### we create a font map for the key, store and return it
 
-        font_map = FontsMap(key)
-        self[key] = font_map
+        font_map = FontsMap(font_key)
+        self[font_key] = font_map
         return font_map
 
 
@@ -165,9 +165,9 @@ def get_font(font_key, desired_height):
     ### for the font size (here we use the desired height)
     ### and the actual height of a produced surface
 
-    raise_if_unattainable(desired_height, desired_height, font_path)
+    raise_if_unattainable(desired_height, desired_height, font_key)
 
-    font = Font(font_path, desired_height)
+    font = font_class(font_key, desired_height)
     _, surf_height = font.size(SPACE_CHARACTER)
 
     diff = desired_height - surf_height
@@ -193,9 +193,9 @@ def get_font(font_key, desired_height):
         ### surface of an arbitrary character (space) when
         ### rendered
 
-        raise_if_unattainable(desired_height, size, font_path)
+        raise_if_unattainable(desired_height, size, font_key)
 
-        font = Font(font_path, size)
+        font = font_class(font_key, size)
         _, surf_height = font.size(SPACE_CHARACTER)
 
         ### store current size as an attempted one since
@@ -241,18 +241,16 @@ def get_font(font_key, desired_height):
 
     if highest_achieved != desired_height:
 
-        font_name = Path(font_path).name
-
         warn(
-            f"Couldn't get height {desired_height} from {font_name},"
-            f" using {highest_achieved} instead"
+            f"Couldn't get height {desired_height} from {font_key!r} font;"
+            f" using height {highest_achieved} instead"
         )
 
     ### finally return the chosen font
     return chosen_font
 
 
-def raise_if_unattainable(desired_height, attempted_size, font_path):
+def raise_if_unattainable(desired_height, attempted_size, font_key):
     """Detect when technical limitations of font interpolation
     will prevent creation of certain font sizes.
     """
@@ -260,9 +258,7 @@ def raise_if_unattainable(desired_height, attempted_size, font_path):
 
     if any(map(lambda s: s < 0 or s >= 65536, sizes)):
 
-        font_name = Path(font_path).name
-
         raise ValueError(
             f"Font of height {desired_height}"
-            " can't be achieved with {font_name}"
+            " can't be achieved with {font_key!r} font"
         )

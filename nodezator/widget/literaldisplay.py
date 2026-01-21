@@ -391,7 +391,7 @@ class LiteralDisplay(Object2D):
 
         general_text_settings = {
             "font_height": self.font_height,
-            "font_path": FIRA_MONO_BOLD_FONT_PATH,
+            "font_key": FIRA_MONO_BOLD_FONT_PATH,
         }
 
         ### store a theme map ready for usage with the
@@ -453,7 +453,7 @@ class LiteralDisplay(Object2D):
 
         text = edit_text(
             text=pformat(self.value, width=84),
-            font_path=FIRA_MONO_BOLD_FONT_PATH,
+            font_key=FIRA_MONO_BOLD_FONT_PATH,
             syntax_highlighting="python",
             validation_command=is_python_literal,
         )

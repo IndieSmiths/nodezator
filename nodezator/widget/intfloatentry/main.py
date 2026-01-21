@@ -112,7 +112,7 @@ class IntFloatEntry(IntFloatOperations, IntFloatModes):
         position_reference_getter=None,
         width=155,
         font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_path=ENC_SANS_BOLD_FONT_PATH,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
         foreground_color=INT_FLOAT_ENTRY_FG,
         background_color=INT_FLOAT_ENTRY_BG,
         coordinates_name="topleft",
@@ -197,10 +197,10 @@ class IntFloatEntry(IntFloatOperations, IntFloatModes):
             width of the widget.
         font_height (integer)
             desired font height in pixels.
-        font_path (string, defaults to ENC_SANS_BOLD_FONT_PATH)
-            represents font style. Check local
-            font.py module for available styles. In doubt,
-            use ENC_SANS_BOLD_FONT_PATH for default font.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         foreground_color, background_color
             (tuple or list of r, g, b values which are
             integers ranging from 0 to 255)
@@ -425,9 +425,9 @@ class IntFloatEntry(IntFloatOperations, IntFloatModes):
         ### in a dictionary inside its own attribute
 
         render_settings = {
-            "font_height": font_height,
-            "font_path": font_path,
-            "foreground_color": foreground_color,
+            'font_height': font_height,
+            'font_key': font_key,
+            'foreground_color': foreground_color,
         }
 
         ### instantiate the entry cursor class, which

@@ -14,12 +14,12 @@ from ...textman.text import get_highlighted_lines
 
 from ...colorsman.colors import TEXT_BLOCK_OUTLINE
 
-from .constants import FONT_HEIGHT, FONT_PATH, PADDING, OUTLINE_THICKNESS
+from .constants import FONT_HEIGHT, FONT_KEY, PADDING, OUTLINE_THICKNESS
 
 
 GENERAL_TEXT_KWARGS = {
-    "font_height": FONT_HEIGHT,
-    "font_path": FONT_PATH,
+    'font_height': FONT_HEIGHT,
+    'font_key': FONT_KEY,
 }
 
 COMMENT_THEME_MAP = get_ready_theme("comment", GENERAL_TEXT_KWARGS)

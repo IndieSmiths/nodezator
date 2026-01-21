@@ -23,7 +23,7 @@ from pygame.math import Vector2
 
 ### local imports
 
-from ...config import APP_REFS, SAMPLE_UNICODE_CHARACTERS_PATH
+from ...config import APP_REFS, SAMPLE_UNICODE_CHARS_PATH
 
 from ...pygamesetup import SCREEN_RECT, SERVICES_NS
 
@@ -64,7 +64,7 @@ SYS_FONT_NAMES_SET = set(get_fonts())
 SYS_FONT_NAMES_SORTED = sorted(SYS_FONT_NAMES_SET)
 
 try:
-    SAMPLE_UNICODE_CHARS_DATA = load_pyl(SAMPLE_UNICODE_CHARACTERS_PATH)
+    SAMPLE_UNICODE_CHARS_DATA = load_pyl(SAMPLE_UNICODE_CHARS_PATH)
 
 except Exception as err:
     raise RuntimeError("Couldn't load sample unicode characters") from err

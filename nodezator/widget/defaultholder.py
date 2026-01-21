@@ -57,7 +57,7 @@ class DefaultHolder(Label):
         value,
         name="default_holder",
         font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_path=ENC_SANS_BOLD_FONT_PATH,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
         max_width=155,
         padding=1,
         foreground_color=(40, 40, 40),
@@ -78,10 +78,10 @@ class DefaultHolder(Label):
             an arbitrary name to help identify the widget.
         font_height (positive integer)
             indicates desired font height in pixels.
-        font_path (string)
-            represents the font desired. Check local
-            font.py module for available styles. In doubt
-            use 'default' for default font.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         padding (positive integer or 0, defaults to 5)
             amount of padding in all four sides of the
             text surface.
@@ -118,15 +118,15 @@ class DefaultHolder(Label):
         ### single dictionary
 
         text_kwargs = {
-            "font_height": font_height,
-            "font_path": font_path,
-            "padding": padding,
-            "max_width": max_width,
-            "foreground_color": foreground_color,
+            'font_height': font_height,
+            'font_key': font_key,
+            'padding': padding,
+            'max_width': max_width,
+            'foreground_color': foreground_color,
         }
 
         if background_color:
-            text_kwargs["background_color"] = background_color
+            text_kwargs['background_color'] = background_color
 
         ### initialize superclass
 

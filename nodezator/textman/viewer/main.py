@@ -88,7 +88,7 @@ HEADER_TEXT_KWARGS = {
 
 HELP_TEXT_KWARGS = {
     'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_path': ENC_SANS_BOLD_FONT_PATH,
+    'font_key': ENC_SANS_BOLD_FONT_PATH,
     'padding': 5,
     'foreground_color': TEXT_VIEWER_HELP_FG,
     'background_color': TEXT_VIEWER_HELP_BG,
