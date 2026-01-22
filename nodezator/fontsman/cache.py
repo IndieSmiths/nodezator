@@ -145,6 +145,10 @@ def get_font(font_key, desired_height):
     explained earlier, we use the height of a text surface rendered from a
     single space character (using .size() to simulate the rendering process).
     """
+    ### first of all make sure the desired height is within an acceptable
+    ### range
+    raise_if_unattainable(desired_height, desired_height, font_key)
+
     ### create a set to keep track of the attempted sizes
     attempted_sizes = set()
 
@@ -154,25 +158,32 @@ def get_font(font_key, desired_height):
     ### pick the font class to use based on the class of the font key
     font_class = Font if isinstance(font_key, Path) else SysFont
 
-    ### create variable to store highest height achieved
-    ### which doesn't surpass the desired height (but
-    ### can be equal)
+    ### define an initial font size (the second parameter to Font/SysFont's
+    ### constructor) that takes into account the difference between the given
+    ### font size and the resulting surface's height
+    ###
+    ### in other words, we take into account the proportion of the font size
+    ### that is turned into actual height of the surface
+
+    ## let's define a font size that is equal to the desired height
+    size = desired_height
+
+    ## calculate the height of a space character rendered with a font of this
+    ## given size
+    surf_height = font_class(font_key, size).size(SPACE_CHARACTER)[1]
+
+    ## now change the size taking into account the proportion of this size
+    ## that was turned into actual surface height;
+    ##
+    ## that is, if the surface was taller than the size (remember, this size
+    ## we are using is equal to the desired height), the size will end up
+    ## smaller and vice-versa; this way the size ends up closer to producing
+    ## a surface height of the desired height
+    size = round(size * (size / surf_height))
+
+    ### create variable to store highest height achieved which doesn't surpass
+    ### the desired height (but can be equal)
     highest_achieved = 0
-
-    ### before searching for the perfect font size inside
-    ### the "while loop", define an initial size that takes
-    ### into account the difference between the value used
-    ### for the font size (here we use the desired height)
-    ### and the actual height of a produced surface
-
-    raise_if_unattainable(desired_height, desired_height, font_key)
-
-    font = font_class(font_key, desired_height)
-    _, surf_height = font.size(SPACE_CHARACTER)
-
-    diff = desired_height - surf_height
-
-    size = desired_height + diff
 
     ### we'll now enter a "while loop" with 02 exit points:
     ###
@@ -196,7 +207,7 @@ def get_font(font_key, desired_height):
         raise_if_unattainable(desired_height, size, font_key)
 
         font = font_class(font_key, size)
-        _, surf_height = font.size(SPACE_CHARACTER)
+        surf_height = font.size(SPACE_CHARACTER)[1]
 
         ### store current size as an attempted one since
         ### we just tried it
@@ -220,6 +231,14 @@ def get_font(font_key, desired_height):
         ### current one according to whether the height
         ### of the surface we obtained is lower/higher
         ### than the desired one;
+
+        ### TODO fix: this logic used here doesn't always hold up
+        ### (that is, sometimes the surf_height is so high that even
+        ### reducing the font size to 0 or below won't produce a surf
+        ### of height lower or equal to the desired height; and, when
+        ### font size gets below 0, as expected, an error is raised
+        ###
+        ### must ponder what to do in this case;
 
         else:
             size += 1 if surf_height < desired_height else -1
@@ -260,5 +279,5 @@ def raise_if_unattainable(desired_height, attempted_size, font_key):
 
         raise ValueError(
             f"Font of height {desired_height}"
-            " can't be achieved with {font_key!r} font"
+            f" can't be achieved with {font_key!r} font"
         )

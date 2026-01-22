@@ -14,10 +14,15 @@ from pygame.locals import (
     K_ESCAPE,
     K_RETURN,
     K_KP_ENTER,
+
+    K_LEFT,
+    K_RIGHT,
+    K_UP,
+    K_DOWN,
+    K_w,
     K_a,
     K_s,
     K_d,
-    K_w,
 )
 
 from pygame.font import SysFont, get_fonts, match_font
@@ -64,9 +69,10 @@ except Exception as err:
     raise RuntimeError("Couldn't load sample unicode characters") from err
 
 
-FONT_PREVIEW_SIZE = (200, 100)
+FONT_LIST_ITEM_SIZE = (640, 90)
+FONT_PREVIEW_AREA_SIZE = (640, 65)
 
-PLACEHOLDER_PREVIEW_SURF = Surface(FONT_PREVIEW_SIZE).convert()
+PLACEHOLDER_PREVIEW_SURF = Surface(FONT_LIST_ITEM_SIZE).convert()
 PLACEHOLDER_PREVIEW_SURF.fill('white')
 
 PREVIEW_CHARS = ' '.join(
@@ -82,12 +88,12 @@ PREVIEW_CHARS = ' '.join(
 )
 
 FONT_PREVIEW_SETTINGS = {
-    'font_size': 20,
+    'font_size': 22,
     'chars': PREVIEW_CHARS,
-    'width': FONT_PREVIEW_SIZE[0],
-    'height': FONT_PREVIEW_SIZE[1],
-    'not_found_width': FONT_PREVIEW_SIZE[0],
-    'not_found_height': FONT_PREVIEW_SIZE[1],
+    'width': FONT_PREVIEW_AREA_SIZE[0],
+    'height': FONT_PREVIEW_AREA_SIZE[1],
+    'not_found_width': FONT_PREVIEW_AREA_SIZE[0],
+    'not_found_height': FONT_PREVIEW_AREA_SIZE[1],
 }
 
 ## create logger for module
@@ -177,28 +183,19 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         )
 
-        sys_font_2d_objs.rect.snap_rects_intermittently_ip(
+        sys_font_2d_objs_rect = self.sys_font_2d_objs_rect = (
+            sys_font_2d_objs.rect
+        )
 
-            ### interval
-            dimension_name='width',
-            dimension_unit='rects',
-            max_dimension_value=3,
+        sys_font_2d_objs_rect.snap_rects_ip(
 
-            ### rect positioning
-
-            retrieve_pos_from='topright',
+            retrieve_pos_from='bottomleft',
             assign_pos_to='topleft',
-            offset_pos_by=(20, 0),
-
-            ### intermittent rect positioning
-
-            intermittent_pos_from='bottomleft',
-            intermittent_pos_to='topleft',
-            intermittent_offset_by=(0, 20),
+            offset_pos_by=(0, 5),
 
         )
 
-        sys_font_2d_objs.rect.topleft = all_fonts_panel.rect.topleft
+        sys_font_2d_objs_rect.topleft = all_fonts_panel.rect.topleft
 
         ###
         self.selected_font_2d_objs = List2D()
@@ -360,28 +357,44 @@ class SystemFontsPicker(Object2D, LoopHolder):
                     self.running = False
                     self.font_names = None
 
-    ### TODO create methods in the RectsManager class to automatically scroll
-    ### objects within a scroll area;
-    ###
-    ### make sure classes2d/collections.py has a suitable way to draw objects
-    ### in such arrangement (within a scroll area); maybe a thourough review of
-    ### classesman/collections.py is needed;
-
     def handle_key_states(self):
 
         key_pressed_states = SERVICES_NS.get_pressed_keys()
 
-        if key_pressed_states[K_a]:
+        sys_font_2d_objs_rect = self.sys_font_2d_objs_rect
+
+
+        dy = 0
+
+        if key_pressed_states[K_w] or key_pressed_states[K_UP]:
+            dy = 70
+
+        elif key_pressed_states[K_s] or key_pressed_states[K_DOWN]:
+            dy = -70
+
+        if dy:
+
+            sys_font_2d_objs_rect.move_ip(0, dy)
+
+            all_fonts_rect = self.all_fonts_rect
+
+            if dy < 0:
+
+                if sys_font_2d_objs_rect.bottom < all_fonts_rect.bottom:
+                    sys_font_2d_objs_rect.bottom == all_fonts_rect.bottom
+
+            else:
+
+                if sys_font_2d_objs_rect.top < all_fonts_rect.top:
+                    sys_font_2d_objs_rect.top == all_fonts_rect.top
+
+        ###
+
+        if key_pressed_states[K_a] or key_pressed_states[K_LEFT]:
             ... #self.char_objs.rect.move_ip(-20, 0)
 
-        elif key_pressed_states[K_s]:
+        elif key_pressed_states[K_d] or key_pressed_states[K_RIGHT]:
             ... #self.char_objs.rect.move_ip(0, 20)
-
-        elif key_pressed_states[K_w]:
-            ... #self.char_objs.rect.move_ip(0, -20)
-
-        elif key_pressed_states[K_d]:
-            ... #self.char_objs.rect.move_ip(20, 0)
 
     def draw(self):
 
@@ -399,8 +412,33 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
                 if obj.image is PLACEHOLDER_PREVIEW_SURF:
 
-                    obj.image = (
-                        FONT_PREVIEWS_DB[obj.font_name][FONT_PREVIEW_SETTINGS]
+                    obj.image = PLACEHOLDER_PREVIEW_SURF.copy()
+
+                    x = 0
+
+                    height = FONT_PREVIEW_SETTINGS['font_size']
+
+                    for font_key in (
+                        ENC_SANS_BOLD_FONT_PATH,
+                        obj.font_name,
+                    ):
+
+                        text_surf = (
+
+                            render_text(
+                                obj.font_name,
+                                font_height=height,
+                                font_key=font_key,
+                            )
+
+                        )
+
+                        obj.image.blit(text_surf, (x, 0))
+                        x = text_surf.get_width() + 4
+
+                    obj.image.blit(
+                        FONT_PREVIEWS_DB[obj.font_name][FONT_PREVIEW_SETTINGS],
+                        (0, 25),
                     )
 
                 blit_operation(obj.image, obj.rect.move(offset))

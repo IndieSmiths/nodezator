@@ -88,9 +88,7 @@ def render_font_preview(
     char_objs = List2D(
 
         Object2D.from_surface(
-
-            render(char, True, BLACK, WHITE)
-
+            _get_char_surf(char, render, font_key)
         )
 
         for char in chars
@@ -116,3 +114,22 @@ def render_font_preview(
 
     ### finally, return the preview
     return surf
+
+
+def _get_char_surf(char, render, font_key):
+
+    try:
+        char_surf = render(char, True, BLACK, WHITE)
+
+    except PygameError as err:
+
+        print(
+
+            "Error when rendering surf for "
+            f"'{char}'char from {font_key!r} font: {err}"
+
+        )
+
+        char_surf = render(' ', True, BLACK, 'red')
+
+    return char_surf
