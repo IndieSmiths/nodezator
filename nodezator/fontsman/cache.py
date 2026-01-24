@@ -209,14 +209,12 @@ def get_font(font_key, desired_height):
         font = font_class(font_key, size)
         surf_height = font.size(SPACE_CHARACTER)[1]
 
-        ### store current size as an attempted one since
-        ### we just tried it
+        ### store current size as an attempted one since we just tried it
         attempted_sizes.add(size)
 
-        ### if we reached a font whose rendered surface
-        ### satisfies our height requirement, we can break
-        ### out of the loop after storing the surf height
-        ### as the highest achieved one and the font as the
+        ### if we reached a font whose rendered surface satisfies our
+        ### height requirement, we can break out of the loop after storing
+        ### the surf height as the highest achieved one and the font as the
         ### chosen one
 
         if surf_height == desired_height:
@@ -226,19 +224,22 @@ def get_font(font_key, desired_height):
 
             break
 
-        ### otherwise, we come up with another value for
-        ### the size by incrementing/decrementing the
-        ### current one according to whether the height
-        ### of the surface we obtained is lower/higher
-        ### than the desired one;
-
-        ### TODO fix: this logic used here doesn't always hold up
-        ### (that is, sometimes the surf_height is so high that even
-        ### reducing the font size to 0 or below won't produce a surf
-        ### of height lower or equal to the desired height; and, when
-        ### font size gets below 0, as expected, an error is raised
+        ### TODO finish the comment below and update the code accordingly; also
+        ### explain why this check is needed here (the explanation was already
+        ### written in the previous commit, so just copy it here);
         ###
-        ### must ponder what to do in this case;
+        ### to finish the comment, you'll also need to decide what to do (perhaps
+        ### return the font for [SyS]Font(font_key, desired_height) and issue a
+        ### warning as well?); also, should a font in those conditions be cached?
+        ### ponder;
+
+        ### otherwise, we come up with another value for the size by
+        ### incrementing/decrementing the current one according to whether
+        ### the obtained height (from the surface) is lower/higher than the
+        ### desired one;
+        ###
+        ### we must also check whether the resulting size is within allowed
+        ### boundaries and, in case they are not, return the font
 
         else:
             size += 1 if surf_height < desired_height else -1
@@ -269,6 +270,16 @@ def get_font(font_key, desired_height):
     return chosen_font
 
 
+
+### TODO
+### probably remove this raise_if_unattainable() function, including it as
+### blocks within get_font(); within get_font(), we'll be able to check a
+### single size at a time, rather than two at once here, which isn't needed;
+###
+### we could even use a `size in range_obj` or `size in set_obj` check in
+### other to avoid repeating the boundaries in the current `s < 0` and
+### `s >= 65536` styles we are using (check the performance with "timeit")
+
 def raise_if_unattainable(desired_height, attempted_size, font_key):
     """Detect when technical limitations of font interpolation
     will prevent creation of certain font sizes.
@@ -277,6 +288,7 @@ def raise_if_unattainable(desired_height, attempted_size, font_key):
 
     if any(map(lambda s: s < 0 or s >= 65536, sizes)):
 
+        print("attempted sizes", sizes)
         raise ValueError(
             f"Font of height {desired_height}"
             f" can't be achieved with {font_key!r} font"

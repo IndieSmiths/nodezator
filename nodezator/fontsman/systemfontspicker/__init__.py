@@ -381,12 +381,12 @@ class SystemFontsPicker(Object2D, LoopHolder):
             if dy < 0:
 
                 if sys_font_2d_objs_rect.bottom < all_fonts_rect.bottom:
-                    sys_font_2d_objs_rect.bottom == all_fonts_rect.bottom
+                    sys_font_2d_objs_rect.bottom = all_fonts_rect.bottom
 
             else:
 
-                if sys_font_2d_objs_rect.top < all_fonts_rect.top:
-                    sys_font_2d_objs_rect.top == all_fonts_rect.top
+                if sys_font_2d_objs_rect.top > all_fonts_rect.top:
+                    sys_font_2d_objs_rect.top = all_fonts_rect.top
 
         ###
 

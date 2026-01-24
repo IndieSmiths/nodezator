@@ -54,9 +54,7 @@ def get_text_size(
     )
 
 
-### XXX refactor: list and explain parameters, review
-### docstring and comments
-
+### XXX refactor: list and explain parameters, review docstring and comments
 
 def fit_text(
     text,
@@ -67,14 +65,14 @@ def fit_text(
     padding=0,
 ):
     """Return optimal text to fit max_width passed."""
-    ### get font
-    font = FONTS_DB[font_key][font_height]
+    ### get size method of font created with given arguments
+    get_surface_size_for_text = FONTS_DB[font_key][font_height].size
 
     ### update max_width to take padding into account
     max_width += -padding * 2
 
     ### if text as it is fits width, then return earlier
-    if not font.size(text)[0] > max_width:
+    if not get_surface_size_for_text(text)[0] > max_width:
         return text
 
     ### define the ellipsis text
@@ -82,7 +80,7 @@ def fit_text(
 
     ### if not even the ellipsis text fits the max width,
     ### we raise an error to indicate such.
-    if font.size(ellipsis)[0] > max_width:
+    if get_surface_size_for_text(ellipsis)[0] > max_width:
         raise ValueError("max_width defined is too small.")
 
     ### concatenate the ellipsis with the text according
@@ -90,16 +88,15 @@ def fit_text(
     ### from which we will repeatedly remove characters
     ### when making the text shorter
 
-    if ommit_direction == "left":
+    if ommit_direction == 'left':
         text = ellipsis + text
         pop_index = 1
 
-    elif ommit_direction == "right":
+    elif ommit_direction == 'right':
         text = text + ellipsis
         pop_index = -2
 
     else:
-
         raise RuntimeError("This 'else' clause should never be reached")
 
     ### define a list of the characters
@@ -117,28 +114,31 @@ def fit_text(
         ## join the text together
 
         char_list.pop(pop_index)
-        text = "".join(char_list)
+        text = ''.join(char_list)
 
         ## if font width of the resulting text fits the
         ## max_width, we can leave the for loop
-        if font.size(text)[0] <= max_width:
+        if get_surface_size_for_text(text)[0] <= max_width:
             break
 
     ### we finally return the text
     return text
 
 
-### XXX this function could use a similar mechanism
-### as the one used by the option menu widget or the
-### appcommon.text.label.main.Label class, so
-### that surfaces with the same settings would
-### only be generated once; however, if this ends up
-### being implemented, it would need an option to
-### disable the behaviour, since the user may
-### want to further manipulate the surface, which
-### would end up making it useless for usage in
-### other objects;
-
+### XXX this function could use a similar mechanism as the one used by the
+### option menu widget or the appcommon.text.label.main.Label class, so that
+### surfaces with the same settings would only be generated once; however,
+### if this ends up being implemented, it would need an option to disable the
+### behaviour, since the user may want to further manipulate the surface, which
+### would end up making it useless for usage in ### other objects;
+###
+### No, probably better: perhaps we could create a duplicate of this function
+### with the desired behaviour; the reason is that the original function,
+### without this extra functionality (and this a bit faster) could still
+### be used when this extra functionality isn't needed and speed and the
+### extra speed is desired; in this context, the duplicate would actually
+### likely be an original function that uses this one but caches the
+### generated surface; ponder
 
 def render_text(
     text,
@@ -155,7 +155,7 @@ def render_text(
     max_width=0,
     ommit_direction="right",
 ):
-    """Return surface or object representing rendered text.
+    """Return surface representing rendered text.
 
     Parameters
     ==========
@@ -208,8 +208,7 @@ def render_text(
         'left' or 'right'. This is only taken into account
         if a max width different from 0 (zero) is provided.
     """
-    ### retrieve the suitable font according to the desired
-    ### height and style
+    ### retrieve the suitable font according to the desired height and style
     font = FONTS_DB[font_key][font_height]
 
     ### if a maximum width is required, fit the text
@@ -307,7 +306,6 @@ def render_text(
 
 ### TODO refactor
 
-
 def render_multiline_text(
 
     text,
@@ -337,8 +335,7 @@ def render_multiline_text(
 
 ):
 
-    ### retrieve the suitable font according to the desired
-    ### height and style
+    ### retrieve the suitable font according to the desired height and style
     font = FONTS_DB[font_key][font_height]
 
     ### split the text into multiple lines
