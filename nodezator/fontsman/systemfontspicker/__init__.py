@@ -6,7 +6,7 @@ from itertools import chain
 
 ### third-party imports
 
-from pygame import Rect, Surface
+from pygame import Rect, Surface, error as PygameError
 
 from pygame.locals import (
     QUIT,
@@ -28,6 +28,8 @@ from pygame.locals import (
 from pygame.font import SysFont, get_fonts, match_font
 
 from pygame.math import Vector2
+
+from pygame.transform import smoothscale
 
 
 ### local imports
@@ -57,6 +59,8 @@ from ...textman.render import render_text
 from ...fontsman.preview.cache import FONT_PREVIEWS_DB
 
 from ...fontsman.constants import ENC_SANS_BOLD_FONT_PATH
+
+from ...fontsman.cache import UnattainableFontHeightError
 
 
 
@@ -411,35 +415,8 @@ class SystemFontsPicker(Object2D, LoopHolder):
             if colliderect(obj.rect):
 
                 if obj.image is PLACEHOLDER_PREVIEW_SURF:
+                    update_sys_font_2d_preview(obj)
 
-                    obj.image = PLACEHOLDER_PREVIEW_SURF.copy()
-
-                    x = 0
-
-                    height = FONT_PREVIEW_SETTINGS['font_size']
-
-                    for font_key in (
-                        ENC_SANS_BOLD_FONT_PATH,
-                        obj.font_name,
-                    ):
-
-                        text_surf = (
-
-                            render_text(
-                                obj.font_name,
-                                font_height=height,
-                                font_key=font_key,
-                            )
-
-                        )
-
-                        obj.image.blit(text_surf, (x, 0))
-                        x = text_surf.get_width() + 4
-
-                    obj.image.blit(
-                        FONT_PREVIEWS_DB[obj.font_name][FONT_PREVIEW_SETTINGS],
-                        (0, 25),
-                    )
 
                 blit_operation(obj.image, obj.rect.move(offset))
 
@@ -452,3 +429,86 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
 pick_system_fonts = SystemFontsPicker().pick_system_fonts
 
+
+### helper function
+
+def update_sys_font_2d_preview(obj):
+
+    image = obj.image = PLACEHOLDER_PREVIEW_SURF.copy()
+
+    height = FONT_PREVIEW_SETTINGS['font_size']
+
+    default_font_text_surf = (
+
+        render_text(
+            obj.font_name,
+            font_height=height,
+            font_key=ENC_SANS_BOLD_FONT_PATH,
+        )
+
+    )
+
+    image.blit(default_font_text_surf, (0, 0))
+
+    try:
+
+        current_font_text_surf = (
+
+            render_text(
+                obj.font_name,
+                font_height=height,
+                font_key=obj.font_name,
+            )
+
+        )
+
+    except UnattainableFontHeightError as err:
+
+        font_name = obj.font_name
+
+        print(f"Suppressed error for {font_name!r}: {err}")
+
+        final_surf = default_font_text_surf.copy()
+        final_surf.fill('white')
+
+        try:
+
+            surf = (
+                SysFont(font_name, height)
+                .render(font_name, True, 'black', 'white')
+                .convert()
+            )
+
+        except (PygameError, Exception) as err:
+
+            print(
+                "Another suppressed error for"
+                f" {font_name!r}: {err}"
+            )
+
+            final_surf.fill('red')
+
+        else:
+
+            smoothscale(
+                surf,
+                default_font_text_surf.get_size(),
+                final_surf,
+            )
+
+        current_font_text_surf = final_surf
+
+    image.blit(
+
+        current_font_text_surf,
+
+        (
+            default_font_text_surf.get_width() + 4,
+            0,
+        )
+    )
+
+    image.blit(
+        FONT_PREVIEWS_DB[obj.font_name][FONT_PREVIEW_SETTINGS],
+        (0, 25),
+    )
