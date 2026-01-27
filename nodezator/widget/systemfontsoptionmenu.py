@@ -111,7 +111,7 @@ class SystemFontsOptionMenu(Object2D):
         )
 
         ###
-        self.update_previews()
+        self.update_image()
 
     def validate_value(self, value):
 
@@ -167,22 +167,6 @@ class SystemFontsOptionMenu(Object2D):
 
         else:
             raise TypeError("'value' must be a string or tuple of strings")
-
-    def update_previews(self):
-        """"""
-        font_names = (
-
-            (self.value,)
-            if isinstance(self.value, str)
-
-            else self.value
-
-        )
-
-        for font_name in font_names:
-            update_cache_for_font_preview(font_name)
-
-        self.update_image()
 
     def update_image(self):
         """Update widget image."""

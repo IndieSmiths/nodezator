@@ -9,8 +9,11 @@ from itertools import chain
 from pygame import Rect, Surface, error as PygameError
 
 from pygame.locals import (
+
     QUIT,
+
     KEYUP,
+
     K_ESCAPE,
     K_RETURN,
     K_KP_ENTER,
@@ -23,6 +26,10 @@ from pygame.locals import (
     K_a,
     K_s,
     K_d,
+
+    KMOD_SHIFT,
+
+    MOUSEBUTTONUP,
 )
 
 from pygame.font import SysFont, get_fonts, match_font
@@ -52,7 +59,7 @@ from ...classes2d.single import Object2D
 
 from ...classes2d.collections import List2D
 
-from ...surfsman.render import render_rect, render_not_found_icon
+from ...surfsman.render import render_rect
 
 from ...textman.render import render_text
 
@@ -104,8 +111,7 @@ FONT_PREVIEW_SETTINGS = {
 logger = get_new_logger(__name__)
 
 
-SYS_FONT_NAMES_SET = set(get_fonts())
-SYS_FONT_NAMES_SORTED = sorted(SYS_FONT_NAMES_SET)
+SYS_FONT_NAMES_SORTED = sorted(get_fonts())
 
 
 class SystemFontsPicker(Object2D, LoopHolder):
@@ -130,7 +136,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
         )
 
         font_preview_panel = self.font_preview_panel = (
-            Object2D.from_surface(render_not_found_icon((420, 560)))
+            Object2D.from_surface(render_rect(420, 560, (255, 255, 255)))
         )
 
         selected_fonts_panel.rect.topleft = caption.rect.move(0, 10).bottomleft
@@ -204,6 +210,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
         ###
         self.selected_font_2d_objs = List2D()
         self.font_names = ('',)
+        self.previewed_font_name = ''
 
         ### center system fonts picker and append centering method
         ### as a window resize setup
@@ -228,6 +235,12 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
     def pick_system_fonts(self, font_names, index=0):
 
+        ### TODO
+        ### if list obtained from pygame.font.get_fonts() is empty,
+        ### it shouldn't be possible to use this system fonts picker;
+        ### in such case, we should display a dialog instead and
+        ### exit immediatelly;
+
         font_names = self.font_names = tuple(
 
             font_name
@@ -250,10 +263,10 @@ class SystemFontsPicker(Object2D, LoopHolder):
         ###
 
         if self.font_name:
-            self.prepare_preview()
+            self.update_preview(self.font_name)
 
         else:
-            self.font_preview_panel.image = self.no_preview_surf
+            self.font_preview_panel.image.fill('white')
 
         ###
         self.loop()
@@ -261,11 +274,20 @@ class SystemFontsPicker(Object2D, LoopHolder):
         ###
         return self.font_names
 
-    def prepare_preview(self):
+    def update_preview(self, font_name):
+
+        ### TODO
+        ### - should blit name of font using default font and
+        ### this custom font being previewed
+
+        if font_name == self.previewed_font_name: return
+
+        ###
+        self.previewed_font_name = font_name
 
         ### render and align text objects
 
-        label_texts, char_texts = zip(*SAMPLE_UNICODE_CHARS_DATA.items())
+        label_texts, char_texts = zip(*SAMPLE_UNICODE_CHARS_DATA)
 
         labels_2d = List2D(
 
@@ -273,7 +295,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
                 render_text(
                     f'{label_text}:',
-                    font_height=17,
+                    font_height=24,
                     font_key=ENC_SANS_BOLD_FONT_PATH,
                 )
 
@@ -284,24 +306,26 @@ class SystemFontsPicker(Object2D, LoopHolder):
         )
 
         char_groups = [
-            char_text.replace(',', '').replace(' ', '')
+            char_text.replace(',', '')
             for char_text in char_texts
         ]
 
+        ### TODO
+        ### - should protect against pygame.error ("Text has zero width")
+        ### - should protect against custom UnattainableFontHeightError
+        ### (like raised from "notocoloremoji" font)
+
         char_groups_2d = List2D(
 
-            List2D(
 
-                Object2D.from_surface(
-                    render_text(
-                        text=char,
-                        font_height=17,
-                        font_key=self.font_name,
-                    )
+            Object2D.from_surface(
+                render_text(
+                    text=char_group,
+                    font_height=24,
+                    font_key=font_name,
                 )
-
-                for char in char_group
             )
+
 
             for char_group in char_groups
 
@@ -314,31 +338,23 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         labels_2d.rect.move_ip(4, 4)
 
-        for char_group in char_groups_2d:
-
-            char_group.rect.snap_rects_ip(
-                retrieve_pos_from='topleft',
-                assign_pos_to='topright',
-                offset_pos_by=(4, 0),
-            )
-
         padded_max_right = (
             max(label_2d.rect.right for label_2d in labels_2d) + 4
         )
 
-        for label_2d, char_group in zip(labels_2d, char_groups):
+        for label_2d, char_group in zip(labels_2d, char_groups_2d):
             char_group.rect.topleft = (padded_max_right, label_2d.rect.top)
 
         ### blit onto preview surface
 
+        self.font_preview_panel.image.fill('white')
+
         blit_on_preview = self.font_preview_panel.image.blit
 
-        for label_2d, char_group in zip(labels_2d, char_groups):
+        for label_2d, char_group in zip(labels_2d, char_groups_2d):
 
             blit_on_preview(label_2d.image, label_2d.rect)
-
-            for char_obj in char_group:
-                blit_on_preview(char_obj.image, char_obj.rect)
+            blit_on_preview(char_group.image, char_group.rect)
 
     def handle_input(self):
 
@@ -349,10 +365,8 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         for event in SERVICES_NS.get_events():
 
-            if event.type == QUIT:
-
-                self.running = False
-                self.font_names = None
+            if event.type == MOUSEBUTTONUP:
+                self.on_mouse_release(event)
 
             elif event.type == KEYUP:
 
@@ -360,6 +374,41 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
                     self.running = False
                     self.font_names = None
+
+            elif event.type == QUIT:
+
+                self.running = False
+                self.font_names = None
+
+    def on_mouse_release(self, event):
+
+        mouse_pos = event.pos
+
+        shift_pressed = SERVICES_NS.get_pressed_mod_keys() & KMOD_SHIFT
+
+        if self.all_fonts_rect.collidepoint(mouse_pos):
+            
+            colliderect = self.all_fonts_panel_colliderect
+
+            for obj in self.sys_font_2d_objs:
+
+                if colliderect(obj.rect) and obj.rect.collidepoint(mouse_pos):
+
+                    if not shift_pressed and obj.font_name not in self.font_names:
+                        self.font_names += (obj.font_name,)
+
+                    elif shift_pressed and obj.font_name in self.font_names:
+
+                        self.font_names = tuple(
+                            obj.font_name
+                            for font_name in self.font_names
+                            if font_name != obj.font_name
+                        )
+
+                    self.font_name = obj.font_name
+                    self.update_preview(obj.font_name)
+
+                    return
 
     def handle_key_states(self):
 
@@ -436,7 +485,7 @@ def update_sys_font_2d_preview(obj):
 
     image = obj.image = PLACEHOLDER_PREVIEW_SURF.copy()
 
-    height = FONT_PREVIEW_SETTINGS['font_size']
+    height = 22
 
     default_font_text_surf = (
 
