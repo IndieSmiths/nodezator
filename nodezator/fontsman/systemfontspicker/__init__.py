@@ -41,11 +41,15 @@ from pygame.transform import smoothscale
 
 ### local imports
 
-from ...config import APP_REFS, SAMPLE_UNICODE_CHARS_PATH
+from ...config import (
+    APP_REFS,
+    SAMPLE_UNICODE_CHARS_PATH,
+    SORTED_SYS_FONT_NAMES,
+)
 
 from ...pygamesetup import SCREEN_RECT, SERVICES_NS
 
-from ...dialog import create_and_show_dialog
+from ...dialog import show_dialog_from_key
 
 from ...logman.main import get_new_logger
 
@@ -109,9 +113,6 @@ FONT_PREVIEW_SETTINGS = {
 
 ## create logger for module
 logger = get_new_logger(__name__)
-
-
-SYS_FONT_NAMES_SORTED = sorted(get_fonts())
 
 
 class SystemFontsPicker(Object2D, LoopHolder):
@@ -189,7 +190,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
                 font_name = font_name,
             )
 
-            for font_name in SYS_FONT_NAMES_SORTED
+            for font_name in SORTED_SYS_FONT_NAMES
 
         )
 
@@ -235,11 +236,20 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
     def pick_system_fonts(self, font_names, index=0):
 
-        ### TODO
         ### if list obtained from pygame.font.get_fonts() is empty,
         ### it shouldn't be possible to use this system fonts picker;
-        ### in such case, we should display a dialog instead and
-        ### exit immediatelly;
+        ###
+        ### in such case, we display a dialog instead and exit immediatelly;
+
+        if not SORTED_SYS_FONT_NAMES:
+
+            show_dialog_from_key(
+                'cant_use_picker_for_no_system_fonts_were_detected'
+            )
+
+            return None
+
+        ###
 
         font_names = self.font_names = tuple(
 

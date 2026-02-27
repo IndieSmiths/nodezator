@@ -9,8 +9,11 @@ from pathlib import Path
 from subprocess import run as run_subprocess
 
 
-### third-party import
+### third-party imports
+
 from pygame.system import get_pref_path
+
+from pygame.font import get_fonts
 
 
 ### local imports
@@ -62,6 +65,9 @@ APP_REFS = SimpleNamespace(
     ## at end of testing session
     system_testing_set=False,
 )
+
+### sorted names of detected system fonts
+SORTED_SYS_FONT_NAMES = sorted(get_fonts())
 
 
 ### data directory and its subdirectories
