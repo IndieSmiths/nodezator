@@ -63,7 +63,7 @@ from ...classes2d.single import Object2D
 
 from ...classes2d.collections import List2D
 
-from ...surfsman.render import render_rect
+from ...surfsman.render import render_rect, combine_surfaces
 
 from ...textman.render import render_text
 
@@ -84,6 +84,90 @@ except Exception as err:
     raise RuntimeError("Couldn't load sample unicode characters") from err
 
 
+FONT_HEIGHT_FOR_LARGE_PREVIEW = 24
+
+LABEL_TEXTS, _char_texts = zip(*SAMPLE_UNICODE_CHARS_DATA)
+
+STRINGS_WITH_SAMPLE_CHARACTERS = [
+    char_text.replace(',', '')
+    for char_text in _char_texts
+]
+
+LARGE_PREVIEW_LABELS_2D = List2D(
+
+    Object2D.from_surface(
+
+        render_text(
+            f'{label_text}:',
+            font_height=FONT_HEIGHT_FOR_LARGE_PREVIEW,
+            font_key=ENC_SANS_BOLD_FONT_PATH,
+        )
+
+    )
+
+    for label_text in LABEL_TEXTS
+
+)
+
+LARGE_PREVIEW_LABELS_2D.rect.snap_rects_ip(
+    retrieve_pos_from='bottomleft',
+    assign_pos_to='topleft',
+)
+
+LARGE_PREVIEW_LABELS_2D.rect.move_ip(4, 4)
+
+LARGE_PREVIEW_LABELS_PADDED_MAX_RIGHT = (
+    max(label_2d.rect.right for label_2d in LARGE_PREVIEW_LABELS_2D)
+    + 4
+)
+
+
+_SPACE_CHAR = (
+    render_text(
+        ' ',
+        font_height=FONT_HEIGHT_FOR_LARGE_PREVIEW,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
+    )
+)
+
+_RED_TOFU = _SPACE_CHAR.copy()
+_RED_TOFU.fill('red')
+
+def _get_custom_tofu(str_with_sample_chars):
+
+
+    return combine_surfaces(
+
+        surfaces = [
+
+            _SPACE_CHAR if char == ' ' else _RED_TOFU
+            for char in str_with_sample_chars
+
+        ],
+
+        retrieve_pos_from='topright',
+        assign_pos_to='topleft',
+
+    )
+
+CUSTOM_TOFU_WHEN_CANT_RENDER_CHAR_GROUPS = (
+
+    List2D(
+
+
+        Object2D.from_surface(
+            _get_custom_tofu(str_with_sample_chars)
+        )
+
+
+        for str_with_sample_chars in STRINGS_WITH_SAMPLE_CHARACTERS
+
+    )
+
+)
+
+##
+
 FONT_LIST_ITEM_SIZE = (640, 90)
 FONT_PREVIEW_AREA_SIZE = (640, 65)
 
@@ -101,6 +185,7 @@ PREVIEW_CHARS = ' '.join(
     )
 
 )
+
 
 FONT_PREVIEW_SETTINGS = {
     'font_size': 22,
@@ -297,63 +382,40 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         ### render and align text objects
 
-        label_texts, char_texts = zip(*SAMPLE_UNICODE_CHARS_DATA)
+        try:
 
-        labels_2d = List2D(
+            char_groups_2d = List2D(
 
-            Object2D.from_surface(
 
-                render_text(
-                    f'{label_text}:',
-                    font_height=24,
-                    font_key=ENC_SANS_BOLD_FONT_PATH,
+                Object2D.from_surface(
+                    render_text(
+                        text=str_with_sample_chars,
+                        font_height=FONT_HEIGHT_FOR_LARGE_PREVIEW,
+                        font_key=font_name,
+                    )
                 )
+
+                for str_with_sample_chars in STRINGS_WITH_SAMPLE_CHARACTERS
 
             )
 
-            for label_text in label_texts
+        except (UnattainableFontHeightError, PygameError, Exception) as err:
 
-        )
-
-        char_groups = [
-            char_text.replace(',', '')
-            for char_text in char_texts
-        ]
-
-        ### TODO
-        ### - should protect against pygame.error ("Text has zero width")
-        ### - should protect against custom UnattainableFontHeightError
-        ### (like raised from "notocoloremoji" font)
-
-        char_groups_2d = List2D(
-
-
-            Object2D.from_surface(
-                render_text(
-                    text=char_group,
-                    font_height=24,
-                    font_key=font_name,
-                )
+            print(
+                "Error while trying to generate large preview for"
+                f" {font_name}: {err}"
             )
 
+            char_groups_2d = CUSTOM_TOFU_WHEN_CANT_RENDER_CHAR_GROUPS
 
-            for char_group in char_groups
+        for label_2d, char_group in (
+            zip(LARGE_PREVIEW_LABELS_2D, char_groups_2d)
+        ):
 
-        )
-
-        labels_2d.rect.snap_rects_ip(
-            retrieve_pos_from='bottomleft',
-            assign_pos_to='topleft',
-        )
-
-        labels_2d.rect.move_ip(4, 4)
-
-        padded_max_right = (
-            max(label_2d.rect.right for label_2d in labels_2d) + 4
-        )
-
-        for label_2d, char_group in zip(labels_2d, char_groups_2d):
-            char_group.rect.topleft = (padded_max_right, label_2d.rect.top)
+            char_group.rect.topleft = (
+                LARGE_PREVIEW_LABELS_PADDED_MAX_RIGHT,
+                label_2d.rect.top,
+            )
 
         ### blit onto preview surface
 
@@ -361,7 +423,9 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         blit_on_preview = self.font_preview_panel.image.blit
 
-        for label_2d, char_group in zip(labels_2d, char_groups_2d):
+        for label_2d, char_group in (
+            zip(LARGE_PREVIEW_LABELS_2D, char_groups_2d)
+        ):
 
             blit_on_preview(label_2d.image, label_2d.rect)
             blit_on_preview(char_group.image, char_group.rect)
