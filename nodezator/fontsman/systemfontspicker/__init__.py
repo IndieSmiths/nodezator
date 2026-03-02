@@ -55,6 +55,8 @@ from ...logman.main import get_new_logger
 
 from ...ourstdlibs.pyl import load_pyl
 
+from ...ourstdlibs.collections.general import FactoryDict
+
 from ...our3rdlibs.userlogger import USER_LOGGER
 
 from ...loopman.main import LoopHolder
@@ -114,7 +116,7 @@ LARGE_PREVIEW_LABELS_2D.rect.snap_rects_ip(
     assign_pos_to='topleft',
 )
 
-LARGE_PREVIEW_LABELS_2D.rect.move_ip(4, 4)
+LARGE_PREVIEW_LABELS_2D.rect.move_ip(4, 0)
 
 LARGE_PREVIEW_LABELS_PADDED_MAX_RIGHT = (
     max(label_2d.rect.right for label_2d in LARGE_PREVIEW_LABELS_2D)
@@ -195,6 +197,31 @@ FONT_PREVIEW_SETTINGS = {
     'not_found_width': FONT_PREVIEW_AREA_SIZE[0],
     'not_found_height': FONT_PREVIEW_AREA_SIZE[1],
 }
+
+## default and custom font name surf caches
+
+def _get_font_name_surfs(font_name):
+
+    height = FONT_PREVIEW_SETTINGS['font_size']
+
+    default_surf = render_text(
+        font_name,
+        font_height=height,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
+    )
+
+    custom_surf = get_custom_font_text_surf(
+
+        font_name,
+        height,
+        default_surf,
+
+    )
+
+    return (default_surf, custom_surf)
+
+FONT_NAME_SURFS_MAP = FactoryDict(_get_font_name_surfs)
+
 
 ## create logger for module
 logger = get_new_logger(__name__)
@@ -371,14 +398,30 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
     def update_preview(self, font_name):
 
-        ### TODO
-        ### - should blit name of font using default font and
-        ### this custom font being previewed
-
         if font_name == self.previewed_font_name: return
 
         ###
         self.previewed_font_name = font_name
+
+        ###
+
+        default_font_text_surf, current_font_text_surf = (
+            FONT_NAME_SURFS_MAP[font_name]
+        )
+
+        def_rect = default_font_text_surf.get_rect()
+        cur_rect = current_font_text_surf.get_rect()
+
+        def_rect.topleft = (4, 4)
+        cur_rect.topleft = def_rect.move(0, 2).bottomleft
+
+        image = self.font_preview_panel.image
+        image.fill('white')
+
+        blit_on_preview = image.blit
+
+        blit_on_preview(default_font_text_surf, def_rect)
+        blit_on_preview(current_font_text_surf, cur_rect)
 
         ### render and align text objects
 
@@ -408,6 +451,8 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
             char_groups_2d = CUSTOM_TOFU_WHEN_CANT_RENDER_CHAR_GROUPS
 
+        LARGE_PREVIEW_LABELS_2D.rect.topleft = cur_rect.move(0, 16).bottomleft
+
         for label_2d, char_group in (
             zip(LARGE_PREVIEW_LABELS_2D, char_groups_2d)
         ):
@@ -418,10 +463,6 @@ class SystemFontsPicker(Object2D, LoopHolder):
             )
 
         ### blit onto preview surface
-
-        self.font_preview_panel.image.fill('white')
-
-        blit_on_preview = self.font_preview_panel.image.blit
 
         for label_2d, char_group in (
             zip(LARGE_PREVIEW_LABELS_2D, char_groups_2d)
@@ -559,39 +600,49 @@ def update_sys_font_2d_preview(obj):
 
     image = obj.image = PLACEHOLDER_PREVIEW_SURF.copy()
 
-    height = 22
+    height = FONT_PREVIEW_SETTINGS['font_size']
 
-    default_font_text_surf = (
+    font_name = obj.font_name
 
-        render_text(
-            obj.font_name,
-            font_height=height,
-            font_key=ENC_SANS_BOLD_FONT_PATH,
-        )
-
+    default_font_text_surf, current_font_text_surf = (
+        FONT_NAME_SURFS_MAP[font_name]
     )
 
     image.blit(default_font_text_surf, (0, 0))
+    image.blit(
+
+        current_font_text_surf,
+
+        (
+            default_font_text_surf.get_width() + 4,
+            0,
+        )
+    )
+
+    image.blit(
+        FONT_PREVIEWS_DB[obj.font_name][FONT_PREVIEW_SETTINGS],
+        (0, 25),
+    )
+
+def get_custom_font_text_surf(font_name, height, default_surf):
 
     try:
 
         current_font_text_surf = (
 
             render_text(
-                obj.font_name,
+                font_name,
                 font_height=height,
-                font_key=obj.font_name,
+                font_key=font_name,
             )
 
         )
 
     except UnattainableFontHeightError as err:
 
-        font_name = obj.font_name
-
         print(f"Suppressed error for {font_name!r}: {err}")
 
-        final_surf = default_font_text_surf.copy()
+        final_surf = default_surf.copy()
         final_surf.fill('white')
 
         try:
@@ -615,23 +666,10 @@ def update_sys_font_2d_preview(obj):
 
             smoothscale(
                 surf,
-                default_font_text_surf.get_size(),
+                default_surf.get_size(),
                 final_surf,
             )
 
         current_font_text_surf = final_surf
 
-    image.blit(
-
-        current_font_text_surf,
-
-        (
-            default_font_text_surf.get_width() + 4,
-            0,
-        )
-    )
-
-    image.blit(
-        FONT_PREVIEWS_DB[obj.font_name][FONT_PREVIEW_SETTINGS],
-        (0, 25),
-    )
+    return current_font_text_surf
