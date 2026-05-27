@@ -15,6 +15,7 @@ from pygame.locals import (
 
     QUIT,
 
+    KEYDOWN,
     KEYUP,
 
     K_ESCAPE,
@@ -25,6 +26,8 @@ from pygame.locals import (
     K_RIGHT,
     K_UP,
     K_DOWN,
+    K_PAGEDOWN,
+    K_PAGEUP,
     K_w,
     K_a,
     K_s,
@@ -252,22 +255,22 @@ class SystemFontsPicker(Object2D, LoopHolder):
             Object2D.from_surface(render_rect(1080, 100, (180, 180, 180)))
         )
 
-        all_fonts_panel = (
-            Object2D.from_surface(render_rect(640, 560, (180, 180, 180)))
+        available_fonts_panel = (
+            Object2D.from_surface(render_rect(640, 540, (180, 180, 180)))
         )
 
         font_preview_panel = self.font_preview_panel = (
-            Object2D.from_surface(render_rect(420, 560, (255, 255, 255)))
+            Object2D.from_surface(render_rect(420, 540, (255, 255, 255)))
         )
 
-        selected_fonts_panel.rect.topleft = caption.rect.move(0, 10).bottomleft
+        selected_fonts_panel.rect.topleft = caption.rect.move(0, 50).bottomleft
 
-        all_fonts_panel.rect.topleft = (
-            selected_fonts_panel.rect.move(0, 20).bottomleft
+        available_fonts_panel.rect.topleft = (
+            selected_fonts_panel.rect.move(0, 40).bottomleft
         )
 
         font_preview_panel.rect.topleft = (
-            all_fonts_panel.rect.move(20, 0).topright
+            available_fonts_panel.rect.move(40, 0).topright
         )
 
         ###
@@ -277,7 +280,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
             (
                 caption,
                 selected_fonts_panel,
-                all_fonts_panel,
+                available_fonts_panel,
                 font_preview_panel,
             )
 
@@ -289,7 +292,13 @@ class SystemFontsPicker(Object2D, LoopHolder):
         self.image = Surface(self.rect.size).convert()
         self.image.fill('grey')
 
-        self.clean_image = self.image.copy()
+        ### blit labels
+
+        self.blit_labels(
+            selected_fonts_panel.rect,
+            available_fonts_panel.rect,
+            font_preview_panel.rect,
+        )
 
         ### reference important objects
 
@@ -297,13 +306,15 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         ## for all fonts panel
 
-        self.all_fonts_panel_surf = all_fonts_panel.image
+        self.available_fonts_panel_surf = available_fonts_panel.image
 
-        self.blit_onto_all_fonts_panel = all_fonts_panel.image.blit
-        self.fill_all_fonts_panel = all_fonts_panel.image.fill
+        self.blit_onto_available_fonts_panel = available_fonts_panel.image.blit
+        self.fill_available_fonts_panel = available_fonts_panel.image.fill
 
-        self.all_fonts_rect = all_fonts_panel.rect
-        self.all_fonts_panel_colliderect = all_fonts_panel.rect.colliderect
+        self.available_fonts_rect = available_fonts_panel.rect
+        self.available_fonts_panel_colliderect = (
+            available_fonts_panel.rect.colliderect
+        )
 
         ## for selected fonts panel
 
@@ -340,7 +351,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         )
 
-        sys_font_2d_objs_rect.topleft = all_fonts_panel.rect.topleft
+        sys_font_2d_objs_rect.topleft = available_fonts_panel.rect.topleft
 
         ###
 
@@ -358,6 +369,9 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         self.font_names = ()
         self.previewed_font_name = ''
+
+        ### attributes to assist in scrolling
+        self.dx = self.dy = 0
 
         ### center system fonts picker and append centering method
         ### as a window resize setup
@@ -379,6 +393,32 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         if any(item for item in self.font_names):
             self.selected_font_2d_objs.rect.move_ip(diff)
+
+    def blit_labels(
+        self,
+        selected_fonts_panel_rect,
+        available_fonts_panel_rect,
+        font_preview_panel_rect,
+    ):
+
+        blit_on_image = self.image.blit
+        offset = -Vector2(self.rect.topleft)
+
+        for text, rect in (
+
+            ("Selected fonts", selected_fonts_panel_rect),
+            ("All available fonts", available_fonts_panel_rect),
+            ("Font preview", font_preview_panel_rect),
+
+        ):
+
+            text_surf = render_text(text=text)
+            text_rect = text_surf.get_rect()
+
+            text_rect.bottomleft = rect.move(0, -2).topleft
+
+            blit_on_image(text_surf, text_rect.move(offset))
+
 
     def pick_system_fonts(self, font_names, index=0):
 
@@ -539,6 +579,14 @@ class SystemFontsPicker(Object2D, LoopHolder):
             if event.type == MOUSEBUTTONUP:
                 self.on_mouse_release(event)
 
+            elif event.type == KEYDOWN:
+
+                if event.key == K_PAGEDOWN:
+                    self.dy += -self.available_fonts_rect.height
+
+                elif event.key == K_PAGEUP:
+                    self.dy += self.available_fonts_rect.height
+
             elif event.type == KEYUP:
 
                 if event.key in (K_RETURN, K_KP_ENTER, K_ESCAPE):
@@ -559,9 +607,9 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         shift_pressed = SERVICES_NS.get_pressed_mod_keys() & KMOD_SHIFT
 
-        if self.all_fonts_rect.collidepoint(mouse_pos):
+        if self.available_fonts_rect.collidepoint(mouse_pos):
 
-            colliderect = self.all_fonts_panel_colliderect
+            colliderect = self.available_fonts_panel_colliderect
 
             for obj in self.sys_font_2d_objs:
 
@@ -611,40 +659,71 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         key_pressed_states = SERVICES_NS.get_pressed_keys()
 
-        sys_font_2d_objs_rect = self.sys_font_2d_objs_rect
-
-
-        dy = 0
 
         if key_pressed_states[K_w] or key_pressed_states[K_UP]:
-            dy = 70
+            self.dy += 70
 
         elif key_pressed_states[K_s] or key_pressed_states[K_DOWN]:
-            dy = -70
+            self.dy += -70
 
-        if dy:
-
-            sys_font_2d_objs_rect.move_ip(0, dy)
-
-            all_fonts_rect = self.all_fonts_rect
-
-            if dy < 0:
-
-                if sys_font_2d_objs_rect.bottom < all_fonts_rect.bottom:
-                    sys_font_2d_objs_rect.bottom = all_fonts_rect.bottom
-
-            else:
-
-                if sys_font_2d_objs_rect.top > all_fonts_rect.top:
-                    sys_font_2d_objs_rect.top = all_fonts_rect.top
-
+        ###
+        if self.dy:
+            self.scroll_dy()
         ###
 
         if key_pressed_states[K_a] or key_pressed_states[K_LEFT]:
-            ... #self.char_objs.rect.move_ip(-20, 0)
+            self.dx += 20
 
         elif key_pressed_states[K_d] or key_pressed_states[K_RIGHT]:
-            ... #self.char_objs.rect.move_ip(0, 20)
+            self.dx += -20
+
+        if self.dx:
+            self.scroll_dx()
+
+    def scroll_dy(self):
+
+        dy = self.dy
+        self.dy = 0
+
+        sys_font_2d_objs_rect = self.sys_font_2d_objs_rect
+
+        sys_font_2d_objs_rect.move_ip(0, dy)
+
+        available_fonts_rect = self.available_fonts_rect
+
+        if dy < 0:
+
+            if sys_font_2d_objs_rect.bottom < available_fonts_rect.bottom:
+                sys_font_2d_objs_rect.bottom = available_fonts_rect.bottom
+
+        else:
+
+            if sys_font_2d_objs_rect.top > available_fonts_rect.top:
+                sys_font_2d_objs_rect.top = available_fonts_rect.top
+
+    def scroll_dx(self):
+
+        dx = self.dx
+        self.dx = 0
+
+        if not self.font_names: return
+
+        objs_rectsman = self.selected_font_2d_objs.rect
+        panel_rect = self.selected_fonts_rect
+
+        if objs_rectsman.width <= panel_rect.width: return
+
+        objs_rectsman.move_ip(dx, 0)
+
+        if dx < 0:
+
+            if objs_rectsman.right < panel_rect.right:
+                objs_rectsman.right = panel_rect.right
+
+        else:
+
+            if objs_rectsman.left > panel_rect.left:
+                objs_rectsman.left = panel_rect.left
 
     def draw(self):
 
@@ -653,14 +732,14 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         ### draw on all fonts panel
 
-        offset = -Vector2(self.all_fonts_rect.topleft)
-        colliderect = self.all_fonts_panel_colliderect
-        blit_operation = self.blit_onto_all_fonts_panel
-        all_fonts_panel_surf = self.all_fonts_panel_surf
+        offset = -Vector2(self.available_fonts_rect.topleft)
+        colliderect = self.available_fonts_panel_colliderect
+        blit_operation = self.blit_onto_available_fonts_panel
+        available_fonts_panel_surf = self.available_fonts_panel_surf
 
         font_names = self.font_names
 
-        self.fill_all_fonts_panel('grey80')
+        self.fill_available_fonts_panel('grey80')
 
         for obj in self.sys_font_2d_objs:
 
@@ -676,7 +755,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
                 if obj.font_name in font_names:
 
                     draw_rect(
-                        all_fonts_panel_surf,
+                        available_fonts_panel_surf,
                         'blue',
                         offset_rect,
                         2,
