@@ -28,6 +28,8 @@ from pygame.locals import (
     K_DOWN,
     K_PAGEDOWN,
     K_PAGEUP,
+    K_HOME,
+    K_END,
     K_w,
     K_a,
     K_s,
@@ -35,6 +37,7 @@ from pygame.locals import (
 
     KMOD_SHIFT,
 
+    MOUSEBUTTONDOWN,
     MOUSEBUTTONUP,
 )
 
@@ -55,7 +58,9 @@ from ...config import (
     SORTED_SYS_FONT_NAMES,
 )
 
-from ...pygamesetup import SCREEN_RECT, SERVICES_NS
+from ...pygamesetup import SERVICES_NS
+
+from ...pygamesetup.constants import SCREEN, SCREEN_RECT
 
 from ...dialog import show_dialog_from_key
 
@@ -210,19 +215,10 @@ FONT_PREVIEW_SETTINGS = {
 
 ##
 
-SELECTED_ITEM_SIZE = (330, 100)
+SELECTED_ITEM_SIZE = (330, 60)
 
 SELECTED_ITEM_CLEARED_SURF = Surface(SELECTED_ITEM_SIZE).convert()
 SELECTED_ITEM_CLEARED_SURF.fill('white')
-
-SELECTED_FONT_PREVIEW_SETTINGS = {
-    'font_size': 22,
-    'chars': PREVIEW_CHARS,
-    'width': SELECTED_ITEM_SIZE[0],
-    'height': SELECTED_ITEM_SIZE[1],
-    'not_found_width': SELECTED_ITEM_SIZE[0],
-    'not_found_height': SELECTED_ITEM_SIZE[1],
-}
 
 X_SURF = render_layered_icon(
     chars=[chr(126)],
@@ -252,15 +248,15 @@ class SystemFontsPicker(Object2D, LoopHolder):
         )
 
         selected_fonts_panel = self.selected_fonts_panel = (
-            Object2D.from_surface(render_rect(1080, 100, (180, 180, 180)))
+            Object2D.from_surface(render_rect(1080, 60, (180, 180, 180)))
         )
 
         available_fonts_panel = (
-            Object2D.from_surface(render_rect(640, 540, (180, 180, 180)))
+            Object2D.from_surface(render_rect(640, 580, (180, 180, 180)))
         )
 
         font_preview_panel = self.font_preview_panel = (
-            Object2D.from_surface(render_rect(420, 540, (255, 255, 255)))
+            Object2D.from_surface(render_rect(420, 580, (255, 255, 255)))
         )
 
         selected_fonts_panel.rect.topleft = caption.rect.move(0, 50).bottomleft
@@ -301,8 +297,6 @@ class SystemFontsPicker(Object2D, LoopHolder):
         )
 
         ### reference important objects
-
-        self.no_preview_surf = font_preview_panel.image
 
         ## for all fonts panel
 
@@ -352,6 +346,35 @@ class SystemFontsPicker(Object2D, LoopHolder):
         )
 
         sys_font_2d_objs_rect.topleft = available_fonts_panel.rect.topleft
+
+        ###
+        self.height_of_sys_font_2d_objs = sys_font_2d_objs_rect.height
+
+        ###
+
+        height_percentage = (
+            available_fonts_panel.rect.height
+            / sys_font_2d_objs_rect.height
+        )
+
+        height = round(height_percentage * available_fonts_panel.rect.height)
+
+        scroll_rect = self.scroll_rect = Rect()
+        scroll_rect.width = 15
+        scroll_rect.height = height if height >= 15 else 15
+
+        scroll_rect.topleft = available_fonts_panel.rect.topright
+
+        farthest_bottom = sys_font_2d_objs_rect.bottom
+        self.nearest_bottom = available_fonts_panel.rect.bottom
+        self.height_range = farthest_bottom - self.nearest_bottom
+
+        self.scroll_rect_trav_height = (
+            available_fonts_panel.rect.height - scroll_rect.height
+        )
+
+        ###
+        self.scroll_grab_height = None
 
         ###
 
@@ -577,7 +600,13 @@ class SystemFontsPicker(Object2D, LoopHolder):
         for event in SERVICES_NS.get_events():
 
             if event.type == MOUSEBUTTONUP:
+
                 self.on_mouse_release(event)
+                self.scroll_grab_height = None
+
+            elif event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self.on_mouse_click(event)
 
             elif event.type == KEYDOWN:
 
@@ -586,6 +615,12 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
                 elif event.key == K_PAGEUP:
                     self.dy += self.available_fonts_rect.height
+
+                elif event.key == K_HOME:
+                    self.dy += self.height_of_sys_font_2d_objs
+
+                elif event.key == K_END:
+                    self.dy += -self.height_of_sys_font_2d_objs
 
             elif event.type == KEYUP:
 
@@ -655,6 +690,13 @@ class SystemFontsPicker(Object2D, LoopHolder):
                     self.update_preview(obj.font_name)
                     return
 
+    def on_mouse_click(self, event):
+
+        mouse_pos = event.pos
+
+        if self.scroll_rect.collidepoint(mouse_pos):
+            self.scroll_grab_height = mouse_pos[1] - self.scroll_rect.top
+
     def handle_key_states(self):
 
         key_pressed_states = SERVICES_NS.get_pressed_keys()
@@ -680,7 +722,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
         if self.dx:
             self.scroll_dx()
 
-    def scroll_dy(self):
+    def scroll_dy(self, move_scroll_rect=True):
 
         dy = self.dy
         self.dy = 0
@@ -700,6 +742,20 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
             if sys_font_2d_objs_rect.top > available_fonts_rect.top:
                 sys_font_2d_objs_rect.top = available_fonts_rect.top
+
+        if move_scroll_rect:
+
+            current_bottom = sys_font_2d_objs_rect.bottom
+
+            percent = 1 - (
+                (current_bottom - self.nearest_bottom) / self.height_range
+            )
+
+            self.scroll_rect.topleft = (
+                available_fonts_rect
+                .move(0, self.scroll_rect_trav_height * percent)
+                .topright
+            )
 
     def scroll_dx(self):
 
@@ -724,6 +780,37 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
             if objs_rectsman.left > panel_rect.left:
                 objs_rectsman.left = panel_rect.left
+
+    def update(self):
+
+        if self.scroll_grab_height is None: return
+
+
+        mouse_height = SERVICES_NS.get_mouse_pos()[1]
+
+        scroll_rect = self.scroll_rect
+        scroll_rect.top = mouse_height - self.scroll_grab_height
+
+        available_fonts_rect = self.available_fonts_rect
+
+        if scroll_rect.top < available_fonts_rect.top:
+            scroll_rect.top = available_fonts_rect.top
+
+        elif scroll_rect.bottom > available_fonts_rect.bottom:
+            scroll_rect.bottom = available_fonts_rect.bottom
+
+        ###
+
+        travelled_distance = scroll_rect.top - available_fonts_rect.top
+        percent = 1 - (travelled_distance / self.scroll_rect_trav_height)
+
+        bottom = self.nearest_bottom + (percent * self.height_range)
+
+        self.sys_font_2d_objs_rect.bottom = bottom
+        #self.dy = bottom - self.sys_font_2d_objs_rect.bottom
+
+        #if self.dy:
+        #    self.scroll_dy(move_scroll_rect=False)
 
     def draw(self):
 
@@ -778,6 +865,9 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         for obj in self.all_panels:
             obj.draw()
+
+        ### scroll rect
+        draw_rect(SCREEN, 'grey30', self.scroll_rect)
 
         ### update screen
         SERVICES_NS.update_screen()
@@ -837,18 +927,8 @@ def _create_surf_for_selected_font(font_name):
         )
     )
 
-    top = (
-        default_font_text_surf.get_height()
-        + current_font_text_surf.get_height()
-        + 4
-    )
-
-    image.blit(
-        FONT_PREVIEWS_DB[font_name][SELECTED_FONT_PREVIEW_SETTINGS],
-        (2, top),
-    )
-
-    X_RECT.topright = image.get_rect().topright
+    X_RECT.top = 0
+    X_RECT.right = image.get_width()
 
     image.blit(X_SURF, X_RECT)
 
