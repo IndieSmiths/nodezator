@@ -93,7 +93,7 @@ def isliteral(value):
 ##        'True',           # antialiased
 ##        '(38, 38, 38)',   # background_color
 ##        '17',             # font_height
-##        ENC_SANS_BOLD_FONT_PATH,      # font_path
+##        ENC_SANS_BOLD_FONT_PATH,      # font_key
 ##        '(238, 238, 238)' # foreground_color
 ##
 ##      ) : {
@@ -114,7 +114,7 @@ def isliteral(value):
 ##        'True',            # antialiased
 ##        '(38, 38, 38)',    # background_color
 ##        '17',              # font_height
-##        ENC_SANS_BOLD_FONT_PATH,       # font_path
+##        ENC_SANS_BOLD_FONT_PATH,       # font_key
 ##        '(238, 238, 238)', # foreground_color
 ##        '140'              # max width
 ##
@@ -149,8 +149,8 @@ class OptionMenu(OptionMenuLifetimeOperations):
         loop_holder=None,
         clamp_area=SCREEN_RECT,
         max_width=155,
-        font_path=ENC_SANS_BOLD_FONT_PATH,
         font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
         antialiased=True,
         foreground_color=OPTION_MENU_FG,
         background_color=OPTION_MENU_BG,
@@ -184,12 +184,12 @@ class OptionMenu(OptionMenuLifetimeOperations):
             they are expanded.
         width (integer)
             widget width in pixels.
-        font_path (string)
-            a key used to define which font file to used;
-            for available keys, check the FONT_PATH_MAP
-            dictionary in textman/font.py.
         font_height (integer)
             font height in pixels.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         antialiased (boolean)
             indicates whether the text should be antialiased
             or not.
@@ -283,28 +283,28 @@ class OptionMenu(OptionMenuLifetimeOperations):
         ### value is does the trick;
 
         self.chosen_text_settings = {
-            "font_path": font_path,
-            "font_height": font_height,
-            "antialiased": antialiased,
-            "max_width": max_text_width,
-            "foreground_color": foreground_color,
-            "background_color": background_color,
+            'font_key': font_key,
+            'font_height': font_height,
+            'antialiased': antialiased,
+            'max_width': max_text_width,
+            'foreground_color': foreground_color,
+            'background_color': background_color,
         }
 
         self.hovered_text_settings = {
-            "font_path": font_path,
-            "font_height": font_height,
-            "antialiased": antialiased,
-            "foreground_color": hovered_foreground_color,
-            "background_color": hovered_background_color,
+            'font_key': font_key,
+            'font_height': font_height,
+            'antialiased': antialiased,
+            'foreground_color': hovered_foreground_color,
+            'background_color': hovered_background_color,
         }
 
         self.unhovered_text_settings = {
-            "font_path": font_path,
-            "font_height": font_height,
-            "antialiased": antialiased,
-            "foreground_color": unhovered_foreground_color,
-            "background_color": unhovered_background_color,
+            'font_key': font_key,
+            'font_height': font_height,
+            'antialiased': antialiased,
+            'foreground_color': unhovered_foreground_color,
+            'background_color': unhovered_background_color,
         }
 
         ### build widgets that form the OptionMenu instance

@@ -1,7 +1,10 @@
-"""Form for user preferences editing."""
+"""Form for lang and font preferences editing."""
 
-### standard library import
+### standard library imports
+
 from functools import partialmethod
+
+from itertools import chain
 
 
 ### third-party imports
@@ -27,7 +30,13 @@ from ..translatedtext import TRANSLATIONS
 
 from .main import USER_PREFS, CONFIG_FILEPATH
 
-from .validation import TEXT_EDITOR_BEHAVIOR_OPTIONS, validate_prefs_data
+from .validation import (
+    AVAILABLE_LOCALES,
+    GENERAL_FONT_HEIGHT_RANGE,
+    MONO_FONT_HEIGHT_RANGE,
+    FONT_KIND_OPTIONS,
+    validate_prefs_data,
+)
 
 from ..dialog import create_and_show_dialog
 
@@ -65,6 +74,13 @@ from ..widget.intfloatentry.main import IntFloatEntry
 
 from ..widget.optionmenu.main import OptionMenu
 
+from ..widget.pathpreview.font import FontPreview
+
+from ..widget.systemfontsoptionmenu import SystemFontsOptionMenu
+
+from ..widget.defaultholder import DefaultHolder
+
+
 from ..colorsman.colors import (
     CONTRAST_LAYER_COLOR,
     BUTTON_FG,
@@ -76,7 +92,7 @@ from ..colorsman.colors import (
 
 
 ### translations
-t = TRANSLATIONS.user_preferences_form
+t = TRANSLATIONS.language_and_fonts_form
 
 ### constants
 
@@ -98,8 +114,8 @@ BUTTON_SETTINGS = {
 }
 
 
-class UserPreferencesEditingForm(Object2D, LoopHolder):
-    """Form for editing user preferences."""
+class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
+    """Form for editing user preferences for language and fonts."""
 
     def __init__(self):
         """Setup form objects."""
@@ -117,7 +133,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         self.rect_size_semitransp_obj = Object2D.from_surface(
             surface=render_rect(*self.rect.size, (*CONTRAST_LAYER_COLOR, 130)),
-            coordinates_name='center',
+            coordinates_name="center",
             coordinates_value=SCREEN_RECT.center,
         )
 
@@ -132,7 +148,6 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         APP_REFS.window_resize_setups.append(self.center_preferences_form)
 
     def center_preferences_form(self):
-
         self.rect.center = self.widgets.rect.center = SCREEN_RECT.center
 
     def build_form_widgets(self):
@@ -147,7 +162,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
                 render_text(
                     text=t.caption,
                     border_thickness=2,
-                    border_color=(TEXT_SETTINGS['foreground_color']),
+                    border_color=(TEXT_SETTINGS["foreground_color"]),
                     **TEXT_SETTINGS,
                 )
             ),
@@ -155,22 +170,24 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         widgets.append(caption_label)
 
-        labels = List2D()
+        ### instantiate labels
 
-        ### create specific widgets to edit user preferences
+        labels = List2D(
 
-        for label_text in (
-            t.backup_files,
-            t.user_logger_lines,
-            t.custom_stdout_lines,
-            t.text_editor_behavior,
-        ):
 
-            label_obj = Object2D.from_surface(
+            Object2D.from_surface(
                 render_text(text=f"{label_text}:", **TEXT_SETTINGS)
             )
 
-            labels.append(label_obj)
+            for label_text in (
+                t.language,
+                t.general_font_height,
+                t.mono_font_height,
+                t.general_font,
+                t.mono_font,
+            )
+        )
+
 
         labels.rect.snap_rects_ip(
             retrieve_pos_from='bottomleft',
@@ -182,57 +199,69 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         widgets.extend(labels)
 
-        ###
+        ### create specific widgets to edit user preferences
 
-        number_backups_intfloat_entry = IntFloatEntry(
+        lang_option_menu = OptionMenu(
             loop_holder=self,
-            value=USER_PREFS['NUMBER_OF_BACKUPS'],
-            name='NUMBER_OF_BACKUPS',
-            width=65,
-            min_value=0,
+            options=AVAILABLE_LOCALES,
+            value=USER_PREFS['LOCALE'],
+            draw_on_window_resize=self.draw,
+            name='LOCALE',
+            max_width=0,
+        )
+
+        general_font_size_intfloat_entry = IntFloatEntry(
+            loop_holder=self,
+            value=USER_PREFS['GENERAL_FONT_HEIGHT'],
+            name='GENERAL_FONT_HEIGHT',
+            width=90,
+            min_value=min(GENERAL_FONT_HEIGHT_RANGE),
+            max_value=max(GENERAL_FONT_HEIGHT_RANGE),
             numeric_classes_hint='int',
             allow_none=False,
             draw_on_window_resize=self.draw,
         )
 
-        user_logger_lines_intfloat_entry = IntFloatEntry(
+        mono_font_size_intfloat_entry = IntFloatEntry(
             loop_holder=self,
-            value=USER_PREFS['USER_LOGGER_MAX_LINES'],
-            name='USER_LOGGER_MAX_LINES',
-            min_value=0,
+            value=USER_PREFS['MONO_FONT_HEIGHT'],
+            name='MONO_FONT_HEIGHT',
+            min_value=min(MONO_FONT_HEIGHT_RANGE),
+            max_value=max(MONO_FONT_HEIGHT_RANGE),
             width=90,
             numeric_classes_hint='int',
             allow_none=False,
             draw_on_window_resize=self.draw,
         )
 
-        custom_stdout_lines_intfloat_entry = IntFloatEntry(
+        general_font_kind_option_menu = self.gen_font_option = OptionMenu(
             loop_holder=self,
-            value=USER_PREFS['CUSTOM_STDOUT_MAX_LINES'],
-            name='CUSTOM_STDOUT_MAX_LINES',
-            min_value=0,
-            width=90,
-            numeric_classes_hint='int',
-            allow_none=False,
+            options=FONT_KIND_OPTIONS,
+            value=USER_PREFS['GENERAL_FONT_KIND'],
+            name='GENERAL_FONT_KIND',
             draw_on_window_resize=self.draw,
+            command=self.switch_general_font_use_widget,
+            max_width=0,
         )
 
-        text_editor_behavior_option_menu = OptionMenu(
+        mono_font_kind_option_menu = self.mono_font_option = OptionMenu(
             loop_holder=self,
-            options=TEXT_EDITOR_BEHAVIOR_OPTIONS,
-            value=USER_PREFS['TEXT_EDITOR_BEHAVIOR'],
-            name='TEXT_EDITOR_BEHAVIOR',
+            options=FONT_KIND_OPTIONS,
+            value=USER_PREFS['MONO_FONT_KIND'],
+            name='MONO_FONT_KIND',
             draw_on_window_resize=self.draw,
+            command=self.switch_mono_font_use_widget,
             max_width=0,
         )
 
         self.prefs_widgets = prefs_widgets = List2D(
-            [
-                number_backups_intfloat_entry,
-                user_logger_lines_intfloat_entry,
-                custom_stdout_lines_intfloat_entry,
-                text_editor_behavior_option_menu,
-            ]
+            (
+                lang_option_menu,
+                general_font_size_intfloat_entry,
+                mono_font_size_intfloat_entry,
+                general_font_kind_option_menu,
+                mono_font_kind_option_menu,
+            )
         )
 
         right = max(label.rect.right for label in labels) + 5
@@ -241,6 +270,105 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
             pref_widget.rect.midleft = (right, label.rect.centery)
 
         widgets.extend(prefs_widgets)
+
+        ###
+
+        self.general_font_widget_map = general_font_widget_map = {}
+        self.mono_font_widget_map = mono_font_widget_map = {}
+
+        for font_kind, value_key, widget_map in (
+
+            (
+                USER_PREFS['GENERAL_FONT_KIND'],
+                'GENERAL_FONT_TO_USE',
+                general_font_widget_map,
+            ),
+
+            (
+                USER_PREFS['MONO_FONT_KIND'],
+                'MONO_FONT_TO_USE',
+                mono_font_widget_map,
+            ),
+        ):
+
+            user_value = USER_PREFS[value_key]
+
+            ## font preview
+
+            value = user_value if font_kind == 'font file' else '.'
+
+            fp = FontPreview(
+                value=value,
+                loop_holder=self,
+                draw_on_window_resize=self.draw,
+            )
+
+            widget_map['font file'] = fp
+
+            ## system fonts option menu
+
+            value = user_value if font_kind == 'system font' else ''
+
+            sfom = SystemFontsOptionMenu(
+                value=value,
+                loop_holder=self,
+                string_when_single=True,
+                draw_on_window_resize=self.draw,
+            )
+
+            widget_map['system font'] = sfom
+
+            ## default holder (when user chooses default font to be used)
+
+            value = (
+
+                "Encode Sans Semi-expanded Bold"
+                if value_key == 'GENERAL_FONT_TO_USE'
+
+                else "Fira Mono Bold"
+
+            )
+
+            dh = DefaultHolder(value=value, max_width=400)
+
+            widget_map['default'] = dh
+
+
+
+        ### calculate extra width and height used by "font_to_use" widgets
+
+        widths, heights = zip(
+
+            *(
+                widget.rect.size
+
+                for widget in chain(
+                    general_font_widget_map.values(),
+                    mono_font_widget_map.values(),
+                )
+
+            )
+
+        )
+
+        extra_width_required = max(widths)
+
+        extra_height_used_by_single_widget = (
+            max(heights) - general_font_kind_option_menu.rect.height
+        )
+
+        ### move last widget and label further down to make space for one of
+        ### the extra widgets (from the maps we just created) that might be
+        ### used
+
+        prefs_widgets[-1].rect.y += extra_height_used_by_single_widget
+        labels[-1].rect.y += extra_height_used_by_single_widget
+
+        ### add and position "font_use" widgets beside their respective option
+        ### menus
+
+        self.switch_general_font_use_widget()
+        self.switch_mono_font_use_widget()
 
         ### create, position and store form related buttons
 
@@ -254,7 +382,18 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         draw_depth_finish(self.finish_button.image)
 
-        self.finish_button.rect.topright = widgets.rect.move(0, 5).bottomright
+        self.finish_button.rect.top = (
+            widgets.rect.move(0, 5).bottom
+            + extra_height_used_by_single_widget
+        )
+
+        self.finish_button.rect.right = (
+            widgets.rect.move(0, 5).right
+            + extra_width_required
+        )
+
+
+        #self.finish_button.rect.topright = widgets.rect.move(0, 5).bottomright
 
         ## cancel button
 
@@ -266,21 +405,73 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
 
         draw_depth_finish(self.cancel_button.image)
 
-        self.cancel_button.rect.midright = self.finish_button.rect.move(-5, 0).midleft
+        self.cancel_button.rect.midright = (
+            self.finish_button.rect.move(-5, 0).midleft
+        )
 
         ## store
-
-        self.finish_button.rect.topright = widgets.rect.move(0, 5).bottomright
-
-        self.cancel_button.rect.topright = self.finish_button.rect.move(-5, 0).topleft
-
         widgets.extend((self.cancel_button, self.finish_button))
 
-    def edit_user_preferences(self):
+    def switch_font_use_widget(self, font_role):
+
+        if font_role == 'general':
+
+            widgets_to_remove = self.general_font_widget_map.values()
+
+            widget_to_add = (
+
+                self.general_font_widget_map[
+                    self.gen_font_option.get()
+                ]
+
+            )
+
+            topright = self.gen_font_option.rect.topright
+
+        elif font_role == 'mono':
+
+            widgets_to_remove = self.mono_font_widget_map.values()
+
+            widget_to_add = (
+
+                self.mono_font_widget_map[
+                    self.mono_font_option.get()
+                ]
+
+            )
+
+            topright = self.mono_font_option.rect.topright
+
+        else:
+
+            return RuntimeError(
+                "This block should never execute, since the 'font_role'"
+                " argument must be either 'general' or 'mono'."
+            )
+
+
+        widgets = self.widgets
+
+        for widget in widgets_to_remove:
+            if widget in widgets:
+                widgets.remove(widget)
+
+        widget_to_add.rect.topleft = topright
+        widget_to_add.rect.move_ip(5, 0)
+
+        widgets.append(widget_to_add)
+
+
+    switch_general_font_use_widget = (
+        partialmethod(switch_font_use_widget, 'general')
+    )
+
+    switch_mono_font_use_widget = partialmethod(switch_font_use_widget, 'mono')
+
+    def edit_lang_and_fonts_settings(self):
 
         ### blit the screen-size semitransparent surf in the
         ### canvas to increase constrast
-
         blit_on_screen(UNHIGHLIGHT_SURF_MAP[SCREEN_RECT.size], (0, 0))
 
         ###
@@ -471,4 +662,7 @@ class UserPreferencesEditingForm(Object2D, LoopHolder):
         blit_on_screen(UNHIGHLIGHT_SURF_MAP[self.rect.size], self.rect)
 
 
-edit_user_preferences = UserPreferencesEditingForm().edit_user_preferences
+edit_lang_and_fonts_settings = (
+    UserPreferencesLanguageAndFontsForm()
+    .edit_lang_and_fonts_settings
+)

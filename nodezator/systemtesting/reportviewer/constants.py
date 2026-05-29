@@ -51,27 +51,27 @@ PIE_INNER_OUTLINE_WIDTH = 2
 PIE_OUTER_OUTLINE_WIDTH = 2
 
 TEXT_SETTINGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
-    "padding": 2,
-    "foreground_color": REPORT_FG,
-    "background_color": REPORT_BG,
+    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
+    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'padding': 2,
+    'foreground_color': REPORT_FG,
+    'background_color': REPORT_BG,
 }
 
 MONO_TEXT_SETTINGS = {
-    "font_height": FIRA_MONO_BOLD_FONT_HEIGHT,
-    "font_path": FIRA_MONO_BOLD_FONT_PATH,
-    "padding": 2,
-    "foreground_color": REPORT_FG,
-    "background_color": REPORT_BG,
+    'font_height': FIRA_MONO_BOLD_FONT_HEIGHT,
+    'font_key': FIRA_MONO_BOLD_FONT_PATH,
+    'padding': 2,
+    'foreground_color': REPORT_FG,
+    'background_color': REPORT_BG,
 }
 
 BUTTON_SETTINGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
-    "padding": 5,
-    "foreground_color": BUTTON_FG,
-    "background_color": BUTTON_BG,
+    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
+    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'padding': 5,
+    'foreground_color': BUTTON_FG,
+    'background_color': BUTTON_BG,
 }
 
 

@@ -161,7 +161,7 @@ class FontPreview(_BasePreview):
         self.update_image()
 
     def blit_path_representation(self):
-        """Blit representation of video in current path."""
+        """Blit representation of font in current path."""
         image = self.image
 
         rect = (

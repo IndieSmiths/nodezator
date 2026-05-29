@@ -109,7 +109,7 @@ def get_node_surface(
             render_text(
                 text=char,
                 font_height=AB_CHARS_HEIGHT,
-                font_path=ENC_SANS_BOLD_FONT_PATH,
+                font_key=ENC_SANS_BOLD_FONT_PATH,
                 foreground_color=char_fg,
             )
             if flag
@@ -121,7 +121,7 @@ def get_node_surface(
                     render_text(
                         text=char,
                         font_height=OP_CHARS_HEIGHT,
-                        font_path=ENC_SANS_BOLD_FONT_PATH,
+                        font_key=ENC_SANS_BOLD_FONT_PATH,
                         foreground_color=operation_char_fg,
                     )
                 )

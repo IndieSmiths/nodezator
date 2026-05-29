@@ -36,7 +36,7 @@ class Label(Object2D):
         *,
         name="label",
         font_height=22,
-        font_path=ENC_SANS_BOLD_FONT_PATH,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
         foreground_color=BLACK,
         background_color=(*BLACK, 0),
         padding=5,
@@ -53,10 +53,10 @@ class Label(Object2D):
             string providing text to update surface.
         font_height
             Integer indicating desired font height in pixels.
-        font_path
-            String representing font style. Check local
-            font.py module for available styles. In doubt
-            use ENC_SANS_BOLD_FONT_PATH for default font.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         foreground_color
         background_color
             A tuple or list of r, g, b values which are
@@ -106,9 +106,9 @@ class Label(Object2D):
         ### previous step)
 
         render_settings = {
-            "font_height": font_height,
-            "font_path": font_path,
-            "foreground_color": foreground_color,
+            'font_height': font_height,
+            'font_key': font_key,
+            'foreground_color': foreground_color,
         }
 
         ### get char map for render settings then store
@@ -116,8 +116,8 @@ class Label(Object2D):
 
         text_map = TEXT_SURFS_DB[render_settings]
 
-        self.surf_map = text_map["surf_map"]
-        self.width_map = text_map["width_map"]
+        self.surf_map = text_map['surf_map']
+        self.width_map = text_map['width_map']
 
         ### store the padding
         self.padding = padding
@@ -127,7 +127,7 @@ class Label(Object2D):
         self.height = (
             ## get the height from a surface of a space
             ## character
-            self.surf_map[" "].get_height()
+            self.surf_map[' '].get_height()
             ## add the padding two times, to account for
             ## the padding on top and bottom
             + (self.padding * 2)

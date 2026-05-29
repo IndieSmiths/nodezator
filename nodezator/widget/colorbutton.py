@@ -89,7 +89,7 @@ COLOR_UNIT_MASK = AlphaMask.from_surface(
     render_text(
         text=chr(114),
         font_height=20,
-        font_path=ICON_FONT_PATH,
+        font_key=ICON_FONT_PATH,
         foreground_color=BLACK,
     )
 )
@@ -97,7 +97,10 @@ COLOR_UNIT_MASK = AlphaMask.from_surface(
 ## create color unit outline surface
 
 COLOR_UNIT_OUTLINE_SURF = render_text(
-    text=chr(113), font_height=20, font_path=ICON_FONT_PATH, foreground_color=BLACK
+    text=chr(113),
+    font_height=20,
+    font_key=ICON_FONT_PATH,
+    foreground_color=BLACK,
 )
 
 ## retrieve and store the size of the mask as the

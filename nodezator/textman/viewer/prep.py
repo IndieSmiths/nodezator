@@ -126,8 +126,8 @@ class TextPreparation:
 
         _, self.line_height = get_text_size(
             "dummy text",
-            general_text_settings["font_height"],
-            general_text_settings["font_path"],
+            general_text_settings['font_height'],
+            general_text_settings['font_key'],
         )
 
         ### store rect
@@ -408,7 +408,7 @@ class TextPreparation:
 
         ### override the font style settings to force the
         ### digits to use a monospaced font
-        digits_text_settings["font_path"] = FIRA_MONO_BOLD_FONT_PATH
+        digits_text_settings['font_key'] = FIRA_MONO_BOLD_FONT_PATH
 
         ### iterate over the digits, creating key-value
         ### pairs of each digit string and its corresponding

@@ -157,3 +157,9 @@ error_while_loading_node_packs
         en-us One or more errors occurred while trying to load node packs. Check the user log for more info (press Ctrl+Shift+j or access the menu "Help > Show user log").
         pt-br Um ou mais errors ocorreram enquanto tentávamos carregar os pacotes de nós. Check o log do usuário para mais informações (pressione Ctrl+Shift+j ou acesse o menu "Ajuda > Mostrar log de usuário").
         zh-cn 加载节点包时发生了一个或多个错误。检查用户日志以获取更多信息 (按下 Ctrl+Shift+j 或者 访问菜单 "帮助 > 打开用户日志").
+
+cant_use_picker_for_no_system_fonts_were_detected
+
+    message
+        en-us It is not possible to use the system fonts picker because no system fonts were detected
+        pt-br Não é possível usar o seletor the fontes do sisstem porque não foram detectadas

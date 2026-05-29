@@ -62,8 +62,8 @@ THEME_MAP = get_ready_theme(
 
 DIGIT_WIDTH, _ = get_text_size(
     "0",
-    font_height=(GENERAL_CODE_TEXT_SETTINGS["font_height"]),
-    font_path=GENERAL_CODE_TEXT_SETTINGS["font_path"],
+    font_height=(GENERAL_CODE_TEXT_SETTINGS['font_height']),
+    font_key=GENERAL_CODE_TEXT_SETTINGS['font_key'],
 )
 
 ###

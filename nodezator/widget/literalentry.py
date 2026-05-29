@@ -89,7 +89,7 @@ class LiteralEntry(Object2D):
         value=None,
         loop_holder=None,
         font_height=FIRA_MONO_BOLD_FONT_HEIGHT,
-        font_path=FIRA_MONO_BOLD_FONT_PATH,
+        font_key=FIRA_MONO_BOLD_FONT_PATH,
         width=155,
         name="literal_entry",
         command=empty_function,
@@ -114,10 +114,10 @@ class LiteralEntry(Object2D):
             initial value of the widget.
         font_height (integer)
             desired font height in pixels.
-        font_path (string, defaults to "default")
-            represents font style. Check local
-            font.py module for available styles. In doubt
-            use 'default' for default font.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         width (integer)
             width of the widget.
         name (string)
@@ -196,10 +196,10 @@ class LiteralEntry(Object2D):
         ### dictionary
 
         render_settings = {
-            "font_height": font_height,
-            "font_path": font_path,
-            "foreground_color": foreground_color,
-            "background_color": background_color,
+            'font_height': font_height,
+            'font_key': font_key,
+            'foreground_color': foreground_color,
+            'background_color': background_color,
         }
 
         ### instantiate the entry cursor class, which is

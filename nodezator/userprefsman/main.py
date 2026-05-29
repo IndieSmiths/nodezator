@@ -64,14 +64,20 @@ neither custom data like recent files and bookmarks.
 ### populated with default values
 
 USER_PREFS = {
-    "LOCALE": "en_us",
-    "NUMBER_OF_BACKUPS": 5,
-    "USER_LOGGER_MAX_LINES": 1000,
-    "CUSTOM_STDOUT_MAX_LINES": 1000,
-    "TEXT_EDITOR_BEHAVIOR": "default",
-    "SOCKET_DETECTION_GRAPHICS": "reaching_hands",
-    "DETECTION_DISTANCE": 150,
-    "GRASPING_DISTANCE": 75,
+    'LOCALE': 'en_us',
+    'NUMBER_OF_BACKUPS': 5,
+    'USER_LOGGER_MAX_LINES': 1000,
+    'CUSTOM_STDOUT_MAX_LINES': 1000,
+    'TEXT_EDITOR_BEHAVIOR': 'default',
+    'SOCKET_DETECTION_GRAPHICS': 'reaching_hands',
+    'DETECTION_DISTANCE': 150,
+    'GRASPING_DISTANCE': 75,
+    'GENERAL_FONT_HEIGHT': 17,
+    'MONO_FONT_HEIGHT': 20,
+    'GENERAL_FONT_KIND': 'default',
+    'GENERAL_FONT_TO_USE': '',
+    'MONO_FONT_KIND': 'default',
+    'MONO_FONT_TO_USE': '',
 }
 
 

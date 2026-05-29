@@ -64,21 +64,21 @@ from ..colorsman.colors import (
 
 FONT_SIZE_KWARGS = {
     # see module docstring about font height
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
-    "padding": 5,
+    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
+    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'padding': 5,
 }
 
 NORMAL_LABEL_KWARGS = {
     **FONT_SIZE_KWARGS,
-    "foreground_color": MENU_FG,
-    "background_color": MENU_BG,
+    'foreground_color': MENU_FG,
+    'background_color': MENU_BG,
 }
 
 HOVERED_LABEL_KWARGS = {
     **FONT_SIZE_KWARGS,
-    "foreground_color": MENU_HOVERED_FG,
-    "background_color": MENU_HOVERED_BG,
+    'foreground_color': MENU_HOVERED_FG,
+    'background_color': MENU_HOVERED_BG,
 }
 
 

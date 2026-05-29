@@ -1,0 +1,34 @@
+
+caption
+    en-us Language and fonts editing form
+    pt-br Formulário para editar idioma e fontes
+
+language
+    en-us Language
+    pt-br Idioma
+    zh-cn 语言
+
+general_font_height
+    en-us General font height
+    pt-br Altura da fonte geral
+
+mono_font_height
+    en-us Monospace font height
+    pt-br Altura da fonte monospace
+
+general_font
+    en-us General font
+    pt-br Fonte geral
+
+mono_font
+    en-us Monospace font
+    pt-br Fonte monospace
+
+finish
+    en-us Finish
+    pt-br Finalizar
+    zh-cn 完成
+cancel
+    en-us Cancel
+    pt-br Cancelar
+    zh-cn 取消

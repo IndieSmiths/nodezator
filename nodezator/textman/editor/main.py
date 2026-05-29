@@ -248,7 +248,7 @@ class TextEditor(Object2D):
             "Welcome to the text editor",
             ## text settings
             font_height=FIRA_MONO_BOLD_FONT_HEIGHT,
-            font_path=FIRA_MONO_BOLD_FONT_PATH,
+            font_key=FIRA_MONO_BOLD_FONT_PATH,
             foreground_color=WINDOW_FG,
             background_color=WINDOW_BG,
         )
@@ -361,7 +361,7 @@ class TextEditor(Object2D):
     def edit_text(
         self,
         text="",
-        font_path=ENC_SANS_BOLD_FONT_PATH,
+        font_key=ENC_SANS_BOLD_FONT_PATH,
         validation_command=None,
         syntax_highlighting="",
     ):
@@ -372,13 +372,10 @@ class TextEditor(Object2D):
 
         text (string)
             text to be edited.
-        font_path (string)
-            indicates the font style to be used when
-            editing the contents; defaults to
-            ENC_SANS_BOLD_FONT_PATH, which uses the normal
-            font of the app. You can use
-            FIRA_MONO_BOLD_FONT_PATH, to edit text
-            representing code using a monospace font.
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         validation_command (None or callable)
             if it is None, the instance is set up so that
             no validation is done;
@@ -420,7 +417,7 @@ class TextEditor(Object2D):
         cursor = self.cursor = Cursor(
             text_editor=self,
             text=text,
-            font_path=font_path,
+            font_key=font_key,
             syntax_highlighting=syntax_highlighting,
         )
 

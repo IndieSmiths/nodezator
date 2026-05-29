@@ -98,21 +98,21 @@ NODE_OUTLINE_THICKNESS = 2
 MAX_WIDTH = 155 - (2 * NODE_OUTLINE_THICKNESS) - 4
 
 GENERAL_PARAMETER_TEXT_SETTINGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
-    "padding": 0,
+    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
+    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'padding': 0,
 }
 
 NORMAL_PARAMETER_TEXT_SETTINGS = {
-    "foreground_color": OPERATION_NODE_NORMAL_FG,
-    "background_color": OPERATION_NODE_NORMAL_BG,
+    'foreground_color': OPERATION_NODE_NORMAL_FG,
+    'background_color': OPERATION_NODE_NORMAL_BG,
     **GENERAL_PARAMETER_TEXT_SETTINGS,
 }
 
 
 COMMENTED_OUT_PARAMETER_TEXT_SETTINGS = {
-    "foreground_color": OPERATION_NODE_COMMENTED_OUT_FG,
-    "background_color": OPERATION_NODE_COMMENTED_OUT_BG,
+    'foreground_color': OPERATION_NODE_COMMENTED_OUT_FG,
+    'background_color': OPERATION_NODE_COMMENTED_OUT_BG,
     **GENERAL_PARAMETER_TEXT_SETTINGS,
 }
 

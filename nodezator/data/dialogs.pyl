@@ -66,4 +66,6 @@
 
   'error_while_loading_node_packs' : {'level_name': 'error'},
 
+  'cant_use_picker_for_no_system_fonts_were_detected' : {'level_name': 'info'},
+
 }

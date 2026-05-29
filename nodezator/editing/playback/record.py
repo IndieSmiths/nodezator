@@ -83,20 +83,20 @@ from ...widget.stringentry import StringEntry
 ### constants
 
 TEXT_SETTINGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
-    "padding": 5,
-    "foreground_color": WINDOW_FG,
-    "background_color": WINDOW_BG,
+    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
+    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'padding': 5,
+    'foreground_color': WINDOW_FG,
+    'background_color': WINDOW_BG,
 }
 
 BUTTON_SETTINGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
-    "padding": 5,
-    "depth_finish_thickness": 1,
-    "foreground_color": BUTTON_FG,
-    "background_color": BUTTON_BG,
+    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
+    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'padding': 5,
+    'depth_finish_thickness': 1,
+    'foreground_color': BUTTON_FG,
+    'background_color': BUTTON_BG,
 }
 
 

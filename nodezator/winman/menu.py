@@ -35,6 +35,8 @@ from ..userprefsman.main import USER_PREFS, update_socket_detection_graphics
 
 from ..userprefsman.generalform import edit_user_preferences
 
+from ..userprefsman.langandfontsform import edit_lang_and_fonts_settings
+
 from ..userprefsman.socketdetectionform import edit_socket_detection_settings
 
 from ..userprefsman.validation import (
@@ -334,13 +336,22 @@ class MenuSetup:
             # build top menu data
 
             edit_menu = {
+
                 "label": t.edit,
+
                 "children": [
+
                     {
                         "label": t.user_preferences,
                         "icon": "tools",
                         "command": edit_user_preferences,
                     },
+
+                    {
+                        "label": t.lang_and_fonts,
+                        "command": edit_lang_and_fonts_settings,
+                    },
+
                 ],
             }
 

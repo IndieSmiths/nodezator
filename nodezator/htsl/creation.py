@@ -497,7 +497,7 @@ def render_inline_code(text):
     text_surf = render_text(
         text=text,
         font_height = NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT,
-        font_path = NOTO_SANS_MONO_MEDIUM_FONT_PATH,
+        font_key = NOTO_SANS_MONO_MEDIUM_FONT_PATH,
         foreground_color = HTSL_GENERAL_TEXT_FG,
     )
 

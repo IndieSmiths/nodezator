@@ -163,10 +163,10 @@ class HTSLBrowser(
         self.title_label = Label(
             f"Untitled document - {BROWSER_TITLE}",
             font_height=20,
-            font_path=ENC_SANS_BOLD_FONT_PATH,
+            font_key=ENC_SANS_BOLD_FONT_PATH,
+            padding=0,
             foreground_color=HTSL_DOCUMENT_TITLE_TEXT_FG,
             background_color=HTSL_BROWSER_BG,
-            padding=0,
             max_width=label_max_width,
         )
 

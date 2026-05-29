@@ -144,7 +144,7 @@ class SortingEditor(SortingEditorModes):
                     render_text(
                         text=label_text,
                         font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-                        font_path=ENC_SANS_BOLD_FONT_PATH,
+                        font_key=ENC_SANS_BOLD_FONT_PATH,
                         padding=5,
                         foreground_color=AREA_LABEL,
                     )

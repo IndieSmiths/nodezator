@@ -3,10 +3,6 @@ caption
     en-us User preferences editing form
     pt-br Formulário para editar preferências
     zh-cn 用户偏好设置表单
-language
-    en-us Language
-    pt-br Idioma
-    zh-cn 语言
 backup_files
     en-us Backup files
     pt-br Arquivos de backup
@@ -19,6 +15,9 @@ custom_stdout_lines
     en-us Custom stdout lines
     pt-br Linhas no stdout personalizado
     zh-cn 自定义标准输出行数
+text_editor_behavior
+    en-us Text editor behavior
+    pt-br Comportamento do editor de texto
 
 finish
     en-us Finish

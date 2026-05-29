@@ -130,9 +130,9 @@ class ColorsPicker(Operations):
 
         caption_surf = render_text(
             text="Click to select/deselect colors",
-            font_path=ENC_SANS_BOLD_FONT_PATH,
-            padding=TEXT_PADDING,
             font_height=ENC_SANS_FONT_HEIGHT,
+            font_key=ENC_SANS_BOLD_FONT_PATH,
+            padding=TEXT_PADDING,
             foreground_color=WINDOW_FG,
             background_color=WINDOW_BG,
             border_color=WINDOW_FG,
@@ -151,7 +151,7 @@ class ColorsPicker(Operations):
             Label(
                 text="",
                 font_height=FIRA_MONO_FONT_HEIGHT,
-                font_path=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=FIRA_MONO_BOLD_FONT_PATH,
                 padding=LABEL_PADDING,
                 foreground_color=WINDOW_FG,
                 background_color=WINDOW_BG,
@@ -200,7 +200,7 @@ class ColorsPicker(Operations):
                 surface=render_text(
                     text=text,
                     font_height=ENC_SANS_FONT_HEIGHT,
-                    font_path=ENC_SANS_BOLD_FONT_PATH,
+                    font_key=ENC_SANS_BOLD_FONT_PATH,
                     padding=BUTTON_PADDING,
                     foreground_color=BUTTON_FG,
                     background_color=BUTTON_BG,

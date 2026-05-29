@@ -97,17 +97,11 @@ FONT_PATH_MAP = {
 class TextDisplay(Object2D):
     """A display widget for storing/displaying text."""
 
-    ### TODO make it so font height is automatically set
-    ### to be either ENC_SANS_BOLD_FONT_HEIGHT or FIRA_MONO_BOLD...
-    ### depending on the value of font_path, in a class
-    ### method which should receive values set by user
-    ### on node callable
-
     def __init__(
         self,
         value="",
         font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_path="sans_bold",
+        font_key=ENC_SANS_BOLD_FONT_PATH,
         width=155,
         no_of_visible_lines=7,
         syntax_highlighting="",
@@ -137,13 +131,10 @@ class TextDisplay(Object2D):
         show_line_number (bool)
             indicates whether to show the line numbers
             or not, when editing the text.
-        font_path (string)
-            indicates the font style to be used when
-            editing the contents. Defaults to 'sans_bold',
-            which uses the normal font of the app. You can
-            also use 'mono_bold', which uses a monospace
-            font when editing the text (for instance, if
-            the text you want to edit is code).
+        font_key (pathlib.Path or string)
+            represents the path wherein to find the font (when a pathlib.Path
+            is used) or the name of a font available in the system (when a
+            string is used).
         width (integer)
             width of the widget.
         no_of_visible_lines (positive integer)
@@ -184,19 +175,8 @@ class TextDisplay(Object2D):
 
             raise ValueError("'no_of_visible_lines' must be >= 1")
 
-        ### process and store the font_path argument;
-        ###
-        ### besides the font path, the font path itself
-        ### may also be a key from the FONT_PATH_MAP,
-        ### in which case it is replaced by the
-        ### proper path
-
-        try:
-            font_path = FONT_PATH_MAP[font_path]
-        except KeyError:
-            pass
-
-        self.font_path = font_path
+        ### store the font_key argument
+        self.font_key = font_key
 
         ### store other arguments
 
@@ -433,13 +413,15 @@ class TextDisplay(Object2D):
         no_of_visible_lines = self.no_of_visible_lines
         show_line_number = self.show_line_number
         font_height = self.font_height
-        font_path = self.font_path
+        font_key = self.font_key
         syntax_highlighting = self.syntax_highlighting
 
         if show_line_number:
 
             lineno_width, _ = get_text_size(
-                "01", font_height=font_height, font_path=FIRA_MONO_BOLD_FONT_PATH
+                "01",
+                font_height=font_height,
+                font_key=FIRA_MONO_BOLD_FONT_PATH,
             )
 
             draw_rect(
@@ -530,7 +512,7 @@ class TextDisplay(Object2D):
                 surf = render_text(
                     text=line_text,
                     font_height=font_height,
-                    font_path=font_path,
+                    font_key=font_key,
                     foreground_color=foreground_color,
                     background_color=background_color,
                 )
@@ -553,7 +535,7 @@ class TextDisplay(Object2D):
                 surf = render_text(
                     text=str(line_number).rjust(2, "0"),
                     font_height=font_height,
-                    font_path=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=FIRA_MONO_BOLD_FONT_PATH,
                     foreground_color=lineno_fg,
                     background_color=lineno_bg,
                 )
@@ -568,7 +550,7 @@ class TextDisplay(Object2D):
 
         general_text_settings = {
             "font_height": self.font_height,
-            "font_path": self.font_path,
+            "font_key": self.font_key,
             "foreground_color": TEXT_DISPLAY_TEXT_FG,
             "background_color": TEXT_DISPLAY_TEXT_BG,
         }
@@ -646,7 +628,7 @@ class TextDisplay(Object2D):
 
     reset_syntax_highlighting = partialmethod(reset_style, "syntax_highlighting")
 
-    reset_font_path = partialmethod(reset_style, "font_path")
+    reset_font_key = partialmethod(reset_style, "font_key")
 
     def edit_value(self):
         """Edit value of widget on the text editor."""
@@ -658,7 +640,7 @@ class TextDisplay(Object2D):
 
         text = edit_text(
             text=self.value,
-            font_path=self.font_path,
+            font_key=self.font_key,
             syntax_highlighting=self.syntax_highlighting,
             validation_command=self.validation_command,
         )
@@ -782,7 +764,7 @@ class TextDisplay(Object2D):
         no_of_visible_lines = self.no_of_visible_lines
         show_line_number = self.show_line_number
         font_height = self.font_height
-        font_path = self.font_path
+        font_key = self.font_key
 
         syntax_highlighting = self.syntax_highlighting
 
@@ -794,7 +776,7 @@ class TextDisplay(Object2D):
             lineno_width, _ = get_text_size(
                 max_lineno_text,
                 font_height=font_height,
-                font_path=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=FIRA_MONO_BOLD_FONT_PATH,
             )
 
             lineno_rect = rect.copy()
@@ -894,7 +876,7 @@ class TextDisplay(Object2D):
                         x_increment, _ = get_text_size(
                             string,
                             font_height=font_height,
-                            font_path=FIRA_MONO_BOLD_FONT_PATH,
+                            font_key=FIRA_MONO_BOLD_FONT_PATH,
                         )
 
                         text_fg = text_settings["foreground_color"]
@@ -926,11 +908,11 @@ class TextDisplay(Object2D):
 
                                 string = fit_text(
                                     text=string,
+                                    font_height=font_height,
+                                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                                    padding=0,
                                     max_width=max_right - temp_x,
                                     ommit_direction="right",
-                                    font_height=font_height,
-                                    font_path=FIRA_MONO_BOLD_FONT_PATH,
-                                    padding=0,
                                 )
 
                             except ValueError:
@@ -971,10 +953,10 @@ class TextDisplay(Object2D):
 
                 line_text = fit_text(
                     text=line_text,
+                    font_height=font_height,
+                    font_key=font_key,
                     max_width=125,
                     ommit_direction="right",
-                    font_height=font_height,
-                    font_path=font_path,
                     padding=0,
                 )
 

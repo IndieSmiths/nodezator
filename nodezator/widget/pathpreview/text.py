@@ -343,7 +343,9 @@ class TextPreview(_BasePreview):
         if show_line_number:
 
             lineno_width, _ = get_text_size(
-                "01", font_height=font_height, font_path=FIRA_MONO_BOLD_FONT_PATH
+                "01",
+                font_height=font_height,
+                font_key=FIRA_MONO_BOLD_FONT_PATH,
             )
 
             draw_rect(
@@ -431,7 +433,7 @@ class TextPreview(_BasePreview):
                 surf = render_text(
                     text=line_text,
                     font_height=font_height,
-                    font_path=font_path,
+                    font_key=font_path,
                     foreground_color=foreground_color,
                     background_color=background_color,
                 )
@@ -451,7 +453,7 @@ class TextPreview(_BasePreview):
                 surf = render_text(
                     text=str(line_number).rjust(2, "0"),
                     font_height=font_height,
-                    font_path=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=FIRA_MONO_BOLD_FONT_PATH,
                     foreground_color=lineno_fg,
                     background_color=lineno_bg,
                 )
@@ -555,7 +557,7 @@ class TextPreview(_BasePreview):
             lineno_width, _ = get_text_size(
                 max_lineno_text,
                 font_height=font_height,
-                font_path=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=FIRA_MONO_BOLD_FONT_PATH,
             )
 
             lineno_rect = rect.copy()
@@ -653,7 +655,7 @@ class TextPreview(_BasePreview):
                         x_increment, _ = get_text_size(
                             string,
                             font_height=font_height,
-                            font_path=FIRA_MONO_BOLD_FONT_PATH,
+                            font_key=FIRA_MONO_BOLD_FONT_PATH,
                         )
 
                         text_fg = text_settings["foreground_color"]
@@ -683,11 +685,11 @@ class TextPreview(_BasePreview):
                             try:
                                 string = fit_text(
                                     text=string,
+                                    font_height=font_height,
+                                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                                    padding=0,
                                     max_width=max_right - temp_x,
                                     ommit_direction="right",
-                                    font_height=font_height,
-                                    font_path=FIRA_MONO_BOLD_FONT_PATH,
-                                    padding=0,
                                 )
                             except ValueError:
                                 string = "\N{horizontal ellipsis}"
@@ -725,11 +727,11 @@ class TextPreview(_BasePreview):
 
                 line_text = fit_text(
                     text=line_text,
-                    max_width=125,
-                    ommit_direction="right",
                     font_height=font_height,
-                    font_path=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=FIRA_MONO_BOLD_FONT_PATH,
                     padding=0,
+                    max_width=125,
+                    ommit_direction='right',
                 )
 
                 text_element = Element(
