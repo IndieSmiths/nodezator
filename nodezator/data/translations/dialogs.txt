@@ -162,4 +162,4 @@ cant_use_picker_for_no_system_fonts_were_detected
 
     message
         en-us It is not possible to use the system fonts picker because no system fonts were detected
-        pt-br Não é possível usar o seletor the fontes do sisstem porque não foram detectadas
+        pt-br Não é possível usar o seletor the fontes do sistema porque não foram detectadas

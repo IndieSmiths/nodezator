@@ -10,6 +10,15 @@ from pathlib import Path
 
 from copy import deepcopy
 
+from warnings import warn
+
+
+### third-party imports
+
+from pygame import error as PygameError
+
+from pygame.font import Font, match_font
+
 
 ### local imports
 
@@ -24,6 +33,15 @@ from ..ourstdlibs.pyl import load_pyl, save_pyl
 from ..our3rdlibs.userlogger import USER_LOGGER
 
 from ..translatedtext import TranslationNode
+
+from ..textman.render import render_text
+
+from ..fontsman.constants import (
+    ENC_SANS_BOLD_FONT_HEIGHT,
+    ENC_SANS_BOLD_FONT_PATH,
+    FIRA_MONO_BOLD_FONT_HEIGHT,
+    FIRA_MONO_BOLD_FONT_PATH,
+)
 
 from .validation import (
     AVAILABLE_SOCKET_DETECTION_GRAPHICS,
@@ -287,3 +305,139 @@ def update_socket_detection_graphics(graphics_string_key):
 
     else:
         APP_REFS.gm.reference_socket_detection_graphics()
+
+
+### preprocess values for fonts to be used
+
+for keys in (
+    ('GENERAL_FONT_KIND', 'GENERAL_FONT_TO_USE'),
+    ('MONO_FONT_KIND', 'MONO_FONT_TO_USE'),
+):
+
+    kind, value = (USER_PREFS[key] for key in keys)
+
+    is_general = 'GENERAL' in keys[0]
+
+    font_key_attr_name = 'general_font_key' if is_general else 'mono_font_key'
+
+    if kind == 'default':
+
+        setattr(
+
+            APP_REFS,
+            font_key_attr_name,
+
+            (
+                ENC_SANS_BOLD_FONT_PATH
+                if is_general
+
+                else FIRA_MONO_BOLD_FONT_PATH
+
+            ),
+
+        )
+
+    elif kind == 'system_font':
+
+        if match_font(value) is not None:
+            setattr(APP_REFS, font_key_attr_name, value)
+
+        else:
+
+            key = keys[1]
+
+            warn(
+                f"Could not find system font set on user preferences for {key}"
+                f" ({value!r}). Using default font instead."
+            )
+
+            setattr(
+
+                APP_REFS,
+                font_key_attr_name,
+
+                (
+                    ENC_SANS_BOLD_FONT_PATH
+                    if is_general
+
+                    else FIRA_MONO_BOLD_FONT_PATH
+
+                ),
+
+            )
+
+    elif kind == 'font_file':
+
+        if not Path(value).exists():
+
+            key = keys[1]
+
+            warn(
+                "Could not find font file on path set on user preferences for"
+                f" {key} ({value!r})."
+                " Using default font instead."
+            )
+
+            setattr(
+
+                APP_REFS,
+                font_key_attr_name,
+
+                (
+                    ENC_SANS_BOLD_FONT_PATH
+                    if is_general
+
+                    else FIRA_MONO_BOLD_FONT_PATH
+
+                ),
+
+            )
+
+        else:
+
+            height_key = (
+
+                'GENERAL_FONT_HEIGHT'
+                if is_general
+
+                else 'MONO_FONT_HEIGHT'
+
+            )
+
+            height = USER_PREFS[height_key]
+
+            try:
+
+                render_text(
+                    text='Hello, world!',
+                    font_height=height,
+                    font_key=Path(value),
+                )
+
+            except (PygameError, Exception):
+
+                key = keys[1]
+
+                warn(
+                    "Could not properly load and render text with font file"
+                    " from path set on user preferences for"
+                    f" {key} ({value!r}). Using default font instead."
+                )
+
+                setattr(
+
+                    APP_REFS,
+                    font_key_attr_name,
+
+                    (
+                        ENC_SANS_BOLD_FONT_PATH
+                        if is_general
+
+                        else FIRA_MONO_BOLD_FONT_PATH
+
+                    ),
+
+                )
+
+            else:
+                setattr(APP_REFS, font_key_attr_name, Path(value))

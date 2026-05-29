@@ -295,7 +295,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
             ## font preview
 
-            value = user_value if font_kind == 'font file' else '.'
+            value = user_value if font_kind == 'font_file' else '.'
 
             fp = FontPreview(
                 value=value,
@@ -303,11 +303,11 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
                 draw_on_window_resize=self.draw,
             )
 
-            widget_map['font file'] = fp
+            widget_map['font_file'] = fp
 
             ## system fonts option menu
 
-            value = user_value if font_kind == 'system font' else ''
+            value = user_value if font_kind == 'system_font' else ''
 
             sfom = SystemFontsOptionMenu(
                 value=value,
@@ -316,7 +316,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
                 draw_on_window_resize=self.draw,
             )
 
-            widget_map['system font'] = sfom
+            widget_map['system_font'] = sfom
 
             ## default holder (when user chooses default font to be used)
 
