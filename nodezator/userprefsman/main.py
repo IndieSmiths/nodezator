@@ -34,7 +34,7 @@ from ..our3rdlibs.userlogger import USER_LOGGER
 
 from ..translatedtext import TranslationNode
 
-from ..textman.render import render_text
+from ..fontsman.cache import FONTS_DB
 
 from ..fontsman.constants import (
     ENC_SANS_BOLD_FONT_HEIGHT,
@@ -310,15 +310,23 @@ def update_socket_detection_graphics(graphics_string_key):
 ### preprocess values for fonts to be used
 
 for keys in (
-    ('GENERAL_FONT_KIND', 'GENERAL_FONT_TO_USE'),
-    ('MONO_FONT_KIND', 'MONO_FONT_TO_USE'),
+    ('GENERAL_FONT_KIND', 'GENERAL_FONT_TO_USE', 'GENERAL_FONT_HEIGHT'),
+    ('MONO_FONT_KIND', 'MONO_FONT_TO_USE', 'MONO_FONT_HEIGHT'),
 ):
 
-    kind, value = (USER_PREFS[key] for key in keys)
+    kind, value, height = (USER_PREFS[key] for key in keys)
 
     is_general = 'GENERAL' in keys[0]
 
     font_key_attr_name = 'general_font_key' if is_general else 'mono_font_key'
+
+    setattr(
+
+        APP_REFS,
+        ('general_font_height' if is_general else 'mono_font_height'),
+        height,
+
+    )
 
     if kind == 'default':
 
@@ -395,24 +403,8 @@ for keys in (
 
         else:
 
-            height_key = (
-
-                'GENERAL_FONT_HEIGHT'
-                if is_general
-
-                else 'MONO_FONT_HEIGHT'
-
-            )
-
-            height = USER_PREFS[height_key]
-
             try:
-
-                render_text(
-                    text='Hello, world!',
-                    font_height=height,
-                    font_key=Path(value),
-                )
+                FONTS_DB[Path(value)][height]
 
             except (PygameError, Exception):
 

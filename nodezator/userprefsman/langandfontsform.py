@@ -299,6 +299,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
             fp = FontPreview(
                 value=value,
+                name=value_key,
                 loop_holder=self,
                 draw_on_window_resize=self.draw,
             )
@@ -311,6 +312,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
             sfom = SystemFontsOptionMenu(
                 value=value,
+                name=value_key,
                 loop_holder=self,
                 string_when_single=True,
                 draw_on_window_resize=self.draw,
@@ -329,7 +331,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
             )
 
-            dh = DefaultHolder(value=value, max_width=400)
+            dh = DefaultHolder(value=value, name=value_key, max_width=400)
 
             widget_map['default'] = dh
 
@@ -450,16 +452,22 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
             )
 
 
+        widget_collections = (self.widgets, self.prefs_widgets)
+
         widgets = self.widgets
 
         for widget in widgets_to_remove:
-            if widget in widgets:
-                widgets.remove(widget)
+
+            for collection in widget_collections:
+
+                if widget in collection:
+                    collection.remove(widget)
 
         widget_to_add.rect.topleft = topright
         widget_to_add.rect.move_ip(5, 0)
 
-        widgets.append(widget_to_add)
+        for collection in widget_collections:
+            collection.append(widget_to_add)
 
 
     switch_general_font_use_widget = (
@@ -584,7 +592,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
     )
 
     def finish_form(self):
-        """Assign new category indices and exit loop."""
+        """Save and set new preferences if copy with new values validates."""
 
         prefs_copy = USER_PREFS.copy()
 

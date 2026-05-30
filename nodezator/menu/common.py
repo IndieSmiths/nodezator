@@ -35,12 +35,9 @@ and the user's preference/need.
 
 ### local imports
 
-from ..ourstdlibs.mathutils import get_straight_distance
+from ..config import APP_REFS
 
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
+from ..ourstdlibs.mathutils import get_straight_distance
 
 from ..surfsman.icon import render_layered_icon
 
@@ -64,8 +61,8 @@ from ..colorsman.colors import (
 
 FONT_SIZE_KWARGS = {
     # see module docstring about font height
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
 }
 
