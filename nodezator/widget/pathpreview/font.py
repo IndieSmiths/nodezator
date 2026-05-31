@@ -183,7 +183,7 @@ class FontPreview(_BasePreview):
 
         else:
 
-            preview_surf = FONT_PREVIEWS_DB[self.current_path][
+            preview_surf = FONT_PREVIEWS_DB[Path(self.current_path)][
                 {
                     "font_size": 20,
                     "chars": PREVIEW_CHARS,
@@ -299,7 +299,7 @@ class FontPreview(_BasePreview):
 
                 ### create thumb
 
-                preview_surf = FONT_PREVIEWS_DB[self.current_path][
+                preview_surf = FONT_PREVIEWS_DB[Path(self.current_path)][
                     {
                         "font_size": 20,
                         "chars": PREVIEW_CHARS,

@@ -637,8 +637,8 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
         ### notify user via dialog and status message
 
         message = (
-            "User preferences changed. Some changes may"
-            " only take effect after restarting the app"
+            "Language preferences changed. Most of these changes"
+            " only take effect after restarting the app."
         )
 
         set_status_message(message)

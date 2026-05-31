@@ -286,7 +286,7 @@ class DataHandling:
 
         edited_text = edit_text(
             text=text,
-            font_path=FIRA_MONO_BOLD_FONT_PATH,
+            font_key=FIRA_MONO_BOLD_FONT_PATH,
             syntax_highlighting='comment',
             validation_command=is_text_block_text_valid,
         )

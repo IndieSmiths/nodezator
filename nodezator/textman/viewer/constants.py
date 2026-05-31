@@ -18,18 +18,19 @@ from ...colorsman.colors import (
 )
 
 
+
 ### general text settings presets
 
 DEFAULT_TEXT_SETTINGS = {
     "font_height": FIRA_MONO_BOLD_FONT_HEIGHT,
-    "font_path": FIRA_MONO_BOLD_FONT_PATH,
+    "font_key": FIRA_MONO_BOLD_FONT_PATH,
     "foreground_color": TEXT_VIEWER_FG,
     "background_color": TEXT_VIEWER_BG,
 }
 
 CUSTOM_STDOUT_TEXT_SETTINGS = {
     "font_height": FIRA_MONO_BOLD_FONT_HEIGHT,
-    "font_path": FIRA_MONO_BOLD_FONT_PATH,
+    "font_key": FIRA_MONO_BOLD_FONT_PATH,
     "foreground_color": CUSTOM_STDOUT_FG,
     "background_color": CUSTOM_STDOUT_BG,
 }
