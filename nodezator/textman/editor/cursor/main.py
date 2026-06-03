@@ -10,9 +10,9 @@ from pygame import Rect
 
 ### local imports
 
-from ....surfsman.cache import EMPTY_SURF
+from ....config import USER_PREFS
 
-from ....userprefsman.main import USER_PREFS
+from ....surfsman.cache import EMPTY_SURF
 
 from ....classes2d.collections import List2D
 

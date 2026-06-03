@@ -35,12 +35,12 @@ from pygame.key import (
 
 ### local imports
 
+from .....config import USER_PREFS
+
 from .....pygamesetup import SERVICES_NS
 from .....pygamesetup.constants import GENERAL_NS
 
 from .....loopman.exception import QuitAppException
-
-from .....userprefsman.main import USER_PREFS
 
 from .....htsl.main import open_htsl_link
 

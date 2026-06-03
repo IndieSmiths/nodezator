@@ -6,11 +6,11 @@ from pygame.draw import line as draw_line
 
 ### local imports
 
+from ....config import USER_PREFS
+
 from ....pygamesetup import SERVICES_NS, SCREEN
 
 from ....colorsman.colors import CUTTING_SEGMENT
-
-from ....userprefsman.main import USER_PREFS
 
 from ..utils import clip_segment
 

@@ -24,11 +24,11 @@ from pygame.locals import (
 
 from ..pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
-from ..config import APP_REFS
+from ..config import APP_REFS, USER_PREFS
 
 from ..translatedtext import TRANSLATIONS
 
-from .main import USER_PREFS, CONFIG_FILEPATH
+from .main import CONFIG_FILEPATH
 
 from .validation import (
     AVAILABLE_LOCALES,

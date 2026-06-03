@@ -29,7 +29,7 @@ from pygame.transform import (
 
 ### local imports
 
-from ...config import APP_REFS
+from ...config import APP_REFS, USER_PREFS
 
 from ...pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
@@ -68,7 +68,6 @@ from ...loopman.exception import (
 
 from ...systemtesting.constants import TEST_ID_TO_TITLE, ID_FORMAT_SPEC
 
-from ...userprefsman.main import USER_PREFS
 from ...userprefsman.constants import TEST_SESSION_SETTINGS_KEY
 
 from ...colorsman.colors import (

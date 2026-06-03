@@ -13,7 +13,7 @@ from webbrowser import open as open_url
 
 ### local imports
 
-from ..config import APP_REFS
+from ..config import APP_REFS, USER_PREFS
 
 from ..dialog import create_and_show_dialog
 
@@ -31,7 +31,7 @@ from ..menu.main import MenuManager
 
 from ..recentfile import get_recent_files
 
-from ..userprefsman.main import USER_PREFS, update_socket_detection_graphics
+from ..userprefsman.main import update_socket_detection_graphics
 
 from ..userprefsman.generalform import edit_user_preferences
 

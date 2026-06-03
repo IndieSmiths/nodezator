@@ -26,29 +26,41 @@ from .appinfo import APP_DIR_NAME, ORG_DIR_NAME, NATIVE_FILE_EXTENSION
 
 
 
+### user preferences (to be populated in a dedicated subpackage)
+USER_PREFS = {}
+
 ### an object to hold references/data used throughout the
 ### entire app
 
 APP_REFS = SimpleNamespace(
+
     ## custom maps
+
     node_def_map={},
     signature_map={},
     script_path_map={},
     category_path_map={},
     category_index_map={},
+
     ## placeholder dict to be replaced by a dict
     ## containing the data being edited in each
     ## app session
     data={},
+
     ## status message
     status_message="",
+
     ## custom stdout lines
     custom_stdout_lines=[],
+
     ## window resize setup commands
     window_resize_setups=CallList(),
+
     ## placeholder for copy of screen
     SCREEN_COPY=None,
+
     ## temporary filepaths manager
+
     temp_filepaths_man = (
         TemporaryFilepathsManager(
             temp_dir_prefix=f'{APP_DIR_NAME}_temp_',
@@ -56,11 +68,14 @@ APP_REFS = SimpleNamespace(
             temp_file_suffix=NATIVE_FILE_EXTENSION,
         )
     ),
+
     ## flag to store system info
     system_info={},
+
     ## flag to lock work-in-progress features, that is,
     ## features not ready for regular usage yet
     wip_lock=True,
+
     ## flag to check need to save system testing settings
     ## at end of testing session
     system_testing_set=False,

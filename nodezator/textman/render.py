@@ -12,9 +12,7 @@ from pygame import Surface
 
 ### local imports
 
-from ..config import APP_REFS
-
-from ..userprefsman.main import USER_PREFS
+from ..config import APP_REFS, USER_PREFS
 
 from ..fontsman.cache import FONTS_DB
 

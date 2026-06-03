@@ -33,7 +33,7 @@ from ..pygamesetup import (
     blit_on_screen,
 )
 
-from ..config import APP_REFS
+from ..config import APP_REFS, USER_PREFS
 
 from ..translatedtext import TRANSLATIONS
 
@@ -83,7 +83,7 @@ from ..colorsman.colors import (
     WINDOW_BG,
 )
 
-from .main import USER_PREFS, CONFIG_FILEPATH
+from .main import CONFIG_FILEPATH
 
 from .validation import (
     ORDERED_SOCKET_DETECTION_GRAPHICS,

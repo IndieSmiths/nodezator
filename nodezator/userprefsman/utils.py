@@ -1,15 +1,15 @@
 
 ### local imports
 
-from ..config import APP_REFS
+from ..config import APP_REFS, USER_PREFS
 
 from ..ourstdlibs.pyl import save_pyl
 
 from ..dialog import create_and_show_dialog
 
-from .main import USER_PREFS, CONFIG_FILEPATH
-
 from .constants import TEST_SESSION_SETTINGS_KEY
+
+from .main import CONFIG_FILEPATH
 
 
 

@@ -16,12 +16,9 @@ from ..surfsman.render import (
     render_surface_from_svg_text,
 )
 
-from ..svgutils import get_circle_svg_text_from_radius
+from ..svgutils.generalshapes import get_circle_svg_text_from_radius
 
-from ..textman.render import (
-    render_text,
-    get_text_size,
-)
+from ..textman.render import render_text, get_text_size
 
 from ..colorsman.colors import (
     MENU_BG,
