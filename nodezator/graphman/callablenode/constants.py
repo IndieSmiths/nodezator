@@ -18,6 +18,13 @@ NODE_WIDTH = 184
 
 NODE_OUTLINE_THICKNESS = 2
 
+NODE_CORNER_RADIUS = 6
+
+NODE_CORNER_SIZE = (
+    (NODE_CORNER_RADIUS + NODE_OUTLINE_THICKNESS,) * 2
+)
+
+
 ## area in the top of the body surface made darker, in order
 ## to give the illusion the title of the node is merged with
 ## the top of the body, since the title uses the same

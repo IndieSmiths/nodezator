@@ -2,6 +2,8 @@
 
 ### third-party imports
 
+from pygame import Surface, Rect
+
 from pygame.draw import line as draw_line
 
 from pygame.transform import rotate as rotate_surface
@@ -11,11 +13,20 @@ from pygame.transform import rotate as rotate_surface
 
 from ...ourstdlibs.collections.general import FactoryDict
 
-from ...surfsman.render import render_rect, combine_surfaces
+from ...surfsman.render import (
+    render_rect,
+    render_surface_from_svg_text,
+    combine_surfaces,
+)
 
 from ...surfsman.icon import render_layered_icon
 
 from ...surfsman.cache import NOT_FOUND_SURF_MAP
+
+from ...svgutils.generalshapes import (
+    get_circle_svg_text_from_radius,
+    get_polygon_svg_text,
+)
 
 from ...fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
 
@@ -40,64 +51,91 @@ from .constants import (
     NODE_WIDTH,
     NODE_BODY_HEAD_HEIGHT,
     NODE_OUTLINE_THICKNESS,
+    NODE_CORNER_RADIUS,
+    NODE_CORNER_SIZE,
 )
 
 
 ###### create map of top corner surfaces
 
-
-def get_top_corners(fill_color):
+def _get_top_corners(fill_color):
     """Create 2-tuple of top corners of given color."""
 
-    return tuple(
-        render_layered_icon(
-            chars=[chr(ordinal) for ordinal in (161, 162)],
-            dimension_name="height",
-            dimension_value=10,
-            colors=[NODE_OUTLINE, fill_color],
-            background_width=8,
-            background_height=8,
-            flip_x=flip_x,
-            flip_y=flip_y,
+    circle = (
+
+        render_surface_from_svg_text(
+
+            get_circle_svg_text_from_radius(
+                r=NODE_CORNER_RADIUS,
+                fill_color=fill_color,
+                outline_color=NODE_OUTLINE,
+                outline_width=NODE_OUTLINE_THICKNESS,
+            )
+
         )
-        for flip_x, flip_y in (
-            (False, False),
-            (True, False),
-        )
+
+    )
+
+    return (
+        circle.subsurface((0, 0), NODE_CORNER_SIZE),
+        circle.subsurface(circle.get_rect().midtop, NODE_CORNER_SIZE),
     )
 
 
-TOP_CORNERS_MAP = FactoryDict(get_top_corners)
+TOP_CORNERS_MAP = FactoryDict(_get_top_corners)
 
 
 ##
 
-bottom_corner_surfs = tuple(
-    render_layered_icon(
-        chars=[chr(ordinal) for ordinal in (161, 162)],
-        dimension_name="height",
-        dimension_value=10,
-        colors=[NODE_OUTLINE, fill_color],
-        background_width=8,
-        background_height=8,
-        flip_x=flip_x,
-        flip_y=flip_y,
+def _get_bottom_corners(fill_color):
+    """Create 2-tuple of bottom corners of given color."""
+
+    circle = (
+
+        render_surface_from_svg_text(
+
+            get_circle_svg_text_from_radius(
+                r=NODE_CORNER_RADIUS,
+                fill_color=fill_color,
+                outline_color=NODE_OUTLINE,
+                outline_width=2,
+            )
+
+        )
+
     )
-    for fill_color, flip_x, flip_y in (
+
+    circle_rect = circle.get_rect()
+    centery = circle_rect.centery
+
+    return (
+        circle.subsurface((0, centery), NODE_CORNER_SIZE),
+        circle.subsurface((circle_rect.centerx, centery), NODE_CORNER_SIZE),
+    )
+
+
+(
+    NORMAL_BOTTOM_CORNERS,
+    COMMENTED_OUT_BOTTOM_CORNERS,
+) = (
+
+    _get_bottom_corners(fill_color)
+
+    for fill_color in (
+
         ## normal bottom corners
-        (NODE_BODY_BG, False, True),
-        (NODE_BODY_BG, True, True),
+        NODE_BODY_BG,
+
         ## commented out bottom corners
-        (COMMENTED_OUT_NODE_BG, False, True),
-        (COMMENTED_OUT_NODE_BG, True, True),
+        COMMENTED_OUT_NODE_BG,
+
     )
+
 )
 
-NORMAL_BOTTOM_CORNERS = bottom_corner_surfs[:2]
-COMMENTED_OUT_BOTTOM_CORNERS = bottom_corner_surfs[2:]
 
 ##
-corner_width, corner_height = bottom_corner_surfs[0].get_size()
+corner_width, corner_height = NODE_CORNER_SIZE
 
 
 ###### create map of roof surfaces (rectangle between top
@@ -172,23 +210,65 @@ for surf in foot_surfs:
 def get_button_surfs(bg_color):
     """Create 2-tuple of surfaces with given background color."""
 
-    return tuple(
+    size = (10, 10)
 
-        render_layered_icon(
-            chars=[chr(82)],
-            dimension_name="height",
-            dimension_value=8,
-            colors=[(255, 255, 255)],
-            background_width=10,
-            background_height=10,
-            offset_pos_by=(-1, -1),
-            rotation_degrees=rotation_degrees,
-            background_color=bg_color,
-        )
+    rect = Rect(0, 0, *size)
 
-        for rotation_degrees in (-180, -90)
+    polygon_points1 = tuple(
+
+        getattr(rect, attr_name)
+        for attr_name in ('topleft', 'midbottom', 'topright')
 
     )
+
+    polygon_points2 = tuple(
+
+        getattr(rect, attr_name)
+        for attr_name in ('topleft', 'midright', 'bottomleft')
+
+    )
+
+    polygon_surf1 = (
+
+        render_surface_from_svg_text(
+
+            get_polygon_svg_text(
+                width=10,
+                height=10,
+                points=polygon_points1,
+                fill_color=(255, 255, 255),
+                outline_color=None,
+            )
+
+        )
+
+    )
+
+    polygon_surf2 = (
+
+        render_surface_from_svg_text(
+
+            get_polygon_svg_text(
+                width=10,
+                height=10,
+                points=polygon_points2,
+                fill_color=(255, 255, 255),
+                outline_color=None,
+            )
+
+        )
+
+    )
+
+
+    surf1 = Surface(size).convert()
+    surf1.fill(bg_color)
+    surf2 = surf1.copy()
+
+    surf1.blit(polygon_surf1, (0, 0))
+    surf2.blit(polygon_surf2, (0, 0))
+
+    return (surf1, surf2)
 
 
 SIGMODE_TOGGLE_BUTTON_MAP = FactoryDict(get_button_surfs)

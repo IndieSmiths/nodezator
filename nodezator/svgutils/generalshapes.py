@@ -71,6 +71,17 @@ LINE_FORMATTER = """
 </svg>
 """.strip().format
 
+POLYGON_FORMATTER = """
+<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}">
+
+    <polygon
+        points="{points}"
+        fill="{fill_color}" stroke="{stroke_color}" stroke-width="{stroke_width}"
+     />
+
+</svg>
+""".strip().format
+
 
 ### functions
 
@@ -287,3 +298,44 @@ def get_line_svg_text(
         )
     )
 
+
+def get_polygon_svg_text(
+    width, height, points,
+    fill_color=None,
+    outline_color=None,
+    outline_width=0,
+):
+    """Return SVG text representing file with a rect."""
+    ### format fill color and outline color into a format
+    ### used in SVG
+
+    fill_color = format_color(fill_color)
+    stroke_color = format_color(outline_color)
+
+    ### format points in format used in SVG
+
+    points = (
+
+        ' '.join(
+
+            f'{x},{y}'
+            for x, y in points
+
+        )
+
+    )
+
+    ### finally pass our data to a str.format() instance that formats
+    ### the data into a string representing the contents of a svg file
+    ### describing our line, returning such string
+
+    return (
+        POLYGON_FORMATTER(
+            width=width,
+            height=height,
+            points=points,
+            fill_color=fill_color,
+            stroke_color=stroke_color,
+            stroke_width=outline_width,
+        )
+    )
