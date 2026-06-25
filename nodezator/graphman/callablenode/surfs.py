@@ -28,6 +28,9 @@ from ...svgutils.generalshapes import (
     get_polygon_svg_text,
 )
 
+from ...svgobjs.elements import SVG, Circle
+from ...svgobjs.utils import get_svg_formatted_color
+
 from ...fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
 
 from ...colorsman.colors import (
@@ -48,11 +51,9 @@ from ...colorsman.colors import (
 )
 
 from .constants import (
-    NODE_WIDTH,
     NODE_BODY_HEAD_HEIGHT,
     NODE_OUTLINE_THICKNESS,
     NODE_CORNER_RADIUS,
-    NODE_CORNER_SIZE,
 )
 
 
@@ -61,24 +62,53 @@ from .constants import (
 def _get_top_corners(fill_color):
     """Create 2-tuple of top corners of given color."""
 
-    circle = (
+    radius = NODE_CORNER_RADIUS
+    outline = NODE_OUTLINE_THICKNESS
+
+    outline_increment = outline - 1 if outline % 2 else outline
+
+    height = width = radius*2 + outline_increment
+
+    cx = cy = width // 2
+
+    circle_surf = (
 
         render_surface_from_svg_text(
 
-            get_circle_svg_text_from_radius(
-                r=NODE_CORNER_RADIUS,
-                fill_color=fill_color,
-                outline_color=NODE_OUTLINE,
-                outline_width=NODE_OUTLINE_THICKNESS,
+            str(
+
+                SVG(
+
+                    width  = width,
+                    height = height,
+
+                    children=[
+
+                        Circle(
+                            r=radius,
+                            cx=cx,
+                            cy=cy,
+                            fill=get_svg_formatted_color(fill_color),
+                            stroke=get_svg_formatted_color(NODE_OUTLINE),
+                            stroke_width=outline,
+                        )
+
+                    ]
+
+                )
             )
 
         )
 
     )
 
+    rect = circle_surf.get_rect()
+
+    corner_size = tuple(n//2 for n in rect.size)
+
     return (
-        circle.subsurface((0, 0), NODE_CORNER_SIZE),
-        circle.subsurface(circle.get_rect().midtop, NODE_CORNER_SIZE),
+        circle_surf.subsurface((0, 0), corner_size),
+        circle_surf.subsurface(rect.midtop, corner_size),
     )
 
 
@@ -90,27 +120,53 @@ TOP_CORNERS_MAP = FactoryDict(_get_top_corners)
 def _get_bottom_corners(fill_color):
     """Create 2-tuple of bottom corners of given color."""
 
-    circle = (
+    radius = NODE_CORNER_RADIUS
+    outline = NODE_OUTLINE_THICKNESS
+
+    outline_increment = outline - 1 if outline % 2 else outline
+
+    height = width = radius*2 + outline_increment
+
+    cx = cy = width // 2
+
+    circle_surf = (
 
         render_surface_from_svg_text(
 
-            get_circle_svg_text_from_radius(
-                r=NODE_CORNER_RADIUS,
-                fill_color=fill_color,
-                outline_color=NODE_OUTLINE,
-                outline_width=2,
+            str(
+
+                SVG(
+
+                    width  = width,
+                    height = height,
+
+                    children=[
+
+                        Circle(
+                            r=radius,
+                            cx=cx,
+                            cy=cy,
+                            fill=get_svg_formatted_color(fill_color),
+                            stroke=get_svg_formatted_color(NODE_OUTLINE),
+                            stroke_width=outline,
+                        )
+
+                    ]
+
+                )
             )
 
         )
 
     )
 
-    circle_rect = circle.get_rect()
-    centery = circle_rect.centery
+    rect = circle_surf.get_rect()
+
+    corner_size = tuple(n//2 for n in rect.size)
 
     return (
-        circle.subsurface((0, centery), NODE_CORNER_SIZE),
-        circle.subsurface((circle_rect.centerx, centery), NODE_CORNER_SIZE),
+        circle_surf.subsurface((0, rect.centery), corner_size),
+        circle_surf.subsurface((rect.centerx, rect.centery), corner_size),
     )
 
 
@@ -135,19 +191,22 @@ def _get_bottom_corners(fill_color):
 
 
 ##
-corner_width, corner_height = NODE_CORNER_SIZE
+CORNER_WIDTH, CORNER_HEIGHT = NORMAL_BOTTOM_CORNERS[0].get_size()
 
 
 ###### create map of roof surfaces (rectangle between top
 ###### corners)
 
-roof_width = NODE_WIDTH - (corner_width * 2)
-roof_height = corner_height
+def get_node_roof(width, fill_color):
 
+    roof_width = width - (CORNER_WIDTH*2)
+    roof_height = CORNER_HEIGHT
 
-def get_node_roof(fill_color):
-
-    roof = render_rect(roof_width, roof_height, fill_color)
+    roof = render_rect(
+        roof_width,
+        roof_height,
+        fill_color,
+    )
 
     draw_line(
         roof,
@@ -169,40 +228,39 @@ NODE_ROOFS_MAP = FactoryDict(get_node_roof)
 ###### which has the same color of the node's roof and top
 ###### corners in order to look like they all are a single
 ###### object
+BODY_HEAD_SURFS_MAP = FactoryDict(render_rect)
 
 
-def get_body_head(fill_color):
+###### create map of node foot surfaces (rectangle between bottom
+###### corners)
 
-    return render_rect(NODE_WIDTH, NODE_BODY_HEAD_HEIGHT, fill_color)
+def get_node_foot(width, fill_color):
+
+    foot_width = width - (CORNER_WIDTH*2)
+    foot_height = CORNER_HEIGHT
+
+    foot = render_rect(
+        foot_width,
+        CORNER_HEIGHT,
+        fill_color,
+    )
+
+    # since line thickness is applied from top to bottom,
+    # we had to use a value equivalent to the foot height
+    # minus the thickness of the line
+
+    line_bottom = foot_height - NODE_OUTLINE_THICKNESS
+
+    line_start = (0, line_bottom)
+    line_end = (foot_width, line_bottom)
+
+    draw_line(foot, NODE_OUTLINE, line_start, line_end, NODE_OUTLINE_THICKNESS)
+
+    return foot
 
 
-BODY_HEAD_SURFS_MAP = FactoryDict(get_body_head)
+NODE_ROOFS_MAP = FactoryDict(get_node_roof)
 
-
-###### create and store 02 foot surfaces (for when the
-###### node is in a normal state or commented out)
-
-foot_width = NODE_WIDTH - (corner_width * 2)
-foot_height = corner_height
-
-foot_surfs = (NORMAL_NODE_FOOT, COMMENTED_OUT_NODE_FOOT) = tuple(
-    render_rect(foot_width, foot_height, color)
-    for color in (NODE_BODY_BG, COMMENTED_OUT_NODE_BG)
-)
-
-# since line thickness is applied from top to bottom,
-# we had to use a value equivalent to the foot height
-# minus the thickness of the line
-
-line_bottom = foot_height - NODE_OUTLINE_THICKNESS
-
-line_start = (0, line_bottom)
-line_end = (foot_width, line_bottom)
-
-
-for surf in foot_surfs:
-
-    draw_line(surf, NODE_OUTLINE, line_start, line_end, NODE_OUTLINE_THICKNESS)
 
 ###### create map of surfaces for sigmode toggle button
 
@@ -279,6 +337,7 @@ SIGMODE_TOGGLE_BUTTON_MAP = FactoryDict(get_button_surfs)
 ### add/remove buttons' surfaces
 
 ADD_BUTTON_SURF, REMOVE_BUTTON_SURF = (
+
     render_layered_icon(
         chars=[chr(ordinal) for ordinal in ordinals],
         dimension_name="height",
@@ -287,16 +346,28 @@ ADD_BUTTON_SURF, REMOVE_BUTTON_SURF = (
         background_width=14,
         background_height=14,
     )
+
     for ordinals, colors in (
-        ((79, 80), (WIDGET_ADD_BUTTON_OUTLINE, WIDGET_ADD_BUTTON_FILL)),
-        ((125, 126), (WIDGET_REMOVE_BUTTON_OUTLINE, WIDGET_REMOVE_BUTTON_FILL)),
+
+        (
+            (79, 80),
+            (WIDGET_ADD_BUTTON_OUTLINE, WIDGET_ADD_BUTTON_FILL),
+        ),
+
+        (
+            (125, 126),
+            (WIDGET_REMOVE_BUTTON_OUTLINE, WIDGET_REMOVE_BUTTON_FILL),
+        ),
+
     )
+
 )
 
 
 ### subparameter moving buttons
 
 (SUBP_UP_BUTTON_SURF, SUBP_DOWN_BUTTON_SURF) = (
+
     render_layered_icon(
         chars=[chr(82)],
         dimension_name="height",
@@ -310,15 +381,24 @@ ADD_BUTTON_SURF, REMOVE_BUTTON_SURF = (
         flip_y=flip_y,
         depth_finish_thickness=1,
     )
+
     for flip_x, flip_y in (
         (False, False),
         (False, True),
     )
+
 )
+
 
 ### subparameter unpacking buttons
 
-(NORMAL_ITERABLE_UNPACKING_SURF, COMMENTED_OUT_ITERABLE_UNPACKING_SURF,) = (
+(
+
+    NORMAL_ITERABLE_UNPACKING_SURF,
+    COMMENTED_OUT_ITERABLE_UNPACKING_SURF,
+
+) = (
+
     render_layered_icon(
         chars="*",
         font_path=FIRA_MONO_BOLD_FONT_PATH,
@@ -329,31 +409,47 @@ ADD_BUTTON_SURF, REMOVE_BUTTON_SURF = (
         background_height=16,
         background_color=bg_color,
     )
+
     for bg_color in (
         NODE_BODY_BG,
         COMMENTED_OUT_NODE_BG,
     )
+
 )
 
 
-(NORMAL_DICT_UNPACKING_SURF, COMMENTED_OUT_DICT_UNPACKING_SURF,) = (
+(
+
+    NORMAL_DICT_UNPACKING_SURF,
+    COMMENTED_OUT_DICT_UNPACKING_SURF,
+
+) = (
+
     combine_surfaces(
+
         [
             surf,
             surf,
         ],
+
         background_color=bg_color,
+
     )
+
     for surf, bg_color in (
+
         (
             NORMAL_ITERABLE_UNPACKING_SURF,
             NODE_BODY_BG,
         ),
+
         (
             COMMENTED_OUT_ITERABLE_UNPACKING_SURF,
             COMMENTED_OUT_NODE_BG,
         ),
+
     )
+
 )
 
 UNPACKING_ICON_SURFS_MAP = {
@@ -367,15 +463,19 @@ UNPACKING_ICON_SURFS_MAP = {
 ### keyword key icon surf and its rect
 
 KEYWORD_KEY_SURF = render_layered_icon(
+
     chars=[chr(ordinal) for ordinal in (102, 103)],
     dimension_name="height",
     dimension_value=16,
+
     colors=[
         NODE_KEYWORD_KEY_OUTLINE,
         NODE_KEYWORD_KEY_FILL,
     ],
+
     background_width=16,
     background_height=16,
+
 )
 
 KEYWORD_KEY_RECT = KEYWORD_KEY_SURF.get_rect()
@@ -384,6 +484,7 @@ KEYWORD_KEY_RECT = KEYWORD_KEY_SURF.get_rect()
 ### reload icon for preview toolbar button 
 
 _arrow_up = render_layered_icon(
+
     chars=[chr(ordinal) for ordinal in (52, 53)],
     dimension_name="width",
     dimension_value=18,
@@ -393,14 +494,18 @@ _arrow_up = render_layered_icon(
     retrieve_pos_from="midbottom",
     assign_pos_to="midbottom",
     offset_pos_by=(0, -2),
+
 )
 
 _arrow_down = rotate_surface(_arrow_up, 180)
 
 RELOAD_PREVIEW_BUTTON_SURF = combine_surfaces(
+
     [_arrow_up, _arrow_down],
     retrieve_pos_from="center",
     assign_pos_to="center",
+
 )
 
 PREVIEW_PANEL_NOT_FOUND_SURFACE = NOT_FOUND_SURF_MAP[(256, 256)]
+
