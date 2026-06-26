@@ -45,15 +45,14 @@ class CallableNode(
     Exporting,
     OutputVisualization,
 ):
-    """Stores and manages a callable state.
+    """Stores and manages state of a callable object.
 
-    This object is used to manage gathering, storage and
-    processing of data by its underlying callable and its
-    related metadata. Such callable is provided upon
-    instantiation.
+    This object is used to manage gathering, storage and processing of data
+    by its underlying callable and its related metadata. Such callable is
+    provided upon instantiation.
 
-    Additional instance state is provided as an argument
-    called "data", also received upon instantiation.
+    Additional instance state is provided as an argument called "data",
+    also received upon instantiation.
     """
 
     ### XXX ponder: instead of making a method like this
@@ -99,16 +98,20 @@ class CallableNode(
 
         self.node_defining_object = node_defining_object
 
-        main_callable = self.main_callable = node_defining_object["main_callable"]
+        main_callable = self.main_callable = (
+            node_defining_object["main_callable"]
+        )
 
-        signature_callable = self.signature_callable = node_defining_object[
-            "signature_callable"
-        ]
+        signature_callable = self.signature_callable = (
+            node_defining_object["signature_callable"]
+        )
 
         ##
 
         try:
-            substitution_callable = node_defining_object["substitution_callable"]
+            substitution_callable = (
+                node_defining_object["substitution_callable"]
+            )
 
         except KeyError:
             pass

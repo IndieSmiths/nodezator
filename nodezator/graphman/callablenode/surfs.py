@@ -225,13 +225,18 @@ NODE_ROOFS_MAP = FactoryDict(_get_node_roof)
 ###### which has the same color of the node's roof and top
 ###### corners in order to look like they all are a single
 ###### object
-BODY_HEAD_SURFS_MAP = FactoryDict(render_rect)
+
+def _unpack_for_render_rect(args):
+    return render_rect(*args)
+
+BODY_HEAD_SURFS_MAP = FactoryDict(_unpack_for_render_rect)
 
 
 ###### create map of node foot surfaces (rectangle between bottom
 ###### corners)
 
-def _get_node_foot(width, fill_color):
+def _get_node_foot(args):
+    width, fill_color = args
 
     foot_width = width - (CORNER_WIDTH*2)
     foot_height = CORNER_HEIGHT

@@ -79,7 +79,7 @@ class SignatureModeVisualPreparations():
         self.exp_rectsman = RectsManager(get_all_rects)
 
     def create_col_mode_visual_elements(self):
-        """Create visual elements for node's expanded signature mode."""
+        """Create visual elements for node's collapsed signature mode."""
 
         ### create and store a rects manager to control all the rects in
         ### the node
@@ -245,6 +245,7 @@ class SignatureModeVisualPreparations():
 
     def create_output_sockets(self):
         """Instantiate and store output sockets."""
+
         ### create a new dictionary holding output socket
         ### instances mapped to the name of the output
         ### they represent (also reference it locally);
@@ -262,12 +263,16 @@ class SignatureModeVisualPreparations():
         ### case for return values instead of parameters
 
         self.output_socket_live_map = {
+
             output_name: OutputSocket(
                 node=self,
                 output_name=output_name,
                 type_codename=(type_to_codename(expected_type)),
             )
-            for output_name, expected_type in self.ordered_output_type_map.items()
+
+            for output_name, expected_type
+            in self.ordered_output_type_map.items()
+
         }
 
         ### gather the rects of the output sockets in a list

@@ -59,7 +59,14 @@ def get_expanded_body_surface(self):
     body_surf = render_rect(184, body_height, node_light_bg_color)
 
     ### obtain body head surf from corresponding map
-    BODY_HEAD_SURF = BODY_HEAD_SURFS_MAP[self.category_color]
+
+    BODY_HEAD_SURF = (
+
+        BODY_HEAD_SURFS_MAP[
+            (*self.title_text_obj.rect.size, self.category_color)
+        ]
+
+    )
 
     ### blit the body head surface in the top of the
     ### body surface; such head surface has a color equal
