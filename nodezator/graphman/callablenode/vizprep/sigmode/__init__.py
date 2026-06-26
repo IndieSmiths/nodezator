@@ -10,6 +10,7 @@ from .....rectsman.main import RectsManager
 
 from ....socket.surfs import type_to_codename
 
+from .....colorsman.colors import NODE_BODY_BG, COMMENTED_OUT_NODE_BG
 
 ## classes for composition
 
@@ -38,11 +39,12 @@ class SignatureModeVisualPreparations():
 
     def create_exp_mode_visual_elements(self):
         """Create visual elements for node's expanded signature mode."""
-        ### create input related widgets
+
+        ### create input related objects
         self.create_input_related_objects()
 
-        ### create output sockets
-        self.create_output_sockets()
+        ### create output-related objects
+        self.create_output_related_objects()
 
         ### reposition all objects within the node (also
         ### sets height of self.rect)
@@ -138,6 +140,9 @@ class SignatureModeVisualPreparations():
         ### input socket instances
         self.input_socket_live_flmap = FlatListDict()
 
+        ### instantiate map to hold text objects representing parameter names
+        self.parameter_text_obj_map = {}
+
         ### instantiate a placeholder socket map to hold
         ### placeholder socket instances
         self.placeholder_socket_live_map = {}
@@ -195,6 +200,18 @@ class SignatureModeVisualPreparations():
         ### create a list to hold instances of remove widget buttons
         self.visible_remove_widget_buttons = []
 
+        ### define color used for node labels bg, based on the "commented out"
+        ### state
+
+        node_bg_color = (
+
+            COMMENTED_OUT_NODE_BG
+            if self.data.get("commented_out", False)
+
+            else NODE_BODY_BG
+
+        )
+
         ### iterate over each parameter, instantiating its
         ### related widgets
 
@@ -207,10 +224,10 @@ class SignatureModeVisualPreparations():
             ## parameter is of variable kind or not
 
             if param_obj.name in self.var_kind_map:
-                self.create_var_parameter_objs(param_obj)
+                self.create_var_parameter_objs(param_obj, node_bg_color)
 
             else:
-                self.create_parameter_objs(param_obj)
+                self.create_parameter_objs(param_obj, node_bg_color)
 
             ## also create a parameter rectsman to manage rects
             ## in the parameter
@@ -243,7 +260,7 @@ class SignatureModeVisualPreparations():
         self.subparam_up_button_flmap.update()
         self.subparam_down_button_flmap.update()
 
-    def create_output_sockets(self):
+    def create_output_related_objects(self):
         """Instantiate and store output sockets."""
 
         ### create a new dictionary holding output socket

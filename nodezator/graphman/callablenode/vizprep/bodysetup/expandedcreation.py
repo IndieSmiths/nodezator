@@ -41,6 +41,7 @@ from .....colorsman.colors import (
 
 def get_expanded_body_surface(self):
     """Return surface for node's body in expanded signature mode."""
+
     ### reference the top rectsman locally
     top_rectsman = self.top_rectsman
 
@@ -51,7 +52,12 @@ def get_expanded_body_surface(self):
     ### on the "commented out" state
 
     node_light_bg_color = (
-        COMMENTED_OUT_NODE_BG if self.data.get("commented_out", False) else NODE_BODY_BG
+
+        COMMENTED_OUT_NODE_BG
+        if self.data.get("commented_out", False)
+
+        else NODE_BODY_BG
+
     )
 
     ### create a surface for the body of the node
@@ -194,15 +200,22 @@ def get_expanded_body_surface(self):
         ### instantiate positioned text object
 
         text_obj = Object2D.from_surface(
+
             surface=render_text(
+
                 text=text,
+
                 ## text settings
+
                 font_height=APP_REFS.general_font_height,
                 foreground_color=NODE_LABELS,
                 background_color=node_light_bg_color,
+
             ),
+
             coordinates_name=coordinates_name,
             coordinates_value=coordinates_value,
+
         )
 
         ### reposition the object relative to the

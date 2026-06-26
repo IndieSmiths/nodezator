@@ -39,7 +39,7 @@ def reposition_expanded_elements(self):
     updating the height of self.rect.
     """
     ### reference subparameter unpacking map locally
-    subparam_unpacking_map = self.data["subparam_unpacking_map"]
+    subparam_unpacking_map = self.data['subparam_unpacking_map']
 
     ### let's also reference maps of live instances locally using
     ### variables of low character count, for better code layout
@@ -69,6 +69,22 @@ def reposition_expanded_elements(self):
     ### create a rect representing the height of text
     ### surfaces used in the node
     text_rect = Rect(0, 0, 0, APP_REFS.general_font_height)
+
+    ### let's start by repositioning the title
+    self.title_text_obj.rect.midtop = self.midtop
+
+
+    ### now let's reposition the output labels below it
+
+
+
+
+
+
+
+
+
+    ###
 
     ### reference the top rectsman and its sides locally
 
