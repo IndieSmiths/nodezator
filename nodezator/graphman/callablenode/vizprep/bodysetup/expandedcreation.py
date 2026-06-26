@@ -13,6 +13,8 @@ from pygame.draw import line as draw_line
 
 ### local imports
 
+from .....config import APP_REFS
+
 from .....surfsman.draw import blit_aligned
 from .....surfsman.render import render_rect
 
@@ -26,11 +28,7 @@ from ...surfs import (
     KEYWORD_KEY_RECT,
 )
 
-from ...constants import (
-    NODE_WIDTH,
-    FONT_HEIGHT,
-    NODE_OUTLINE_THICKNESS,
-)
+from ...constants import NODE_OUTLINE_THICKNESS
 
 from .....colorsman.colors import (
     NODE_OUTLINE,
@@ -58,7 +56,7 @@ def get_expanded_body_surface(self):
 
     ### create a surface for the body of the node
 
-    body_surf = render_rect(NODE_WIDTH, body_height, node_light_bg_color)
+    body_surf = render_rect(184, body_height, node_light_bg_color)
 
     ### obtain body head surf from corresponding map
     BODY_HEAD_SURF = BODY_HEAD_SURFS_MAP[self.category_color]
@@ -79,7 +77,7 @@ def get_expanded_body_surface(self):
 
     ### create a rect representing the height of text
     ### surfaces used in the node
-    text_rect = Rect(0, 0, 0, FONT_HEIGHT)
+    text_rect = Rect(0, 0, 0, APP_REFS.general_font_height)
 
     ### in order to blit surfaces in the body surface
     ### relative to the surface's origin, define an offset
@@ -192,10 +190,9 @@ def get_expanded_body_surface(self):
             surface=render_text(
                 text=text,
                 ## text settings
-                font_height=FONT_HEIGHT,
+                font_height=APP_REFS.general_font_height,
                 foreground_color=NODE_LABELS,
                 background_color=node_light_bg_color,
-                max_width=170,
             ),
             coordinates_name=coordinates_name,
             coordinates_value=coordinates_value,
@@ -262,10 +259,9 @@ def get_expanded_body_surface(self):
             surface=(
                 render_text(
                     text=output_socket_name,
-                    font_height=FONT_HEIGHT,
+                    font_height=APP_REFS.general_font_height,
                     foreground_color=NODE_LABELS,
                     background_color=(node_light_bg_color),
-                    max_width=170,
                 )
             ),
             coordinates_name=coordinates_name,
@@ -285,7 +281,7 @@ def get_expanded_body_surface(self):
 
     # calculate and store the result from subtracting
     # the outline thickness from the body width
-    # (which is equivalent to the NODE_WIDTH);
+    # (which is equivalent to the NODE_WIDTH (184));
     #
     # we'll call this the 'offset_width', and it is
     # the x coordinate from where we'll define the points
@@ -296,7 +292,7 @@ def get_expanded_body_surface(self):
     # wouldn't appear if the line were placed
     # right on top of the right side; instead, it must be
     # offset to the left by subtracting the thickness
-    offset_width = NODE_WIDTH - NODE_OUTLINE_THICKNESS
+    offset_width = 184 - NODE_OUTLINE_THICKNESS
 
     # defining lines
 

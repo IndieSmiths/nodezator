@@ -50,11 +50,8 @@ from ...colorsman.colors import (
     BLACK,
 )
 
-from .constants import (
-    NODE_BODY_HEAD_HEIGHT,
-    NODE_OUTLINE_THICKNESS,
-    NODE_CORNER_RADIUS,
-)
+from .constants import NODE_OUTLINE_THICKNESS, NODE_CORNER_RADIUS
+
 
 
 ###### create map of top corner surfaces
@@ -197,7 +194,7 @@ CORNER_WIDTH, CORNER_HEIGHT = NORMAL_BOTTOM_CORNERS[0].get_size()
 ###### create map of roof surfaces (rectangle between top
 ###### corners)
 
-def get_node_roof(width, fill_color):
+def _get_node_roof(width, fill_color):
 
     roof_width = width - (CORNER_WIDTH*2)
     roof_height = CORNER_HEIGHT
@@ -219,7 +216,7 @@ def get_node_roof(width, fill_color):
     return roof
 
 
-NODE_ROOFS_MAP = FactoryDict(get_node_roof)
+NODE_ROOFS_MAP = FactoryDict(_get_node_roof)
 
 
 ###### create map to store body head surfaces
@@ -234,7 +231,7 @@ BODY_HEAD_SURFS_MAP = FactoryDict(render_rect)
 ###### create map of node foot surfaces (rectangle between bottom
 ###### corners)
 
-def get_node_foot(width, fill_color):
+def _get_node_foot(width, fill_color):
 
     foot_width = width - (CORNER_WIDTH*2)
     foot_height = CORNER_HEIGHT
@@ -259,7 +256,7 @@ def get_node_foot(width, fill_color):
     return foot
 
 
-NODE_ROOFS_MAP = FactoryDict(get_node_roof)
+NODE_FOOTS_MAP = FactoryDict(_get_node_foot)
 
 
 ###### create map of surfaces for sigmode toggle button

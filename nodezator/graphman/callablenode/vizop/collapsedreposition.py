@@ -6,10 +6,11 @@ from pygame import Rect
 
 ### local imports
 
+from ....config import APP_REFS
+
 from ....rectsman.main import RectsManager
 
 from ..constants import (
-    FONT_HEIGHT,
     BODY_CONTENT_OFFSET,
     NODE_OUTLINE_THICKNESS,
     SUBPARAM_OFFSET_FROM_LABEL,
@@ -37,7 +38,7 @@ def reposition_collapsed_elements(self):
 
     ### create a rect representing the height of text
     ### surfaces used in the node
-    text_rect = Rect(0, 0, 0, FONT_HEIGHT)
+    text_rect = Rect(0, 0, 0, APP_REFS.general_font_height)
 
     ### reference the top rectsman and its horizontal
     ### edges locally

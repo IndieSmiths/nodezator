@@ -17,12 +17,11 @@ from ....rectsman.main import RectsManager
 from ....iconfactory import ICON_MAP
 
 from ....colorsman.colors import (
+    NODE_BODY_BG,
     NODE_CATEGORY_COLORS,
     NODE_TITLE,
     BLACK,
 )
-
-from ..constants import FONT_HEIGHT, NODE_WIDTH
 
 
 ## class extensions
@@ -39,9 +38,10 @@ from ..surfs import (
     NODE_ROOFS_MAP,
     TOP_CORNERS_MAP,
     NORMAL_BOTTOM_CORNERS,
-    NORMAL_NODE_FOOT,
+    NODE_ROOFS_MAP,
     SIGMODE_TOGGLE_BUTTON_MAP,
 )
+
 
 
 class VisualPreparations(
@@ -82,7 +82,7 @@ class VisualPreparations(
         ### create a body for the node
 
         body_topleft = self.top_rectsman.bottomleft
-        body_size = (NODE_WIDTH, 0)
+        body_size = (184, 0)
 
         self.body = Object2D(rect=Rect(body_topleft, body_size))
 
@@ -222,7 +222,7 @@ class VisualPreparations(
                 text=self.title_text,
                 # font settings (note that we use the
                 # roof width as the max width)
-                font_height=FONT_HEIGHT,
+                font_height=APP_REFS.general_font_height,
                 foreground_color=NODE_TITLE,
                 background_color=self.category_color,
                 max_width=roof_rect.width,
@@ -253,7 +253,7 @@ class VisualPreparations(
         ## foot
 
         self.foot = Object2D()
-        self.foot.image = NORMAL_NODE_FOOT
+        self.foot.image = NODE_ROOFS_MAP[(184, NODE_BODY_BG)]
         self.foot.rect = self.foot.image.get_rect()
 
         ## corners
@@ -303,13 +303,10 @@ class VisualPreparations(
             render_text(
                 ### use node id as the text
                 text=" {} ".format(self.id),
-                # font settings (note that we use the
-                # foot width as the max width)
-                font_height=FONT_HEIGHT,
+                font_height=APP_REFS.general_font_height,
                 foreground_color=NODE_TITLE,
                 background_color=self.category_color,
                 border_thickness=1,
                 border_color=BLACK,
-                max_width=self.foot.rect.width,
             )
         )

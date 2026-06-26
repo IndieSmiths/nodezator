@@ -9,17 +9,9 @@ from itertools import chain
 
 ### local imports
 
+from ...config import APP_REFS
+
 from ...rectsman.main import RectsManager
-
-from .constants import (
-    NODE_OUTLINE_THICKNESS,
-    FONT_HEIGHT,
-)
-
-from .surfs import (
-    TOP_CORNERS_MAP,
-    UNPACKING_ICON_SURFS_MAP,
-)
 
 from ...pointsman2d.shape import cross_from_rect
 from ...pointsman2d.transform import rotate_points
@@ -34,6 +26,14 @@ from ...colorsman.colors import (
     NODE_LABELS,
     UNPACKING_ICON_COLOR,
 )
+
+from .constants import NODE_OUTLINE_THICKNESS
+
+from .surfs import (
+    TOP_CORNERS_MAP,
+    UNPACKING_ICON_SURFS_MAP,
+)
+
 
 
 ### constants
@@ -101,6 +101,7 @@ def get_unpacking_icon_group():
     return g
 
 
+FONT_HEIGHT = APP_REFS.general_font_height
 FONT_HEIGHT += -4
 
 id_bg_rect_css = "".join(

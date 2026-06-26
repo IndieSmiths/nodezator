@@ -2,6 +2,8 @@
 
 ### local imports
 
+from ...config import APP_REFS
+
 from ...fontsman.constants import (
     ENC_SANS_BOLD_FONT_HEIGHT,
     NOTO_SANS_REGULAR_FONT_PATH,
@@ -16,7 +18,7 @@ NODE_OUTLINE_THICKNESS = 2
 
 NODE_CORNER_RADIUS = 6
 
-
+BODY_CONTENT_OFFSET = APP_REFS.general_font_height + 2
 
 ### distance from a variable parameter's label to its
 ### first subparameter

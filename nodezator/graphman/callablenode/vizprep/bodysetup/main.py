@@ -2,9 +2,13 @@
 
 ### local imports
 
+from .....colorsman.colors import (
+    NODE_BODY_BG,
+    COMMENTED_OUT_NODE_BG,
+)
+
 from ...surfs import (
-    NORMAL_NODE_FOOT,
-    COMMENTED_OUT_NODE_FOOT,
+    NODE_FOOTS_MAP,
     NORMAL_BOTTOM_CORNERS,
     COMMENTED_OUT_BOTTOM_CORNERS,
     UNPACKING_ICON_SURFS_MAP,
@@ -15,6 +19,7 @@ from ...surfs import (
 from .expandedcreation import get_expanded_body_surface
 from .collapsedcreation import get_collapsed_body_surface
 from .callablecreation import get_callable_body_surface
+
 
 
 class BodySetupOperations:
@@ -87,13 +92,31 @@ class BodySetupOperations:
         ## assign the appropriate surfaces to the 'image'
         ## attribute of the respective objects
 
-        (self.foot.image, bottomleft_corner.image, bottomright_corner.image) = (
+        (
+
+            self.foot.image,
+            bottomleft_corner.image,
+            bottomright_corner.image,
+
+        ) = (
+
             ## surfaces for commented out nodes,
             ## when the node is commented out
-            (COMMENTED_OUT_NODE_FOOT, *COMMENTED_OUT_BOTTOM_CORNERS)
+
+            (
+                NODE_FOOTS_MAP[(184, COMMENTED_OUT_NODE_BG)]
+                *COMMENTED_OUT_BOTTOM_CORNERS,
+            )
+
             if self.data.get("commented_out", False)
+
             ## otherwise, surfaces for uncommented nodes
-            else (NORMAL_NODE_FOOT, *NORMAL_BOTTOM_CORNERS)
+
+            else (
+                NODE_FOOTS_MAP[(184, NODE_BODY_BG)],
+                *NORMAL_BOTTOM_CORNERS,
+            )
+
         )
 
     def assign_unpacking_icon_surfs(self):

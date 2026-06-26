@@ -13,7 +13,6 @@ from ....rectsman.main import RectsManager
 from ...socket.surfs import SOCKET_DIAMETER
 
 from ..constants import (
-    FONT_HEIGHT,
     BODY_CONTENT_OFFSET,
     NODE_OUTLINE_THICKNESS,
     SUBPARAM_OFFSET_FROM_LABEL,
@@ -69,7 +68,7 @@ def reposition_expanded_elements(self):
 
     ### create a rect representing the height of text
     ### surfaces used in the node
-    text_rect = Rect(0, 0, 0, FONT_HEIGHT)
+    text_rect = Rect(0, 0, 0, APP_REFS.general_font_height)
 
     ### reference the top rectsman and its sides locally
 
