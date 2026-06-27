@@ -12,13 +12,13 @@ from .....config import APP_REFS
 
 from .....classes2d.single import Object2D
 
+from .....textman.cache import CachedTextObject
+
 from ....widget.utils import WIDGET_CLASS_MAP
 
 from ....socket.surfs import type_to_codename
 
 from ...utils import update_with_widget
-
-from ....colorsman.color import NODE_LABELS
 
 
 ## classes for composition
@@ -44,7 +44,7 @@ from ...constants import SUBPARAM_KEYWORD_ENTRY_WIDTH
 
 
 
-def create_var_parameter_objs(self, param_obj, node_bg_color):
+def create_var_parameter_objs(self, param_obj, label_text_settings):
     """Create socket(s) and widget(s) for the parameter.
 
     The parameter in question must not be of non-variable
@@ -58,8 +58,8 @@ def create_var_parameter_objs(self, param_obj, node_bg_color):
     param_obj (inspect.Parameter instance)
         an object representing a parameter from a callable,
         containing related data.
-    node_bg_color
-        color used for bg of labels
+    label_text_settings (dict)
+        text settings used for labels.
     """
     ### retrieve the name of the parameter
     param_name = param_obj.name
@@ -76,22 +76,13 @@ def create_var_parameter_objs(self, param_obj, node_bg_color):
 
     self.parameter_text_obj_map[param_name] = (
 
-        Object2D.from_surface(
+        CachedTextObject(
 
-            surface=render_text(
-
-                text=prefix+param_name,
-
-                ## text settings
-
-                font_key=APP_REFS.general_font_key,
-                font_height=APP_REFS.general_font_height,
-                foreground_color=NODE_LABELS,
-                background_color=node_bg_color,
-
-            ),
+            text=prefix+param_name,
+            text_settings=label_text_settings,
 
         )
+
     )
 
     ### since we'll use their information, let's

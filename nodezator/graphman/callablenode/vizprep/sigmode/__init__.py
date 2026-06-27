@@ -2,15 +2,21 @@
 
 ### local imports
 
+from .....config import APP_REFS
+
 from .....ourstdlibs.collections.fldict.main import FlatListDict
 
-from .....classes2d.single import Object2D
+from .....textman.cache import CachedTextObject
 
 from .....rectsman.main import RectsManager
 
 from ....socket.surfs import type_to_codename
 
-from .....colorsman.colors import NODE_BODY_BG, COMMENTED_OUT_NODE_BG
+from ..constants import (
+    NORMAL_LABEL_TEXT_SETTINGS,
+    COMMENTED_OUT_LABEL_TEXT_SETTINGS,
+)
+
 
 ## classes for composition
 
@@ -40,11 +46,23 @@ class SignatureModeVisualPreparations():
     def create_exp_mode_visual_elements(self):
         """Create visual elements for node's expanded signature mode."""
 
+        ### define text settings used for node labels bg, based on whether node
+        ### is commented out or not
+
+        label_text_settings = (
+
+            COMMENTED_OUT_LABEL_TEXT_SETTINGS
+            if self.data.get("commented_out", False)
+
+            else NORMAL_LABEL_TEXT_SETTINGS
+
+        )
+
         ### create input related objects
-        self.create_input_related_objects()
+        self.create_input_related_objects(label_text_settings)
 
         ### create output-related objects
-        self.create_output_related_objects()
+        self.create_output_related_objects(label_text_settings)
 
         ### reposition all objects within the node (also
         ### sets height of self.rect)
@@ -125,7 +143,7 @@ class SignatureModeVisualPreparations():
         self.disconnected_param_input_sockets = []
         self.disconnected_subparam_input_sockets = []
 
-    def create_input_related_objects(self):
+    def create_input_related_objects(self, label_text_settings):
         """Create objects representing the node' inputs."""
         ### create maps to hold button instances
         ### for subparameters and for placeholder sockets
@@ -200,18 +218,6 @@ class SignatureModeVisualPreparations():
         ### create a list to hold instances of remove widget buttons
         self.visible_remove_widget_buttons = []
 
-        ### define color used for node labels bg, based on the "commented out"
-        ### state
-
-        node_bg_color = (
-
-            COMMENTED_OUT_NODE_BG
-            if self.data.get("commented_out", False)
-
-            else NODE_BODY_BG
-
-        )
-
         ### iterate over each parameter, instantiating its
         ### related widgets
 
@@ -224,10 +230,10 @@ class SignatureModeVisualPreparations():
             ## parameter is of variable kind or not
 
             if param_obj.name in self.var_kind_map:
-                self.create_var_parameter_objs(param_obj, node_bg_color)
+                self.create_var_parameter_objs(param_obj, label_text_settings)
 
             else:
-                self.create_parameter_objs(param_obj, node_bg_color)
+                self.create_parameter_objs(param_obj, label_text_settings)
 
             ## also create a parameter rectsman to manage rects
             ## in the parameter
@@ -247,7 +253,10 @@ class SignatureModeVisualPreparations():
         if parameters:
 
             get_param_rectsmans = [
-                item for item in self.param_rectsman_map.values()
+
+                item 
+                for item in param_rectsman_map.values()
+
             ].__iter__
 
             self.input_rectsman = RectsManager(get_param_rectsmans)
@@ -260,8 +269,28 @@ class SignatureModeVisualPreparations():
         self.subparam_up_button_flmap.update()
         self.subparam_down_button_flmap.update()
 
-    def create_output_related_objects(self):
+    def create_output_related_objects(self, label_text_settings):
         """Instantiate and store output sockets."""
+
+        ### create a new dictionary holding text objects representing the
+        ### names of the outputs
+
+        self.output_text_obj_map = {
+
+            output_name: (
+
+                CachedTextObject(
+
+                    text=output_name,
+                    text_settings=label_text_settings,
+
+                )
+
+            )
+
+            for output_name in self.ordered_output_type_map
+
+        }
 
         ### create a new dictionary holding output socket
         ### instances mapped to the name of the output

@@ -11,6 +11,7 @@ from ....config import APP_REFS
 from ....classes2d.single import Object2D
 
 from ....textman.render import render_text
+from ....textman.cache import CachedTextObject
 
 from ....surfsman.cache import EMPTY_SURF
 
@@ -69,8 +70,11 @@ class VisualPreparations(
         ### create elements situated on top of the node
         self.create_top_objects()
 
-        ### create title of node
-        self.create_title_object()
+        ### create and position title of node; it is the only element
+        ### positioned for now, as the remaining elements are positioned
+        ### either relative to it or to other elements that are themselves
+        ### positioned relative to it
+        self.create_and_position_title_text_object()
 
         ### create sigmode toggle button
         self.create_sigmode_toggle_button()
@@ -187,7 +191,7 @@ class VisualPreparations(
         ## store it in its own attribute
         self.top_rectsman = RectsManager(get_top_rects)
 
-    def create_title_object(self):
+    def create_and_position_title_text_object(self):
         """Instatiate object representing title of the node.
 
         Create and store a text object to represent the
@@ -195,13 +199,24 @@ class VisualPreparations(
         node represents as the text.
         """
 
-        self.title_text_obj = Object2D.from_surface(
-            surface=render_text(
+        self.title_text_obj = (
+
+            CachedTextObject(
+
                 text=self.title_text,
-                font_height=APP_REFS.general_font_height,
-                foreground_color=NODE_TITLE,
-                background_color=self.category_color,
-            ),
+
+                text_settings={
+                    'font_key': APP_REFS.general_font_key,
+                    'font_height': APP_REFS.general_font_height,
+                    'foreground_color': NODE_TITLE,
+                    'background_color': self.category_color,
+                },
+
+                coordinates_name='midtop',
+                coordiantes_value=self.midtop,
+
+            )
+
         )
 
     def create_sigmode_toggle_button(self):

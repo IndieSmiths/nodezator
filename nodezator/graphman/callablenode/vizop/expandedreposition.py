@@ -20,6 +20,7 @@ from ..constants import (
     DISTANCE_BETWEEN_SUBPARAMS,
     DISTANCE_BETWEEN_OUTPUTS,
     INPUT_OFFSET,
+    SUBPARAM_KEYWORD_ENTRY_WIDTH,
 )
 
 
@@ -28,16 +29,8 @@ SOCKET_RADIUS = SOCKET_DIAMETER // 2
 
 
 def reposition_expanded_elements(self):
-    """Reposition objects inside the node in expanded signature mode.
+    """Reposition objects inside the node in expanded signature mode."""
 
-    The repositioning is made from the input
-    downwards (the top rectsman doesn't need to be
-    repositioned, it always stays at the same relative
-    position within the node).
-
-    Another administrative task is performed, which is
-    updating the height of self.rect.
-    """
     ### reference subparameter unpacking map locally
     subparam_unpacking_map = self.data['subparam_unpacking_map']
 
@@ -57,6 +50,9 @@ def reposition_expanded_elements(self):
     prm_map = self.param_rectsman_map
     srm_map = self.subparam_rectsman_map
 
+    pto_map = self.parameter_text_obj_map
+    oto_map = self.output_text_obj_map
+
     ### reference the lists of visible widgets and remove buttons
     ### locally; and clear them
 
@@ -70,11 +66,19 @@ def reposition_expanded_elements(self):
     ### surfaces used in the node
     text_rect = Rect(0, 0, 0, APP_REFS.general_font_height)
 
-    ### let's start by repositioning the title
-    self.title_text_obj.rect.midtop = self.midtop
+    ### let's start by calculating the largest width among the
+    ### labels (including the title text) and widgets
 
+    largest_width = max(
 
-    ### now let's reposition the output labels below it
+        self.title_text_obj.rect.width,
+        *(obj.rect.width for obj in pto_map.values()),
+        *(obj.rect.width for obj in oto_map.values()),
+        *(obj.rect.width for obj in wl_flmap.flat_values),
+        (0 if not skl_map else SUBPARAM_KEYWORD_ENTRY_WIDTH),
+    )
+
+    ### let's reposition the output labels below it
 
 
 

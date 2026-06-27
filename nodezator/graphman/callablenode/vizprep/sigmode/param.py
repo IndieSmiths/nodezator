@@ -8,7 +8,7 @@ from functools import partial
 
 ### local imports
 
-from ....config import APP_REFS
+from .....textman.cache import CachedTextObject
 
 from ....widget.utils import WIDGET_CLASS_MAP
 
@@ -23,11 +23,9 @@ from ....socket.input import InputSocket
 
 from .....widget.defaultholder import DefaultHolder
 
-from .....colorsman.colors import NODE_LABELS
 
 
-
-def create_parameter_objs(self, param_obj, node_bg_color):
+def create_parameter_objs(self, param_obj, label_text_settings):
     """Build socket and widget for the parameter.
 
     The parameter in question must not be of variable
@@ -41,8 +39,8 @@ def create_parameter_objs(self, param_obj, node_bg_color):
     param_obj (inspect.Parameter instance)
         an object representing a parameter from a callable
         object, containing related data.
-    node_bg_color
-        color used for bg of labels
+    label_text_settings (dict)
+        text settings used for labels.
     """
     ### retrieve the name of the parameter
     param_name = param_obj.name
@@ -51,22 +49,11 @@ def create_parameter_objs(self, param_obj, node_bg_color):
 
     self.parameter_text_obj_map[param_name] = (
 
-        Object2D.from_surface(
-
-            surface=render_text(
-
-                text=param_name,
-
-                ## text settings
-
-                font_key=APP_REFS.general_font_key,
-                font_height=APP_REFS.general_font_height,
-                foreground_color=NODE_LABELS,
-                background_color=node_bg_color,
-
-            ),
-
+        CachedTextObject(
+            text=param_name,
+            text_settings=label_text_settings,
         )
+
     )
 
     ### let's also alias the live instances map for
@@ -86,8 +73,14 @@ def create_parameter_objs(self, param_obj, node_bg_color):
 
     ### instantiate socket
 
-    input_socket = InputSocket(
-        node=self, type_codename=type_codename, parameter_name=param_name,
+    input_socket = (
+
+        InputSocket(
+            node=self,
+            type_codename=type_codename,
+            parameter_name=param_name,
+        )
+
     )
 
     ### store the input socket instance in the
