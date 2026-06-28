@@ -19,6 +19,12 @@ from ..constants import (
     SUBPARAM_KEYWORD_ENTRY_WIDTH,
 )
 
+from ..surfs import (
+    CORNER_WIDTH,
+    NODE_ROOFS_MAP,
+    NODE_FOOTS_MAP,
+)
+
 
 
 SOCKET_RADIUS = SOCKET_DIAMETER // 2
@@ -26,35 +32,6 @@ SOCKET_RADIUS = SOCKET_DIAMETER // 2
 
 def reposition_expanded_elements(self):
     """Reposition objects inside the node in expanded signature mode."""
-
-    ### let's start by calculating the largest width among the
-    ### labels (including the title text) and widgets
-
-    largest_width = max(
-
-        self.title_text_obj.rect.width,
-        *(obj.rect.width for obj in pto_map.values()),
-        *(obj.rect.width for obj in oto_map.values()),
-        *(obj.rect.width for obj in wl_flmap.flat_values),
-        (0 if not skl_map else SUBPARAM_KEYWORD_ENTRY_WIDTH),
-    )
-
-    ### let's reposition the output labels below it
-
-
-
-
-
-    ### reference the top rectsman and its sides locally
-
-    top_rectsman = self.top_rectsman
-    top_rectsman_left = top_rectsman.left
-    top_rectsman_right = top_rectsman.right
-
-    ### define a top coordinate which is the bottom of
-    ### the top of the node plus the body content
-    ### offset given as a constant
-    top = top_rectsman.bottom + BODY_CONTENT_OFFSET
 
     ### position all output elements relative to each other
 
@@ -105,7 +82,7 @@ def reposition_expanded_elements(self):
         ## if this is not the last output, also add the constant distance
         ## between outputs
 
-        top = temp_rectsman.bottom + (
+        top = _temp_rectsman.bottom + (
 
             DISTANCE_BETWEEN_OUTPUTS
             if output_name != last_output_name
@@ -117,18 +94,15 @@ def reposition_expanded_elements(self):
 
     ### position all input elements relative to each other
 
+    top = 0
+
     ## retrieve parameter objects (they're ordered)
     parameters = self.signature_obj.parameters.values()
 
-    ## if there are parameters...
+    ## if there are parameters, store the name of the last one
+    ## for future reference
 
     if parameters:
-
-        ## offset the defined top by the input offset
-        ## given as a constant
-        top += INPUT_OFFSET
-
-        ## also store the name of the last one for future reference
         last_param_name = list(parameters)[-1].name
 
     ## reference subparameter unpacking map locally
@@ -358,18 +332,28 @@ def reposition_expanded_elements(self):
 
                     if is_unpacked:
 
-                        # position the unpacking icon rect and add it to the
-                        # list of subparameter rects
+                        # align icon's centery with up button's bottom
+                        unpacking_icon_rect.centery = up_button_rect.bottom
 
-                        unpacking_icon_rect.midleft = (
-                            subp_up_button.rect.move(3, 0).bottomright
-                            if kind == 'var_pos'
-                            else subp_up_button.rect.move(18, 0).bottomright
-                        )
+                        # align icon's left with up button's right padding it
+                        # according to whether th
+                        unpacking_icon_rect.left = up_button_rect.right + 3
 
+                        # if parameter is of variable-keyword kind, we also
+                        # add horizontal padding to account for the key icon
+                        # used
+
+                        if kind == 'var_key':
+
+                            # TODO use width of key icon rather than hardcoded
+                            # number
+                            unpacking_icon_rect.left += 18
+
+                        # add it to the list of subparameter rects
                         subparam_rects.append(unpacking_icon_rect)
 
-                    ## if it is of keyword variable kind...
+
+                    ## if it's not unpacked, but of keyword variable kind...
 
                     elif kind == 'var_key':
 
@@ -379,7 +363,7 @@ def reposition_expanded_elements(self):
                         keyword_entry = skl_map[subparam_index]
 
                         keyword_entry.rect.midleft = (
-                            subp_up_button.rect.move(18, 0).bottomright
+                            up_button_rect.move(18, 0).bottomright
                         )
 
                         subparam_rects.append(keyword_entry.rect)
@@ -404,12 +388,11 @@ def reposition_expanded_elements(self):
                     ## position them and add their rects as part of the
                     ## subparameter
 
-                    widget.rect.topleft = (
-                        subp_up_button.rect.move(3, 0).topright
-                    )
+                    widget.rect.topleft = up_button_rect.move(3, 0).topright
 
                     remove_button.rect.midleft = (
-                        widget.rect.right, input_socket.rect.centery
+                        widget.rect.right,
+                        input_socket.rect.centery,
                     )
 
                     subparam_rects.append(widget.rect)
@@ -424,12 +407,12 @@ def reposition_expanded_elements(self):
                         # list of subparameter rects
 
                         unpacking_icon_rect.bottomleft = (
-                            subp_up_button.rect.move(3, -2).topright
+                            up_button_rect.move(3, -2).topright
                         )
 
                         subparam_rects.append(unpacking_icon_rect)
 
-                    ## if it is of keyword variable kind...
+                    ## if not unpacked but is of keyword variable kind...
 
                     elif kind == 'var_key':
 
@@ -439,7 +422,7 @@ def reposition_expanded_elements(self):
                         keyword_entry = skl_map[subparam_index]
 
                         keyword_entry.rect.bottomleft = (
-                            subp_up_button.rect.move(3, -2).topright
+                            up_button_rect.move(3, -2).topright
                         )
 
                         subparam_rects.append(keyword_entry.rect)
@@ -457,80 +440,192 @@ def reposition_expanded_elements(self):
                 # add subparam rectsman to list of rects for the parameter
                 param_rects.append(subparam_rectsman)
 
-                # if the subparameter isn't the last one,
-                # increment the top with the distance
-                # between subparameters given as a constant
+                # if the subparameter isn't the last one, increment the top
+                # with a constant distance between subparameters
 
                 if subparam_index != last_subparam_index:
                     top += DISTANCE_BETWEEN_SUBPARAMS
 
+
+            ## position the placeholder socket
+
             ## retrieve the rects from the placeholder
             ## socket and the "add subparameter button"
 
-            socket_rect = self.placeholder_socket_live_map[param_name].rect
+            psocket_rect = psl_map[param_name].rect
+            add_button_rect = pab_map[param_name].rect
 
-            button_rect = self.placeholder_add_button_map[param_name].rect
+            ## position the placeholder socket's centerx at 0
+            psocket_rect.centerx = 0
 
-            ## position the placeholder socket horizontally
-            socket_rect.centerx = top_rectsman_left
+            ## put the "add subparameter button" a bit to the right of the
+            ## placeholder socket, both vertically aligned
+            add_button_rect.midleft = psocket_rect.move(5, 0).midright
 
-            ## put the "add subparameter button" a bit to the
-            ## right of the placeholder, both vertically
-            ## aligned
-            button_rect.midleft = socket_rect.move(5, 0).midright
-
-            ## reposition socket rect and button rect
-            ## together as if they were a single rect
-            ## by controlling them through a temporary
+            ## reposition socket rect and button rect together as if they
+            ## were a single rect by controlling them through a temporary
             ## rects manager instance
 
             # instantiate rectsman
-            temp_rectsman = RectsManager((socket_rect, button_rect).__iter__)
+
+            _temp_rectsman = (
+
+                RectsManager(
+
+                    # __iter__ method of tuple containing rect
+
+                    (
+                        psocket_rect,
+                        add_button_rect,
+                    ).__iter__
+
+                )
+
+            )
 
             # assign the defined top and add 4 pixels, to
             # push them just a bit down for extra padding
-            temp_rectsman.top = top + 4
+            _temp_rectsman.top = top + 4
 
             # define the bottom of the rectsman as the new top
             # to be used by the next parameter
-            top = temp_rectsman.bottom
+            top = _temp_rectsman.bottom
 
             ## add the rects of the placeholder socket and add button as
             ## part of the parameter's rects
 
-            param_rects.append(socket_rect)
-            param_rects.append(button_rect)
+            param_rects.append(psocket_rect)
+            param_rects.append(add_button_rect)
 
-        ## if the parameter being positioned isn't the
-        ## last one, increment the top with the distance
-        ## between parameters given as a constant
+        ## if the parameter being positioned isn't the last one,
+        ## increment the top with the constant distance between parameters
 
         if param_name != last_param_name:
             top += DISTANCE_BETWEEN_PARAMS
 
-    ### position the id text object
+
+    ### now that the output elements are properly positioned relative to
+    ### each other and the input elements (if any) are also positioned like
+    ### that, we can finally:
+    ###
+    ### - position all elements relative to the title text of the node and
+    ###   each other
+    ### - generate missing visuals whose size depend on resulting positions
+
+    orectsman = self.output_rectsman
+    title_rect = self.title_text_obj.rect
+
+    top_width = title_rect.width + (CORNER_WIDTH*2)
+
+    (
+        topleft_corner_rect,
+        topright_corner_rect,
+        bottomleft_corner_rect,
+        bottomright_corner_rect,
+
+    ) = (
+
+        corner.rect
+        for corner in self.corners
+
+    )
+
+    topleft_corner_rect.top = topright_corner_rect.top = title_rect.top - 3
+    topleft_corner_rect.right = title_rect.left
+    topright_corner_rect.left = title_rect.right
+
+    if parameters:
+
+        irectsman = self.input_rectsman
+        orectsman.left = irectsman.right - (SOCKET_DIAMETER+5)
+
+        _temp_rectsman = RectsManager((irectsman, orectsman).__iter__)
+
+        if _temp_rectsman.width > top_width:
+            
+            _temp_rectsman.centerx = title_rect.centerx 
+
+            topleft_corner_rect.left = irectsman.left + SOCKET_RADIUS
+            topright_corner_rect.right = orectsman.right - SOCKET_RADIUS
+
+        else:
+
+            irectsman.left = topleft_corner_rect.left + SOCKET_RADIUS
+            orectsman.right = topright_corner_rect.right - SOCKET_RADIUS
+            
+    else:
+
+        if orectsman.width > top_width:
+
+            orectsman.centerx = title_rect.centerx
+
+            topleft_corner_rect.left = orectsman.left - 5
+            topright_corner_rect.right = orectsman.right - SOCKET_RADIUS
+
+        else:
+            orectsman.right = topright_corner_rect.right - SOCKET_RADIUS
+
+    roof = self.roof
+
+    roof_width = topright_corner_rect.left - topleft_corner_rect.right
+
+    roof.image = NODE_ROOFS_MAP[(roof_width, self.category_color)]
+
+    roof.rect.size = roof.image.get_size()
+    roof.rect.midtop = title_rect.move(0, -3).midtop
+
+    ###
+
+    top_rectsman = self.top_rectsman
+
+    top_rectsman.move_ip(0, 3)
+
+    top = top_rectsman.bottom + BODY_CONTENT_OFFSET
+
+    orectsman.top = top
+
+    if parameters:
+
+        irectsman.top = orectsman.bottom + INPUT_OFFSET
+        top = irectsman.bottom
 
     ## reference the rect of the id text object locally
     id_text_rect = self.id_text_obj.rect
+
+    ## align its centerx with title rect's centerx
+    id_text_rect.centerx = title_rect.centerx
 
     ## align its top with the last defined top; also push it
     ## 4 pixels down for extra padding
     id_text_rect.top = top + 4
 
-    ## align the centerx of the id text object with
-    ## the centerx of the top rectsman, so it is
-    ## horizontally centered on the node
-    id_text_rect.centerx = top_rectsman.centerx
+    ##
 
-    ### position the bottom rectsman
+    top = id_text_rect.bottom
 
-    ## reference the bottom rectsman in a local variable
+    ## position bottom corners
+
+    bottomleft_corner_rect.top = bottomright_corner_rect.top = top
+
+    bottomleft_corner_rect.left = topleft_corner_rect.left
+    bottomright_corner_rect.right = topright_corner_rect.right
+
+    ## generate visual for foot and position it
+
+    foot = self.foot
+    foot_rect = foot.rect
+
+    foot_width = roof_width
+    foot.image = NODE_FOOTS_MAP[(foot_width, self.category_color)]
+
+    foot_rect.size = foot.image.get_size()
+
+    foot_rect.top = top
+    foot_rect.left = bottomleft_corner_rect.right
+
+
+    ###
     bottom_rectsman = self.bottom_rectsman
-
-    ## align the centerx of the bottom rectsman with
-    ## the centerx of the top rectsman, so it is
-    ## horizontally centered on the node
-    bottom_rectsman.centerx = top_rectsman.centerx
 
     ## align the bottom of the bottom rectsman with
     ## the bottom of the id text object, then push

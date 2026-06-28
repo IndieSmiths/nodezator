@@ -67,6 +67,11 @@ class VisualPreparations(
         self.reference_tiny_icons()
         self.pick_tiny_icon()
 
+        ## create list to store corners
+        ##
+        ## corners will use surfaces from imported maps
+        self.corners = []
+
         ### create elements situated on top of the node
         self.create_top_objects()
 
@@ -85,8 +90,8 @@ class VisualPreparations(
         ### create a body for the node
         self.body = Object2D.from_surface(EMPTY_SURF)
 
-        ### gather references to "background" and text
-        ### elements for easy retrieval and drawing
+        ### gather references to "background" and text elements
+        ### for easy retrieval and drawing
 
         self.background_and_text_elements = (
             *self.corners,
@@ -97,9 +102,12 @@ class VisualPreparations(
             self.id_text_obj,
         )
 
-        ### create a rect to be used as the boundaries
-        ### of the node
+        ### create a rect to be used as the boundaries of the node
         self.rect = Rect(0, 0, 0, 0)
+
+        ### the title text is the only object that is positioned at this time;
+        ### the rest will be positioned relative to it in further steps
+        self.title_text_obj.rect.midtop = self.midtop
 
         ### create expanded signature mode visuals
         self.create_exp_mode_visual_elements()
@@ -122,7 +130,18 @@ class VisualPreparations(
         so that it can be overriden by subclasses as
         neeeded.
         """
-        self.color_index = APP_REFS.category_index_map[self.data["script_id"][:2]]
+
+        self.color_index = (
+
+            APP_REFS
+            .category_index_map
+
+            [
+                self
+                .data["script_id"]
+                [:2]
+            ]
+        )
 
         self.category_color = NODE_CATEGORY_COLORS[self.color_index]
 
@@ -147,11 +166,6 @@ class VisualPreparations(
 
         ## roof
         roof = self.roof = Object2D.from_surface(EMPTY_SURF)
-
-        ## create list to store corners
-        ##
-        ## corners will use surfaces from imported maps
-        self.corners = []
 
         # topleft corner
 
@@ -224,6 +238,7 @@ class VisualPreparations(
 
     def create_bottom_objects(self):
         """Create objects that lie at the node's bottom."""
+
         ### create foot
 
         ### the actual surface for the foot will be generated later
@@ -271,13 +286,17 @@ class VisualPreparations(
         """
         ### instantiate
 
+        node_id = self.id
+
         self.id_text_obj = Object2D.from_surface(
 
             render_text(
 
-                ### use node id as the text
-                text=" {} ".format(self.id),
+                text=f" {node_id} ",
 
+                ### text settings
+
+                font_key=APP_REFS.general_font_key,
                 font_height=APP_REFS.general_font_height,
                 foreground_color=NODE_TITLE,
                 background_color=self.category_color,
@@ -287,9 +306,9 @@ class VisualPreparations(
 
         )
 
-    ### TODO finish method
+    ### TODO remove method after using its contents where needed
 
-    def perform_final_visual_and_repositioning_setups(self):
+    def _perform_final_visual_and_repositioning_setups(self):
 
         self.roof.image = NODE_ROOFS_MAP[(184, NODE_BODY_BG)]
 

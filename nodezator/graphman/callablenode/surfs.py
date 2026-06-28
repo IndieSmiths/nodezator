@@ -194,7 +194,8 @@ CORNER_WIDTH, CORNER_HEIGHT = NORMAL_BOTTOM_CORNERS[0].get_size()
 ###### create map of roof surfaces (rectangle between top
 ###### corners)
 
-def _get_node_roof(width, fill_color):
+def _get_node_roof(args):
+    width, fill_color = args
 
     roof_width = width - (CORNER_WIDTH*2)
     roof_height = CORNER_HEIGHT
@@ -236,6 +237,7 @@ BODY_HEAD_SURFS_MAP = FactoryDict(_unpack_for_render_rect)
 ###### corners)
 
 def _get_node_foot(args):
+
     width, fill_color = args
 
     foot_width = width - (CORNER_WIDTH*2)

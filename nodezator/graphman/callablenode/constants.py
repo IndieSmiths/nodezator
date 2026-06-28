@@ -11,7 +11,11 @@ from ...fontsman.constants import (
     NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT,
 )
 
-from ...colorsman.colors import NODE_BODY_BG, COMMENTED_OUT_NODE_BG
+from ...colorsman.colors import (
+    NODE_BODY_BG,
+    COMMENTED_OUT_NODE_BG,
+    NODE_LABELS,
+)
 
 
 

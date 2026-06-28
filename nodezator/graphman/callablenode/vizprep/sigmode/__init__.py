@@ -12,7 +12,7 @@ from .....rectsman.main import RectsManager
 
 from ....socket.surfs import type_to_codename
 
-from ..constants import (
+from ...constants import (
     NORMAL_LABEL_TEXT_SETTINGS,
     COMMENTED_OUT_LABEL_TEXT_SETTINGS,
 )
