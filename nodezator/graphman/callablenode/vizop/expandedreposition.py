@@ -1,9 +1,5 @@
 """Function to extend VisualRelatedOperations class."""
 
-### third-party import
-from pygame import Rect
-
-
 ### local imports
 
 from ....config import APP_REFS
@@ -31,41 +27,6 @@ SOCKET_RADIUS = SOCKET_DIAMETER // 2
 def reposition_expanded_elements(self):
     """Reposition objects inside the node in expanded signature mode."""
 
-    ### reference subparameter unpacking map locally
-    subparam_unpacking_map = self.data['subparam_unpacking_map']
-
-    ### let's also reference maps of live instances locally using
-    ### variables of low character count, for better code layout
-
-    isl_flmap = self.input_socket_live_flmap
-    sub_flmap = self.subparam_up_button_flmap
-    sdb_flmap = self.subparam_down_button_flmap
-    wl_flmap = self.widget_live_flmap
-    sui_flmap = self.subparam_unpacking_icon_flmap
-    skl_map = self.subparam_keyword_entry_live_map
-    wrb_flmap = self.widget_remove_button_flmap
-    pab_map = self.placeholder_add_button_map
-    psl_map = self.placeholder_socket_live_map
-
-    prm_map = self.param_rectsman_map
-    srm_map = self.subparam_rectsman_map
-
-    pto_map = self.parameter_text_obj_map
-    oto_map = self.output_text_obj_map
-
-    ### reference the lists of visible widgets and remove buttons
-    ### locally; and clear them
-
-    vws = self.visible_widgets
-    vbs = self.visible_remove_widget_buttons
-
-    vws.clear()
-    vbs.clear()
-
-    ### create a rect representing the height of text
-    ### surfaces used in the node
-    text_rect = Rect(0, 0, 0, APP_REFS.general_font_height)
-
     ### let's start by calculating the largest width among the
     ### labels (including the title text) and widgets
 
@@ -84,12 +45,6 @@ def reposition_expanded_elements(self):
 
 
 
-
-
-
-
-    ###
-
     ### reference the top rectsman and its sides locally
 
     top_rectsman = self.top_rectsman
@@ -101,54 +56,66 @@ def reposition_expanded_elements(self):
     ### offset given as a constant
     top = top_rectsman.bottom + BODY_CONTENT_OFFSET
 
-    ### position each output socket
+    ### position all output elements relative to each other
 
-    ## get names of output sockets (their order is defined
+    ## get names of outputs (their order is defined
     ## in the node script)
-    socket_names = self.ordered_output_type_map.keys()
+    output_names = self.ordered_output_type_map.keys()
 
-    ## get name of last socket
-    last_socket_name = list(socket_names)[-1]
+    ## get name of last output
+    last_output_name = list(output_names)[-1]
 
-    ## reference the output socket map locally
+    ## reference the output socket and output text object maps locally
+
     osl_map = self.output_socket_live_map
+    oto_map = self.output_text_obj_map
 
-    ## iterate over socket names, retrieving the rect of
-    ## each socket in order to position it
+    ## iterate over output names, positioning socket's and the their respective
+    ## text relative to each other
 
-    for output_name in socket_names:
+    top = 0
 
-        ## retrieve socket rect
-        socket_rect = osl_map[output_name].rect
+    for output_name in output_names:
+        
+        ## retrieve socket and text object rects
 
-        ## position the socket horizontally
-        socket_rect.centerx = top_rectsman_right
+        osocket_rect = osl_map[output_name].rect
+        text_rect = oto_map[output_name].rect
 
-        ## align text rect center with the center of the
-        ## socket, offset 2 pixels up
-        text_rect.centery = socket_rect.move(0, -2).centery
+        ## align text midright with socket's midleft, with a bit of horizontal
+        ## padding
+        text_rect.midright = osocket_rect.move(-2, 0).midleft
 
         ## position text rect and socket rect together
         ## as if they were a single rect by controlling
         ## them through a temporary rects manager instance
 
-        # instantiate rectsman
-        temp_rectsman = RectsManager((text_rect, socket_rect).__iter__)
+        # instantiate temporary rectsman
+        _temp_rectsman = RectsManager((text_rect, osocket_rect).__iter__)
 
-        # assign top to the temporary rectsman
-        temp_rectsman.top = top
+        # position rectsman's top
+        _temp_rectsman.top = top
 
-        # new top is the bottom of the temp rectsman
-        top = temp_rectsman.bottom
+        # position rectsman so socket centerx ends up at 0
 
-        ## if the socket isn't the last one, increment
-        ## the top with the distance between outputs
-        ## given as a constant
+        xdiff = osocket_rect.centerx - 0
+        _temp_rectsman.move_ip(xdiff, 0)
 
-        if output_name != last_socket_name:
-            top += DISTANCE_BETWEEN_OUTPUTS
+        ## define next top as the bottom of the temp rectsman and,
+        ## if this is not the last output, also add the constant distance
+        ## between outputs
 
-    ### position parameters
+        top = temp_rectsman.bottom + (
+
+            DISTANCE_BETWEEN_OUTPUTS
+            if output_name != last_output_name
+
+            else 0
+
+        )
+
+
+    ### position all input elements relative to each other
 
     ## retrieve parameter objects (they're ordered)
     parameters = self.signature_obj.parameters.values()
@@ -161,20 +128,47 @@ def reposition_expanded_elements(self):
         ## given as a constant
         top += INPUT_OFFSET
 
-        ## also store the name of the last one (we'll use it soon)
+        ## also store the name of the last one for future reference
         last_param_name = list(parameters)[-1].name
 
-    ## iterate over parameter objects positioning each
-    ## of them
+    ## reference subparameter unpacking map locally
+    subparam_unpacking_map = self.data['subparam_unpacking_map']
+
+    ## let's also reference maps of live instances locally using
+    ## variables of low character count, for better code layout
+
+    sub_flmap = self.subparam_up_button_flmap
+    sdb_flmap = self.subparam_down_button_flmap
+    wl_flmap = self.widget_live_flmap
+    sui_flmap = self.subparam_unpacking_icon_flmap
+    skl_map = self.subparam_keyword_entry_live_map
+    wrb_flmap = self.widget_remove_button_flmap
+    pab_map = self.placeholder_add_button_map
+    psl_map = self.placeholder_socket_live_map
+    prm_map = self.param_rectsman_map
+    srm_map = self.subparam_rectsman_map
+
+    isl_flmap = self.input_socket_live_flmap
+    pto_map = self.parameter_text_obj_map
+
+    ## reference the lists of visible widgets and remove buttons locally
+    ## and clear them
+
+    vws = self.visible_widgets
+    vbs = self.visible_remove_widget_buttons
+
+    vws.clear()
+    vbs.clear()
+
+    ## iterate over parameter objects positioning each of them
 
     for param_obj in parameters:
 
         ## retrieve name of parameter
         param_name = param_obj.name
 
-        ## retrieve the rectsman representing the
-        ## parameter, as well as the list of the
-        ## underlying rects it controls
+        ## retrieve the rectsman representing the parameter,
+        ## as well as the list of the underlying rects it controls
 
         param_rectsman = prm_map[param_name]
         param_rects = param_rectsman._get_all_rects.__self__
@@ -183,25 +177,25 @@ def reposition_expanded_elements(self):
         param_rects.clear()
 
 
-        ## try retrieving the variable kind of the
-        ## parameter
+        ## try retrieving the variable kind of the parameter
         try:
             kind = self.var_kind_map[param_name]
 
-        ## if the retrieval fails, then we have
-        ## a regular parameter
+        ## if the retrieval fails, then we have a regular parameter
 
         except KeyError:
 
-            ## reference the input socket
-            input_socket = isl_flmap[param_name]
+            ## reference the input socket and its rect
 
-            ## its centerx must be the top_rectsman left
-            input_socket.rect.centerx = top_rectsman_left
+            input_socket = isl_flmap[param_name]
+            isocket_rect = input_socket.rect
+
+            ## socket rect's centerx must be 0
+            isocket_rect.centerx = 0
 
             ## store the input socket's rect as a
             ## parameter's rect
-            param_rects.append(input_socket.rect)
+            param_rects.append(isocket_rect)
 
             ## check whether input socket has a parent
 
@@ -217,9 +211,13 @@ def reposition_expanded_elements(self):
             ## check wheter it has a widget
             has_widget = param_name in wl_flmap
 
-            ## if it has a parent or doesn't have a widget,
-            ## we have only the input socket, in the parameter,
-            ## so we align the vertical center of both the text rect
+            ## reference the associated text object's rect
+            text_rect = pto_map[param_name].rect
+
+            ## if it has a parent or doesn't have a widget, it means we only
+            ## the input socket and the text object in the parameter;
+            ##
+            ## we align the vertical center of both the text rect
             ## and input socket (with just a bit offset) and perform
             ## the calculation as if they were a single object by
             ## temporarily appending the text rect to the list of
@@ -227,12 +225,12 @@ def reposition_expanded_elements(self):
 
             if has_parent or not has_widget:
 
-                # align vertical center of both text rect and input socket
-                # (with a bit offset)
-                text_rect.centery = input_socket.rect.move(0, -2).centery
+                ## align text midleft with socket's midright, with a bit of
+                ## horizontal padding
+                text_rect.midleft = isocket_rect.move(2, 0).midright
 
-                # position object as one, by appending
-                # text rect temporarily to the rect list
+                ## position objects as one, by appending text rect temporarily
+                ## to the rect list
 
                 param_rects.append(text_rect)
 
@@ -251,15 +249,14 @@ def reposition_expanded_elements(self):
 
                 ## position it and store it as a visible one
 
-                widget.rect.topleft = input_socket.rect.move(8, -1).topright
+                widget.rect.topleft = isocket_rect.move(8, -1).topright
                 vws.append(widget)
 
                 ## store its rect among the parameter's rects
                 param_rects.append(widget.rect)
 
-                ## since the widget is beside the socket, the
-                ## parameter text will be above the input socket
-                ## and visible widget
+                ## since the widget is beside the socket, the parameter text
+                ## will be above the input socket and visible widget
 
                 text_rect.top = top
 
@@ -267,27 +264,23 @@ def reposition_expanded_elements(self):
 
                 top = param_rectsman.bottom
 
-        ## otherwise, we are dealing with a variable
-        ## parameter
+        ## otherwise, we are dealing with a variable parameter
 
         else:
 
-            ## variable parameters always start with the
-            ## name of the parameter on top, so we begin
-            ## by positioning the top rect on top
+            ## variable parameters always start with the name of the parameter
+            ## on top, so we begin by positioning the text rect on top
             text_rect.top = top
 
-            ## the top for the next object will be below
-            ## the text rect plus an offset given as a
-            ## constant
+            ## the top for the next object will be below the text rect plus a
+            ## constant offset
             top = text_rect.bottom + SUBPARAM_OFFSET_FROM_LABEL
 
-            ## we then retrieve the names of the
-            ## subparameters sorted
-            sorted_subparam_indices = sorted(self.input_socket_live_flmap[param_name])
+            ## we then retrieve the names of the subparameters sorted
+            sorted_subparam_indices = sorted(isl_flmap[param_name])
 
-            ## if there are indeed subparameters, store the
-            ## name of the last one (we'll use it soon)
+            ## if there are indeed subparameters, store the name of
+            ## the last one (we'll use it soon)
 
             if sorted_subparam_indices:
                 last_subparam_index = sorted_subparam_indices[-1]
@@ -309,29 +302,30 @@ def reposition_expanded_elements(self):
                 # clear the list
                 subparam_rects.clear()
 
-                # reference input socket
+                # reference input socket and its rect
+
                 input_socket = isl_flmap[param_name][subparam_index]
+                isocket_rect = input_socket.rect
 
-                ## its centerx must be the top_rectsman left
-                input_socket.rect.centerx = top_rectsman_left
+                ## its centerx must be 0
+                isocket_rect.centerx = 0
 
-                ## store the input socket's rect as a subparameter's
-                ## rect
-                subparam_rects.append(input_socket.rect)
+                ## store the input socket's rect as a subparameter's rect
+                subparam_rects.append(isocket_rect)
 
-                ## retrieve buttons to move the subparameter, position
-                ## them and store their rects as subparameter's rects
+                ## retrieve rects of buttons to move the subparameter,
+                ## position them and store their rects as subparameter's rects
 
-                subp_up_button = sub_flmap[param_name][subparam_index]
-                subp_down_button = sdb_flmap[param_name][subparam_index]
+                up_button_rect = sub_flmap[param_name][subparam_index].rect
+                down_button_rect = sdb_flmap[param_name][subparam_index].rect
 
-                offset_midright = input_socket.rect.move(2, 0).midright
+                offset_midright = isocket_rect.move(2, 0).midright
 
-                subp_up_button.rect.bottomleft = offset_midright
-                subp_down_button.rect.topleft = offset_midright
+                up_button_rect.bottomleft = offset_midright
+                down_button_rect.topleft = offset_midright
 
-                subparam_rects.append(subp_up_button.rect)
-                subparam_rects.append(subp_down_button.rect)
+                subparam_rects.append(up_button_rect)
+                subparam_rects.append(down_button_rect)
 
                 ## check whether the subparameter has a parent
 

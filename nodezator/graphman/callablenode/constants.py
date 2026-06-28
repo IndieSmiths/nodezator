@@ -5,7 +5,6 @@
 from ...config import APP_REFS
 
 from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
     NOTO_SANS_REGULAR_FONT_PATH,
     NOTO_SANS_FONT_HEIGHT,
     NOTO_SANS_MONO_MEDIUM_FONT_PATH,
@@ -22,6 +21,9 @@ NODE_CORNER_RADIUS = 6
 
 BODY_CONTENT_OFFSET = APP_REFS.general_font_height + 2
 
+### distance between outputs
+DISTANCE_BETWEEN_OUTPUTS = 4
+
 ### distance from a variable parameter's label to its
 ### first subparameter
 SUBPARAM_OFFSET_FROM_LABEL = 2
@@ -35,13 +37,8 @@ DISTANCE_BETWEEN_PARAMS = 4
 ### distance between subparameters
 DISTANCE_BETWEEN_SUBPARAMS = 8
 
-### distance between last input (including the object with
-### lowest bottom, whether it is a widget or the label)
-### and the first output socket
+### distance between last output's bottom and the first input
 INPUT_OFFSET = 4
-
-### distance between outputs
-DISTANCE_BETWEEN_OUTPUTS = 4
 
 ### label text (input and output labels)
 

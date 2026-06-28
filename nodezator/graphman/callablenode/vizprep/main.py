@@ -70,11 +70,8 @@ class VisualPreparations(
         ### create elements situated on top of the node
         self.create_top_objects()
 
-        ### create and position title of node; it is the only element
-        ### positioned for now, as the remaining elements are positioned
-        ### either relative to it or to other elements that are themselves
-        ### positioned relative to it
-        self.create_and_position_title_text_object()
+        ### create title of node
+        self.create_title_text_object()
 
         ### create sigmode toggle button
         self.create_sigmode_toggle_button()
@@ -191,7 +188,7 @@ class VisualPreparations(
         ## store it in its own attribute
         self.top_rectsman = RectsManager(get_top_rects)
 
-    def create_and_position_title_text_object(self):
+    def create_title_text_object(self):
         """Instatiate object representing title of the node.
 
         Create and store a text object to represent the
@@ -211,9 +208,6 @@ class VisualPreparations(
                     'foreground_color': NODE_TITLE,
                     'background_color': self.category_color,
                 },
-
-                coordinates_name='midtop',
-                coordiantes_value=self.midtop,
 
             )
 
