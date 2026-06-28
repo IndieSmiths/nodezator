@@ -64,12 +64,12 @@ class SignatureModeVisualPreparations():
         ### create output-related objects
         self.create_output_related_objects(label_text_settings)
 
-        ### reposition all objects within the node (also
-        ### sets height of self.rect)
+        ### reposition all objects within the node (also performs other related
+        ### admin tasks)
         self.reposition_expanded_elements()
 
-        ### also create and store a rects manager to
-        ### control all the rects in the node
+        ### also create and store a rects manager to control all the rects in
+        ### the node
 
         ## create a list containing the rects to be managed
         ## and get its __iter__ method to use as a callable

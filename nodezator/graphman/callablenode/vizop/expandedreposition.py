@@ -6,6 +6,10 @@ from ....config import APP_REFS
 
 from ....rectsman.main import RectsManager
 
+from ....surfsman.render import render_rect
+
+from ....colorsman.colors import NODE_BODY_BG, COMMENTED_OUT_NODE_BG
+
 from ...socket.surfs import SOCKET_DIAMETER
 
 from ..constants import (
@@ -63,9 +67,9 @@ def reposition_expanded_elements(self):
         ## padding
         text_rect.midright = osocket_rect.move(-2, 0).midleft
 
-        ## position text rect and socket rect together
-        ## as if they were a single rect by controlling
-        ## them through a temporary rects manager instance
+        ## position text rect and socket rect together as if they were a
+        ## single rect by controlling them through a temporary rects manager
+        ## instance
 
         # instantiate temporary rectsman
         _temp_rectsman = RectsManager((text_rect, osocket_rect).__iter__)
@@ -508,14 +512,8 @@ def reposition_expanded_elements(self):
     ### each other and the input elements (if any) are also positioned like
     ### that, we can finally:
     ###
-    ### - position all elements relative to the title text of the node and
-    ###   each other
+    ### - position all elements relative to each other
     ### - generate missing visuals whose size depend on resulting positions
-
-    orectsman = self.output_rectsman
-    title_rect = self.title_text_obj.rect
-
-    top_width = title_rect.width + (CORNER_WIDTH*2)
 
     (
         topleft_corner_rect,
@@ -530,14 +528,23 @@ def reposition_expanded_elements(self):
 
     )
 
-    topleft_corner_rect.top = topright_corner_rect.top = title_rect.top - 3
-    topleft_corner_rect.right = title_rect.left
-    topright_corner_rect.left = title_rect.right
+    topleft_corner_rect.top = topright_corner_rect.top = self.midtop[1]
+
+    title_rect = self.title_text_obj.rect
+    title_rect.midtop = self.midtop
+    title_rect.move_ip(0, 3)
+
+    topleft_corner_rect.right = title_rect.left - 5
+    topright_corner_rect.left = title_rect.right + 5
+
+
+    orectsman = self.output_rectsman
+    top_width = title_rect.width + (CORNER_WIDTH*2) + 10
 
     if parameters:
 
         irectsman = self.input_rectsman
-        orectsman.left = irectsman.right - (SOCKET_DIAMETER+5)
+        orectsman.left = irectsman.right + SOCKET_RADIUS
 
         _temp_rectsman = RectsManager((irectsman, orectsman).__iter__)
 
@@ -572,7 +579,13 @@ def reposition_expanded_elements(self):
     roof.image = NODE_ROOFS_MAP[(roof_width, self.category_color)]
 
     roof.rect.size = roof.image.get_size()
-    roof.rect.midtop = title_rect.move(0, -3).midtop
+    roof.rect.midtop = self.midtop
+
+    ###
+
+    self.sigmode_toggle_button.rect.topleft = (
+        topleft_corner_rect.move(2, 2).bottomleft
+    )
 
     ###
 
@@ -635,6 +648,29 @@ def reposition_expanded_elements(self):
 
     bottom_rectsman.bottom = id_text_rect.bottom
     bottom_rectsman.top += NODE_OUTLINE_THICKNESS + 4
+
+    ### perform extra administrative task: generate body surface and
+    ### update its rect
+
+    body = self.body
+
+    body_rect = body.rect
+
+    body_rect.width = top_rectsman.width
+    body_rect.height = bottom_rectsman.bottom - top_rectsman.bottom
+
+    body_rect.midtop = top_rectsman.midbottom
+
+    bg_color = (
+
+        COMMENTED_OUT_NODE_BG
+        if self.data.get('commented_out', False)
+
+        else NODE_BODY_BG
+
+    )
+
+    body.image = render_rect(*body_rect.size, bg_color)
 
     ### perform extra administrative task: update size and position
     ### of self.rect

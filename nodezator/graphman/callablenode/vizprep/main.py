@@ -20,7 +20,6 @@ from ....rectsman.main import RectsManager
 from ....iconfactory import ICON_MAP
 
 from ....colorsman.colors import (
-    NODE_BODY_BG,
     NODE_CATEGORY_COLORS,
     NODE_TITLE,
     BLACK,
@@ -29,10 +28,8 @@ from ....colorsman.colors import (
 ## other objects for composition
 
 from ..surfs import (
-    NODE_ROOFS_MAP,
     TOP_CORNERS_MAP,
     NORMAL_BOTTOM_CORNERS,
-    NODE_ROOFS_MAP,
     SIGMODE_TOGGLE_BUTTON_MAP,
 )
 
@@ -104,10 +101,6 @@ class VisualPreparations(
 
         ### create a rect to be used as the boundaries of the node
         self.rect = Rect(0, 0, 0, 0)
-
-        ### the title text is the only object that is positioned at this time;
-        ### the rest will be positioned relative to it in further steps
-        self.title_text_obj.rect.midtop = self.midtop
 
         ### create expanded signature mode visuals
         self.create_exp_mode_visual_elements()
@@ -231,9 +224,12 @@ class VisualPreparations(
         """Instatiate button to toggle between signature modes."""
 
         self.sigmode_toggle_button = (
+
             Object2D.from_surface(
-                SIGMODE_TOGGLE_BUTTON_MAP[self.category_color][0]
+                surface=SIGMODE_TOGGLE_BUTTON_MAP[self.category_color][0],
+                on_mouse_release = self.toggle_sigmode,
             )
+
         )
 
     def create_bottom_objects(self):
@@ -305,42 +301,3 @@ class VisualPreparations(
             )
 
         )
-
-    ### TODO remove method after using its contents where needed
-
-    def _perform_final_visual_and_repositioning_setups(self):
-
-        self.roof.image = NODE_ROOFS_MAP[(184, NODE_BODY_BG)]
-
-        topleft_corner, topright_corner = self.corners[:2]
-
-        topleft_corner.rect.topright = self.roof.rect.topleft
-        topright_corner.rect.topleft = self.roof.rect.topright
-
-        ## calculate midtop for title object so that it has
-        ## its midtop coordinate just a bit below the
-        ## midtop of the roof of the node
-        title_midtop = roof_rect.move(0, 3).midtop
-        coordinates_name="midtop",
-        coordinates_value=title_midtop,
-
-        ## sigmode toggle button
-
-        button = self.sigmode_toggle_button
-
-        button.rect.topleft = self.top_rectsman.move(2, 0).bottomleft
-        button.on_mouse_release = self.toggle_sigmode
-
-        ## generate and position foot
-
-        self.foot.image = NODE_ROOFS_MAP[(184, NODE_BODY_BG)]
-        self.foot.rect.size = self.foot.image.get_size()
-
-        bottomleft_corner, bottomright_corner = self.corners[2:]
-
-        bottomleft_corner.rect.topright = self.foot.rect.topleft
-        bottomright_corner.rect.topleft = self.foot.rect.topright
-
-        ### align the top rectsman midtop with the
-        ### midtop coordinates of the node
-        self.top_rectsman.midtop = self.midtop
