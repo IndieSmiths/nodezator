@@ -384,7 +384,7 @@ def reposition_expanded_elements(self):
                 ## if it doesn't have a parent...
 
                 else:
-                    
+
                     ## reference the widget and its remove button locally
 
                     widget = wl_flmap[param_name][subparam_index]
@@ -511,6 +511,7 @@ def reposition_expanded_elements(self):
             param_rects.append(psocket_rect)
             param_rects.append(add_button_rect)
 
+
         ## if the parameter being positioned isn't the last one,
         ## increment the top with the constant distance between parameters
 
@@ -557,6 +558,13 @@ def reposition_expanded_elements(self):
 
         irectsman = self.input_rectsman
         orectsman.right = irectsman.right + SOCKET_DIAMETER
+
+        ### add padding if too similar in width
+
+        if abs(irectsman.width - orectsman.width) < 20:
+            orectsman.right += 20
+
+        ###
 
         _temp_rectsman = RectsManager((irectsman, orectsman).__iter__)
 
@@ -617,6 +625,7 @@ def reposition_expanded_elements(self):
 
     else:
         top = orectsman.bottom
+
 
     ## reference the rect of the id text object locally
     id_text_rect = self.id_text_obj.rect
@@ -693,15 +702,7 @@ def reposition_expanded_elements(self):
 
     )
 
-    right = (
-
-        ## if there are outputs (always the case, at least for now)
-        self.output_rectsman.right
-        if osl_map
-
-        ## otherwise...
-        else top_rectsman.move(SOCKET_RADIUS, 0).right
-    )
+    right = self.output_rectsman.right
 
     self.rect.width = right - left
 
