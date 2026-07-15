@@ -207,16 +207,13 @@ def reposition_expanded_elements(self):
                 ## horizontal padding
                 text_rect.midleft = isocket_rect.move(2, 0).midright
 
-                ## position objects as one, by appending text rect temporarily
-                ## to the rect list
+                ## add text object's rect and position objects as one
 
                 param_rects.append(text_rect)
 
                 param_rectsman.top = top
 
                 top = param_rectsman.bottom
-
-                param_rects.pop()
 
             ## otherwise, if we have a widget, we perform related setups
 
@@ -242,6 +239,12 @@ def reposition_expanded_elements(self):
 
                 top = param_rectsman.bottom
 
+                ## align text's left with input socket's right
+                text_rect.left = isocket_rect.move(2, 0).right
+
+                ## add text object's rect
+                param_rects.append(text_rect)
+
         ## otherwise, we are dealing with a variable parameter
 
         else:
@@ -249,6 +252,9 @@ def reposition_expanded_elements(self):
             ## variable parameters always start with the name of the parameter
             ## on top, so we begin by positioning the text rect on top
             text_rect.top = top
+
+            ##
+            param_rects.append(text_rect)
 
             ## the top for the next object will be below the text rect plus a
             ## constant offset
@@ -534,22 +540,21 @@ def reposition_expanded_elements(self):
     title_rect.midtop = self.midtop
     title_rect.move_ip(0, 3)
 
-    topleft_corner_rect.right = title_rect.left - 10
-    topright_corner_rect.left = title_rect.right + 10
-
+    topleft_corner_rect.right = title_rect.left - 20
+    topright_corner_rect.left = title_rect.right + 20
 
     orectsman = self.output_rectsman
-    top_width = title_rect.width + (CORNER_WIDTH*2) + 20
+    top_width = title_rect.width + (CORNER_WIDTH*2) + 40
 
     if parameters:
 
         irectsman = self.input_rectsman
-        orectsman.right = irectsman.right + SOCKET_RADIUS
+        orectsman.right = irectsman.right + SOCKET_DIAMETER
 
         _temp_rectsman = RectsManager((irectsman, orectsman).__iter__)
 
         if _temp_rectsman.width > top_width:
-            
+
             _temp_rectsman.centerx = title_rect.centerx 
 
             topleft_corner_rect.left = irectsman.left + SOCKET_RADIUS
@@ -557,8 +562,8 @@ def reposition_expanded_elements(self):
 
         else:
 
-            irectsman.left = topleft_corner_rect.left + SOCKET_RADIUS
-            orectsman.right = topright_corner_rect.right - SOCKET_RADIUS
+            irectsman.left = topleft_corner_rect.left - SOCKET_RADIUS
+            orectsman.right = topright_corner_rect.right + SOCKET_RADIUS
             
     else:
 
@@ -571,6 +576,9 @@ def reposition_expanded_elements(self):
 
         else:
             orectsman.right = topright_corner_rect.right - SOCKET_RADIUS
+
+
+    ###
 
     roof = self.roof
 

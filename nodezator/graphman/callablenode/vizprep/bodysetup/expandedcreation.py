@@ -131,20 +131,16 @@ def get_expanded_body_surface(self):
     for param_name in parameters_names:
 
         text_obj = pto_map[param_name]
-
         text_rect = text_obj.rect
 
         _topleft = text_rect.topleft
 
-        ### reposition the object relative to the
-        ### surface's origin and blit the obj's surface
-        ### on the body surface
-
         text_obj.rect.move_ip(offset)
+
         text_obj.draw_on_surf(body_surf)
 
-        ###
         text_rect.topleft = _topleft
+
 
     ### outline the sides of the body surface
 
