@@ -91,12 +91,12 @@ class VisualPreparations(
         ### for easy retrieval and drawing
 
         self.background_and_text_elements = (
-            *self.corners,
             self.roof,
             self.body,
             self.foot,
             self.title_text_obj,
             self.id_text_obj,
+            *self.corners,
         )
 
         ### create a rect to be used as the boundaries of the node

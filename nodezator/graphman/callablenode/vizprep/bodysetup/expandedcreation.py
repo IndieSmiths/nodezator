@@ -148,7 +148,6 @@ def get_expanded_body_surface(self):
 
     # calculate and store the result from subtracting
     # the outline thickness from the body width
-    # (which is equivalent to the NODE_WIDTH (184));
     #
     # we'll call this the 'offset_width', and it is
     # the x coordinate from where we'll define the points

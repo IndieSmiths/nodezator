@@ -89,6 +89,13 @@ class BodySetupOperations:
         ## it
         bottomleft_corner, bottomright_corner = self.corners[2:]
 
+        ##
+
+        foot_width = (
+            bottomright_corner.rect.left
+            - bottomleft_corner.rect.right
+        )
+
         ## assign the appropriate surfaces to the 'image'
         ## attribute of the respective objects
 
@@ -104,7 +111,7 @@ class BodySetupOperations:
             ## when the node is commented out
 
             (
-                NODE_FOOTS_MAP[(184, COMMENTED_OUT_NODE_BG)]
+                NODE_FOOTS_MAP[(foot_width, COMMENTED_OUT_NODE_BG)],
                 *COMMENTED_OUT_BOTTOM_CORNERS,
             )
 
@@ -113,7 +120,7 @@ class BodySetupOperations:
             ## otherwise, surfaces for uncommented nodes
 
             else (
-                NODE_FOOTS_MAP[(184, NODE_BODY_BG)],
+                NODE_FOOTS_MAP[(foot_width, NODE_BODY_BG)],
                 *NORMAL_BOTTOM_CORNERS,
             )
 

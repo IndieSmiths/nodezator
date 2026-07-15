@@ -197,7 +197,7 @@ CORNER_WIDTH, CORNER_HEIGHT = NORMAL_BOTTOM_CORNERS[0].get_size()
 def _get_node_roof(args):
     width, fill_color = args
 
-    roof_width = width - (CORNER_WIDTH*2)
+    roof_width = width
     roof_height = CORNER_HEIGHT
 
     roof = render_rect(
@@ -238,16 +238,11 @@ BODY_HEAD_SURFS_MAP = FactoryDict(_unpack_for_render_rect)
 
 def _get_node_foot(args):
 
-    width, fill_color = args
+    foot_width, fill_color = args
 
-    foot_width = width - (CORNER_WIDTH*2)
     foot_height = CORNER_HEIGHT
 
-    foot = render_rect(
-        foot_width,
-        CORNER_HEIGHT,
-        fill_color,
-    )
+    foot_surf = render_rect(foot_width, foot_height, fill_color)
 
     # since line thickness is applied from top to bottom,
     # we had to use a value equivalent to the foot height
@@ -258,9 +253,16 @@ def _get_node_foot(args):
     line_start = (0, line_bottom)
     line_end = (foot_width, line_bottom)
 
-    draw_line(foot, NODE_OUTLINE, line_start, line_end, NODE_OUTLINE_THICKNESS)
+    draw_line(
+        foot_surf,
+        NODE_OUTLINE,
+        line_start,
+        line_end,
+        NODE_OUTLINE_THICKNESS,
+    )
 
-    return foot
+    ###
+    return foot_surf
 
 
 NODE_FOOTS_MAP = FactoryDict(_get_node_foot)

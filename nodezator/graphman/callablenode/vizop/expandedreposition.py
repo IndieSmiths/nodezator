@@ -514,6 +514,9 @@ def reposition_expanded_elements(self):
             top += DISTANCE_BETWEEN_PARAMS
 
 
+    ###
+    midtop = self.rect.midtop if self.rect else self.midtop
+
     ### now that the output elements are properly positioned relative to
     ### each other and the input elements (if any) are also positioned like
     ### that, we can finally:
@@ -534,11 +537,11 @@ def reposition_expanded_elements(self):
 
     )
 
-    topleft_corner_rect.top = topright_corner_rect.top = self.midtop[1]
+    topleft_corner_rect.top = topright_corner_rect.top = midtop[1]
 
     title_rect = self.title_text_obj.rect
-    title_rect.midtop = self.midtop
-    title_rect.move_ip(0, 3)
+    title_rect.midtop = midtop
+    title_rect.move_ip(0, 2)
 
     topleft_corner_rect.right = title_rect.left - 20
     topright_corner_rect.left = title_rect.right + 20
@@ -587,19 +590,17 @@ def reposition_expanded_elements(self):
     roof.image = NODE_ROOFS_MAP[(roof_width, self.category_color)]
 
     roof.rect.size = roof.image.get_size()
-    roof.rect.midtop = self.midtop
+    roof.rect.midtop = midtop
 
     ###
 
     self.sigmode_toggle_button.rect.topleft = (
-        topleft_corner_rect.move(2, 2).bottomleft
+        topleft_corner_rect.move(-1, -1).bottomright
     )
 
     ###
 
     top_rectsman = self.top_rectsman
-
-    top_rectsman.move_ip(0, 3)
 
     top = top_rectsman.bottom + BODY_CONTENT_OFFSET
 
@@ -609,6 +610,9 @@ def reposition_expanded_elements(self):
 
         irectsman.top = orectsman.bottom + INPUT_OFFSET
         top = irectsman.bottom
+
+    else:
+        top = orectsman.bottom
 
     ## reference the rect of the id text object locally
     id_text_rect = self.id_text_obj.rect
@@ -621,8 +625,7 @@ def reposition_expanded_elements(self):
     id_text_rect.top = top + 4
 
     ##
-
-    top = id_text_rect.bottom
+    top = id_text_rect.bottom - 2
 
     ## position bottom corners
 
@@ -644,18 +647,8 @@ def reposition_expanded_elements(self):
     foot_rect.top = top
     foot_rect.left = bottomleft_corner_rect.right
 
-
     ###
     bottom_rectsman = self.bottom_rectsman
-
-    ## align the bottom of the bottom rectsman with
-    ## the bottom of the id text object, then push
-    ## the bottom rectsman just a bit down in order
-    ## to compensate for the node outline and add
-    ## a bit of padding
-
-    bottom_rectsman.bottom = id_text_rect.bottom
-    bottom_rectsman.top += NODE_OUTLINE_THICKNESS + 4
 
     ### perform extra administrative task: generate body surface and
     ### update its rect
@@ -665,7 +658,7 @@ def reposition_expanded_elements(self):
     body_rect = body.rect
 
     body_rect.width = top_rectsman.width
-    body_rect.height = bottom_rectsman.bottom - top_rectsman.bottom
+    body_rect.height = bottom_rectsman.top - top_rectsman.bottom
 
     body_rect.midtop = top_rectsman.midbottom
 
