@@ -278,7 +278,10 @@ def get_at_literal(obj, literal: "python_literal" = None) -> [{"name": "item"}]:
 def namespace_from_exec(
     python_source: {
         "widget_name": "text_display",
-        "widget_kwargs": {"syntax_highlighting": "python", "font_path": "mono_bold"},
+        "widget_kwargs": {
+            "syntax_highlighting": "python",
+            "pick_monospaced_font": True,
+        },
         "type": str,
     } = "",
     **variables,

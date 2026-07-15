@@ -468,6 +468,10 @@ def reposition_expanded_elements(self):
             ## position the placeholder socket's centerx at 0
             psocket_rect.centerx = 0
 
+            ## don't forget to adjust text rect's left relative to the
+            ## placeholder socket's right
+            text_rect.left = psocket_rect.move(2, 0).right
+
             ## put the "add subparameter button" a bit to the right of the
             ## placeholder socket, both vertically aligned
             add_button_rect.midleft = psocket_rect.move(5, 0).midright

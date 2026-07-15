@@ -13,6 +13,8 @@ from pygame.draw import rect as draw_rect
 
 ### local imports
 
+from ..config import APP_REFS
+
 from ..ourstdlibs.behaviour import empty_function
 
 from ..ourstdlibs.stringutils import VALIDATION_COMMAND_MAP
@@ -33,11 +35,7 @@ from ..textman.render import (
 from ..textman.viewer.main import view_text
 from ..textman.editor.main import edit_text
 
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
+from ..fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
 
 from ..syntaxman.utils import (
     AVAILABLE_SYNTAXES,
@@ -83,14 +81,6 @@ ICON_SURF = combine_surfaces(
 ICON_WIDTH, ICON_HEIGHT = ICON_SURF.get_size()
 
 
-### map associating keys with font paths
-
-FONT_PATH_MAP = {
-    "sans_bold": ENC_SANS_BOLD_FONT_PATH,
-    "mono_bold": FIRA_MONO_BOLD_FONT_PATH,
-}
-
-
 ### class definition
 
 
@@ -100,11 +90,12 @@ class TextDisplay(Object2D):
     def __init__(
         self,
         value="",
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         width=155,
         no_of_visible_lines=7,
         syntax_highlighting="",
+        pick_monospaced_font=False,
         show_line_number=False,
         name="text_display",
         command=empty_function,
@@ -175,13 +166,22 @@ class TextDisplay(Object2D):
 
             raise ValueError("'no_of_visible_lines' must be >= 1")
 
-        ### store the font_key argument
-        self.font_key = font_key
+        ### store the font_key argument, that is, depending on the value
+        ### of pick_monospaced_font
+
+        if pick_monospaced_font:
+
+            self.font_key = APP_REFS.mono_font_key
+            self.font_height = APP_REFS.mono_font_height
+
+        else:
+
+            self.font_height = font_height
+            self.font_key = font_key
 
         ### store other arguments
 
         self.value = value
-        self.font_height = font_height
 
         self.syntax_highlighting = syntax_highlighting
         self.show_line_number = show_line_number
