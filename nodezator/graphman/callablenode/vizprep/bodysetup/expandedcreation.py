@@ -108,19 +108,14 @@ def get_expanded_body_surface(self):
     for output_name in ordered_output_names:
 
         text_obj = oto_map[output_name]
-
         text_rect = text_obj.rect
 
         _topleft = text_rect.topleft
 
-        ### reposition the object relative to the
-        ### surface's origin and blit the obj's surface
-        ### on the body surface
-
         text_rect.move_ip(offset)
+
         text_obj.draw_on_surf(body_surf)
 
-        ###
         text_rect.topleft = _topleft
 
 

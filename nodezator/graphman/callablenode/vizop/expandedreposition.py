@@ -534,17 +534,17 @@ def reposition_expanded_elements(self):
     title_rect.midtop = self.midtop
     title_rect.move_ip(0, 3)
 
-    topleft_corner_rect.right = title_rect.left - 5
-    topright_corner_rect.left = title_rect.right + 5
+    topleft_corner_rect.right = title_rect.left - 10
+    topright_corner_rect.left = title_rect.right + 10
 
 
     orectsman = self.output_rectsman
-    top_width = title_rect.width + (CORNER_WIDTH*2) + 10
+    top_width = title_rect.width + (CORNER_WIDTH*2) + 20
 
     if parameters:
 
         irectsman = self.input_rectsman
-        orectsman.left = irectsman.right + SOCKET_RADIUS
+        orectsman.right = irectsman.right + SOCKET_RADIUS
 
         _temp_rectsman = RectsManager((irectsman, orectsman).__iter__)
 

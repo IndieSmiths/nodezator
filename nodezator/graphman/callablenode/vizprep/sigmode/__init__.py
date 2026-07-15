@@ -64,11 +64,7 @@ class SignatureModeVisualPreparations():
         ### create output-related objects
         self.create_output_related_objects(label_text_settings)
 
-        ### reposition all objects within the node (also performs other related
-        ### admin tasks)
-        self.reposition_expanded_elements()
-
-        ### also create and store a rects manager to control all the rects in
+        ### create and store a rects manager to control all the rects in
         ### the node
 
         ## create a list containing the rects to be managed
@@ -275,7 +271,7 @@ class SignatureModeVisualPreparations():
         ### create a new dictionary holding text objects representing the
         ### names of the outputs
 
-        self.output_text_obj_map = {
+        self.output_text_obj_map = oto_map = {
 
             output_name: (
 
@@ -308,7 +304,7 @@ class SignatureModeVisualPreparations():
         ### regular type hints in Python, but in this
         ### case for return values instead of parameters
 
-        self.output_socket_live_map = {
+        self.output_socket_live_map = osl_map = {
 
             output_name: OutputSocket(
                 node=self,
@@ -321,21 +317,25 @@ class SignatureModeVisualPreparations():
 
         }
 
-        ### gather the rects of the output sockets in a list
+        ### gather the rects of all output objects in a list
         ### in order to use its __iter__ method to create a
         ### rects manager instance which you'll use to
         ### control the rects (and thus the position of the
-        ### sockets
-
-        ## reference output sock live map locally
-        osl_map = self.output_socket_live_map
+        ### output objects)
 
         ## create mentioned list
 
-        rect_list = [
+        rect_list = []
+
+        rect_list.extend(
+            oto_map[output_name].rect
+            for output_name in self.ordered_output_type_map.keys()
+        )
+
+        rect_list.extend(
             osl_map[output_name].rect
             for output_name in self.ordered_output_type_map.keys()
-        ]
+        )
 
         ## finally, instantiate and store the rects
         ## manager
