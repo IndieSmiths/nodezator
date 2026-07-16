@@ -226,7 +226,7 @@ class CallableNode(
             self.adjust_sigmode_toggle_button(mode_name)
 
             self.reposition_elements = self.reposition_expanded_elements
-            self.create_body_surface = self.get_expanded_body_surface
+            self.redraw_body_surface = self.get_expanded_body_surface
 
             self.input_sockets = self.input_socket_live_flmap.flat_values
             self.output_sockets = self.output_socket_live_map.values()
@@ -248,7 +248,7 @@ class CallableNode(
             self.adjust_sigmode_toggle_button(mode_name)
 
             self.reposition_elements = self.reposition_collapsed_elements
-            self.create_body_surface = self.get_collapsed_body_surface
+            self.redraw_body_surface = self.get_collapsed_body_surface
 
             self.input_sockets = self.visible_input_sockets
             self.output_sockets = self.visible_output_sockets
@@ -267,7 +267,7 @@ class CallableNode(
             if current_mode_name in {'expanded_signature', 'collapsed_signature'}:
                 APP_REFS.gm.sever_all_connections(self)
 
-            self.create_body_surface = self.get_callable_body_surface
+            self.redraw_body_surface = self.get_callable_body_surface
             self.reposition_elements = self.reposition_callable_elements
 
             self.input_sockets = EMPTY_TUPLE

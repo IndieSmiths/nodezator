@@ -61,7 +61,7 @@ class SegmentOperations:
         self.reposition_elements()
 
         ## reset body's height and image
-        self.reset_body_height_and_image()
+        self.redraw_body_surface()
 
 
     def signal_severance(self, socket=None):
@@ -115,7 +115,7 @@ class SegmentOperations:
                 self.reposition_elements()
 
                 ## reset body's height and image
-                self.reset_body_height_and_image()
+                self.redraw_body_surface()
 
         ### if we have a subparameter input socket, store it
         ### for later setups

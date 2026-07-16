@@ -111,7 +111,7 @@ class UnpackingOps:
         self.reposition_elements()
 
         ### reset body's height and image
-        self.reset_body_height_and_image()
+        self.redraw_body_surface()
 
         ### there's no need to indicate here that changes were made
         ### in the data cause this is done by the input socket in
@@ -223,7 +223,7 @@ class UnpackingOps:
         self.reposition_elements()
 
         ### reset body's height and image
-        self.reset_body_height_and_image()
+        self.redraw_body_surface()
 
         ### there's no need to indicate here that changes were made
         ### in the data cause this is done by the input socket in

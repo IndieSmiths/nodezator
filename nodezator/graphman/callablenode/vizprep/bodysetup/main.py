@@ -39,18 +39,30 @@ class BodySetupOperations:
 
     def setup_body(self):
         """Performs several adjustments to the body."""
-        self.reset_body_height_and_image()
+        self.redraw_body_surface()
         self.assign_bottom_surfaces()
 
     ## for when node is commented out/uncommented
 
     def perform_commenting_uncommenting_setups(self):
         """Performs several adjustments to the body."""
+
+        ### fill body's surface with appropriate color
+
+        self.body.image.fill(
+
+            COMMENTED_OUT_NODE_BG
+            if self.data.get("commented_out", False)
+
+            else NODE_BODY_BG
+
+        )
+
+        ### redraw the body's surface
+        self.redraw_body_surface()
+
         ###
         self.assign_bottom_surfaces()
-
-        ### create and store the body's surface
-        self.body.image = self.create_body_surface()
 
         ###
         self.assign_unpacking_icon_surfs()
@@ -59,16 +71,6 @@ class BodySetupOperations:
         self.pick_tiny_icon()
 
     ### methods representing modular operations
-
-    def reset_body_height_and_image(self):
-        """Calculate and set body height and create new image."""
-        ### the body height is equivalent to the interval
-        ### between the top rectsman's bottom and the bottom
-        ### rectsman's top
-        self.body.rect.height = self.bottom_rectsman.top - self.top_rectsman.bottom
-
-        ### create and store a new surface for the body
-        self.body.image = self.create_body_surface()
 
     def assign_bottom_surfaces(self):
         """Assign proper surfaces to node's bottom objects.

@@ -225,7 +225,7 @@ class WidgetOps:
         self.reposition_elements()
 
         ### reset body's height and image
-        self.reset_body_height_and_image()
+        self.redraw_body_surface()
 
         ### indicate that changes were made in the data
         indicate_unsaved()
@@ -383,7 +383,7 @@ class WidgetOps:
         self.reposition_elements()
 
         ### reset body's height and image
-        self.reset_body_height_and_image()
+        self.redraw_body_surface()
 
         ### indicate that changes were made in the data
         indicate_unsaved()

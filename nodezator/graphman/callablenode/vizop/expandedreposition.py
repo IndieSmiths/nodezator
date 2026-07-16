@@ -646,13 +646,25 @@ def reposition_expanded_elements(self):
     bottomleft_corner_rect.left = topleft_corner_rect.left
     bottomright_corner_rect.right = topright_corner_rect.right
 
+    ##
+
+    bg_color = (
+
+        COMMENTED_OUT_NODE_BG
+        if self.data.get('commented_out', False)
+
+        else NODE_BODY_BG
+
+    )
+
     ## generate visual for foot and position it
 
     foot = self.foot
     foot_rect = foot.rect
 
     foot_width = roof_width
-    foot.image = NODE_FOOTS_MAP[(foot_width, self.category_color)]
+
+    foot.image = NODE_FOOTS_MAP[(foot_width, bg_color)]
 
     foot_rect.size = foot.image.get_size()
 
@@ -673,15 +685,6 @@ def reposition_expanded_elements(self):
     body_rect.height = bottom_rectsman.top - top_rectsman.bottom
 
     body_rect.midtop = top_rectsman.midbottom
-
-    bg_color = (
-
-        COMMENTED_OUT_NODE_BG
-        if self.data.get('commented_out', False)
-
-        else NODE_BODY_BG
-
-    )
 
     body.image = render_rect(*body_rect.size, bg_color)
 

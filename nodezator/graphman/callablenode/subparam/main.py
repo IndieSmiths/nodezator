@@ -415,7 +415,7 @@ class SubparameterHandling(WidgetOps, UnpackingOps):
         ### as well
 
         if self.var_kind_map[param_name] == "var_key":
-            self.reset_body_height_and_image()
+            self.redraw_body_surface()
 
         ### indicate that changes were made in the data
         indicate_unsaved()
