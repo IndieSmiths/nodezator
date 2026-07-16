@@ -154,6 +154,8 @@ def reposition_expanded_elements(self):
         ## clear the list
         param_rects.clear()
 
+        ## reference the associated text object's rect
+        text_rect = pto_map[param_name].rect
 
         ## try retrieving the variable kind of the parameter
         try:
@@ -188,9 +190,6 @@ def reposition_expanded_elements(self):
 
             ## check wheter it has a widget
             has_widget = param_name in wl_flmap
-
-            ## reference the associated text object's rect
-            text_rect = pto_map[param_name].rect
 
             ## if it has a parent or doesn't have a widget, it means we only
             ## the input socket and the text object in the parameter;

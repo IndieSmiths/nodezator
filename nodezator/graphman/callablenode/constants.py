@@ -65,21 +65,21 @@ COMMENTED_OUT_LABEL_TEXT_SETTINGS = {
 
 SIDEVIZ_TEXT_SETTINGS = {
     'font_height': NOTO_SANS_FONT_HEIGHT,
-    'font_path': NOTO_SANS_REGULAR_FONT_PATH,
+    'font_key': NOTO_SANS_REGULAR_FONT_PATH,
     'foreground_color': (15, 15, 15),
     'background_color': (230, 230, 235),
 }
 
 SIDEVIZ_MONOSPACED_TEXT_SETTINGS = {
     'font_height': NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT,
-    'font_path': NOTO_SANS_MONO_MEDIUM_FONT_PATH,
+    'font_key': NOTO_SANS_MONO_MEDIUM_FONT_PATH,
     'foreground_color': (15, 15, 15),
     'background_color': (230, 230, 235),
 }
 
 SIDEVIZ_PYTHON_SOURCE_SETTINGS = {
     'font_height': NOTO_SANS_MONO_MEDIUM_FONT_HEIGHT,
-    'font_path': NOTO_SANS_MONO_MEDIUM_FONT_PATH,
+    'font_key': NOTO_SANS_MONO_MEDIUM_FONT_PATH,
     'foreground_color': (235, 235, 235),
     'background_color': (15, 15, 15),
 }

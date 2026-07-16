@@ -38,11 +38,7 @@ class WidgetOps:
         widget_data,
         param_name,
     ):
-        """Instantiate a new widget for a subparameter.
-
-        The subparameter may already exist (if it was
-        created by connecting its socket) or not (in which
-        case we'll need to create it).
+        """Instantiate a new widget (and its underlying subparameter).
 
         Parameters
         ==========
@@ -56,30 +52,26 @@ class WidgetOps:
         ### map for input sockets of this parameter
         param_input_sockets = self.input_socket_live_flmap[param_name]
 
-        ### let's also alias live instances maps using
-        ### variables of low character count, for better
-        ### code layout
+        ### let's also alias live instances maps using variables of
+        ### low character count, for better code layout
 
         wl_flmap = self.widget_live_flmap
         wrb_flmap = self.widget_remove_button_flmap
 
-        ### create input socket and retrieve a reference
-        ### to it
+        ### create input socket and retrieve a reference to it
 
-        ## create a new input socket (input sockets
-        ## represent parameters/subparameters, so this
-        ## is the equivalent of creating a subparameter)
+        ## create a new input socket (input sockets represent
+        ## parameters/subparameters, so this is the equivalent of
+        ## creating a subparameter)
         self.create_new_input_socket(param_name)
 
-        ## update the subparam_index variable with the
-        ## name of the parameter we just created; (it
-        ## is a key in the map containing input sockets
-        ## for the parameter, an integer which is the
-        ## highest among the keys
+        ## by now the input socket already exists; its subparam index
+        ## will be the highest index available (since it was just
+        ## created); retrieve it
         subparam_index = max(param_input_sockets)
 
-        ## use the subparameter index to retrieve the
-        ## input socket representing the subparameter
+        ## use the subparameter index to retrieve the input socket
+        ## representing the subparameter
         input_socket = param_input_sockets[subparam_index]
 
         ### create and store "move subparam buttons"
@@ -116,7 +108,15 @@ class WidgetOps:
 
         ### store the widget data in the subwidgets data
         ### map for this subparameter
-        self.data["subparam_widget_map"][param_name][subparam_index] = widget_data
+
+        (
+
+            self.data
+            ['subparam_widget_map']
+            [param_name]
+            [subparam_index]
+
+        ) = widget_data
 
         ### retrieve widget class using the widget
         ### name from the parameter widget metadata
@@ -150,11 +150,7 @@ class WidgetOps:
 
             ## put together a command which takes proper
             ## measures when updating the keyword name
-
-            command = partial(
-                self.update_keyword,
-                input_socket,
-            )
+            command = partial(self.update_keyword, input_socket)
 
             ## instantiate the keyword entry and take
             ## additional measures
@@ -174,8 +170,8 @@ class WidgetOps:
                 subparam_keyword_entry
             )
 
-            # also store the name of the keyword created
-            # in the dedicated map for keyword names
+            # also store the name of the keyword created in the dedicated map
+            # for keyword names
             self.data["subparam_keyword_map"][subparam_index] = keyword_name
 
 
@@ -205,7 +201,18 @@ class WidgetOps:
         ### widget may change its size when edited, depending on the
         ### kind of widget), then assign such command to the 'command'
         ### attribute of the widget
-        widget.command = partial(update_with_widget, kwargs, "value", widget, button)
+
+        widget.command = (
+
+            partial(
+                update_with_widget,
+                kwargs,
+                'value',
+                widget,
+                button,
+            )
+
+        )
 
         ### create a rects manager to control the rects of this
         ### new subparameter
