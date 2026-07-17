@@ -403,7 +403,7 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         height = round(height_percentage * available_fonts_panel.rect.height)
 
-        scroll_rect = self.scroll_rect = Rect()
+        scroll_rect = self.scroll_rect = Rect(0, 0, 0, 0)
         scroll_rect.width = 15
         scroll_rect.height = height if height >= 15 else 15
 

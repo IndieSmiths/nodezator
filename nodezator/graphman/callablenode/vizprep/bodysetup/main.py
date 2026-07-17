@@ -1,5 +1,9 @@
 """Facility for visuals related node class extension."""
 
+### standard library import
+from itertools import chain
+
+
 ### local imports
 
 from .....colorsman.colors import (
@@ -12,6 +16,11 @@ from ...surfs import (
     NORMAL_BOTTOM_CORNERS,
     COMMENTED_OUT_BOTTOM_CORNERS,
     UNPACKING_ICON_SURFS_MAP,
+)
+
+from ...constants import (
+    NORMAL_LABEL_TEXT_SETTINGS,
+    COMMENTED_OUT_LABEL_TEXT_SETTINGS,
 )
 
 ## functions for injection
@@ -39,6 +48,7 @@ class BodySetupOperations:
 
     def setup_body(self):
         """Performs several adjustments to the body."""
+        self.update_label_text_settings()
         self.redraw_body_surface()
         self.assign_bottom_surfaces()
 
@@ -58,6 +68,9 @@ class BodySetupOperations:
 
         )
 
+        ### update text settings for labels
+        self.update_label_text_settings()
+
         ### redraw the body's surface
         self.redraw_body_surface()
 
@@ -71,6 +84,30 @@ class BodySetupOperations:
         self.pick_tiny_icon()
 
     ### methods representing modular operations
+
+    def update_label_text_settings(self):
+
+        ### define text settings used for node labels bg, based on whether node
+        ### is commented out or not
+
+        label_text_settings = (
+
+            COMMENTED_OUT_LABEL_TEXT_SETTINGS
+            if self.data.get("commented_out", False)
+
+            else NORMAL_LABEL_TEXT_SETTINGS
+
+        )
+
+        ### apply such settings
+
+        for text_obj in chain(
+            self.parameter_text_obj_map.values(),
+            self.output_text_obj_map.values(),
+        ):
+
+            text_obj.change_text_settings(label_text_settings)
+            text_obj.rect.size = text_obj.image.get_size()
 
     def assign_bottom_surfaces(self):
         """Assign proper surfaces to node's bottom objects.
