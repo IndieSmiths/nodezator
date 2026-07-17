@@ -14,13 +14,11 @@ from ...socket.surfs import SOCKET_DIAMETER
 
 from ..constants import (
     BODY_CONTENT_OFFSET,
-    NODE_OUTLINE_THICKNESS,
     SUBPARAM_OFFSET_FROM_LABEL,
     DISTANCE_BETWEEN_PARAMS,
     DISTANCE_BETWEEN_SUBPARAMS,
     DISTANCE_BETWEEN_OUTPUTS,
     INPUT_OFFSET,
-    SUBPARAM_KEYWORD_ENTRY_WIDTH,
 )
 
 from ..surfs import (
@@ -615,6 +613,8 @@ def reposition_expanded_elements(self):
 
     top = top_rectsman.bottom + BODY_CONTENT_OFFSET
 
+    ### assign and redefine top
+
     orectsman.top = top
 
     if parameters:
@@ -700,7 +700,7 @@ def reposition_expanded_elements(self):
         if parameters
 
         ## otherwise...
-        else top_rectsman.move(-SOCKET_RADIUS, 0).left
+        else top_rectsman.left - SOCKET_RADIUS
 
     )
 
