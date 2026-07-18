@@ -61,6 +61,9 @@ def reposition_expanded_elements(self):
         osocket_rect = osl_map[output_name].rect
         text_rect = oto_map[output_name].rect
 
+        ## place socket's horizontal center at 0
+        osocket_rect.centerx = 0
+
         ## align text midright with socket's midleft, with a bit of horizontal
         ## padding
         text_rect.midright = osocket_rect.move(-2, 0).midleft
@@ -74,11 +77,6 @@ def reposition_expanded_elements(self):
 
         # position rectsman's top
         _temp_rectsman.top = top
-
-        # position rectsman so socket centerx ends up at 0
-
-        xdiff = osocket_rect.centerx - 0
-        _temp_rectsman.move_ip(xdiff, 0)
 
         ## define next top as the bottom of the temp rectsman and,
         ## if this is not the last output, also add the constant distance

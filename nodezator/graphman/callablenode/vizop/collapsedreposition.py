@@ -84,6 +84,9 @@ def reposition_collapsed_elements(self):
         osocket_rect = output_socket.rect
         text_rect = oto_map[output_socket.output_name].rect
 
+        ## place socket's horizontal center at 0
+        osocket_rect.centerx = 0
+
         ## align text midright with socket's midleft, with a bit of horizontal
         ## padding
         text_rect.midright = osocket_rect.move(-2, 0).midleft
@@ -98,24 +101,19 @@ def reposition_collapsed_elements(self):
         # position rects manager's top
         temp_rectsman.top = top
 
-        # position rects manager so socket centerx ends up at 0
-
-        xdiff = osocket_rect.centerx - 0
-        temp_rectsman.move_ip(xdiff, 0)
-
         ## add the socket and text object rects as output rects
 
         output_rects.append(osocket_rect)
         output_rects.append(text_rect)
 
         ## define next top as the bottom of the temp rects manager and,
-        ## if this is not the last output, also add the constant distance
-        ## between outputs
+        ## if this is not the last visible output socket, also add the constant
+        ## distance between outputs
 
         top = temp_rectsman.bottom + (
 
             DISTANCE_BETWEEN_OUTPUTS
-            if output_name != last_output_name
+            if output_socket is not last_output_socket
 
             else 0
 

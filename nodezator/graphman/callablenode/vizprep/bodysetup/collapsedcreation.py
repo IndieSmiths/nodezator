@@ -309,25 +309,23 @@ def get_collapsed_body_surface(self):
 
     )
 
-    ### if there's a keyword-variable parameter in the
-    ### node, only for the subparameters whose input
-    ### socket are visible, blit the keyword key icon beside each
-    ### keyword entry or subparameter unpacking icon
-    ### for that parameter (if there's any subparameter);
+    ### if there's a keyword-variable parameter in the node, only for the
+    ### subparameters whose input socket are visible, blit the keyword key icon
+    ### beside each keyword entry or subparameter unpacking icon for that
+    ### parameter (if there's any subparameter);
     ###
-    ### the motivation is purely aesthetic, but
-    ### from my experience the effect improves readability,
-    ### since it makes it easier to spot keyword entry
-    ### widgets
+    ### the motivation is purely aesthetic, but from my experience the effect
+    ### improves readability, since it makes it easier to spot keyword entry
+    ### widgets at a glance
 
-    if "var_key" in self.var_kind_map.values():
+    if 'var_key' in self.var_kind_map.values():
 
         param_name = next(
 
             key
 
             for key, value in self.var_kind_map.items()
-            if value == "var_key"
+            if value == 'var_key'
 
         )
 
