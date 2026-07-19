@@ -4,16 +4,15 @@
 from itertools import chain
 
 
-### third-party imports
-
-from pygame import Rect
-
+### third-party import
 from pygame.draw import line as draw_line
 
 
 ### local imports
 
 from .....surfsman.draw import blit_aligned
+
+from .....colorsman.colors import NODE_OUTLINE
 
 from ...surfs import (
     BODY_HEAD_SURFS_MAP,
@@ -22,11 +21,6 @@ from ...surfs import (
 )
 
 from ...constants import NODE_OUTLINE_THICKNESS
-
-from .....colorsman.colors import (
-    NODE_OUTLINE,
-    NODE_LABELS,
-)
 
 
 

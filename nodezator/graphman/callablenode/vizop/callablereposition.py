@@ -1,7 +1,14 @@
 """Function to extend VisualRelatedOperations class."""
 
 ### local imports
+
+from ....surfsman.render import render_rect
+
+from ....colorsman.colors import NODE_BODY_BG, COMMENTED_OUT_NODE_BG
+
 from ..constants import BODY_CONTENT_OFFSET, NODE_OUTLINE_THICKNESS
+
+from ..surfs import NODE_ROOFS_MAP, NODE_FOOTS_MAP
 
 
 
@@ -16,11 +23,51 @@ def reposition_callable_elements(self):
     Another administrative task is performed, which is
     updating the height of self.rect.
     """
+    ###
+
+    midtop = self.rect.midtop if self.rect else self.midtop
+
+    (
+        topleft_corner_rect,
+        topright_corner_rect,
+        bottomleft_corner_rect,
+        bottomright_corner_rect,
+
+    ) = (
+
+        corner.rect
+        for corner in self.corners
+
+    )
+
+    topleft_corner_rect.top = topright_corner_rect.top = midtop[1]
+
+    title_rect = self.title_text_obj.rect
+    title_rect.midtop = midtop
+    title_rect.move_ip(0, 2)
+
+    topleft_corner_rect.right = title_rect.left - 20
+    topright_corner_rect.left = title_rect.right + 20
+
+    ###
+
+    roof = self.roof
+
+    roof_width = topright_corner_rect.left - topleft_corner_rect.right
+
+    roof.image = NODE_ROOFS_MAP[(roof_width, self.category_color)]
+
+    roof.rect.size = roof.image.get_size()
+    roof.rect.midtop = midtop
+
     ### reference the top rectsman locally
     top_rectsman = self.top_rectsman
 
     ### position callable output socket
-    self.callable_output_socket.rect.midtop = top_rectsman.move(0, -2).bottomright
+
+    self.callable_output_socket.rect.midtop = (
+        top_rectsman.move(0, -2).bottomright
+    )
 
     ### define a top coordinate which is the bottom of
     ### the top of the node plus the body content
@@ -32,38 +79,77 @@ def reposition_callable_elements(self):
     ## reference the rect of the id text object locally
     id_text_rect = self.id_text_obj.rect
 
-    ## align its top with the last defined top, which
-    ## is the bottom of the pair last output socket
-    ## and the text rect; also push it 4 pixels down
-    ## for extra padding
+    ## align its centerx with title rect's centerx
+    id_text_rect.centerx = title_rect.centerx
 
-    id_text_rect.top = top
-    id_text_rect.top += 4
+    ## align its top with the last defined top; also push it
+    ## 4 pixels down for extra padding
+    id_text_rect.top = top + 4
 
-    ## align the centerx of the id text object with
-    ## the centerx of the top rectsman, so it is
-    ## horizontally centered on the node
-    id_text_rect.centerx = top_rectsman.centerx
+    ##
+    top = id_text_rect.bottom - 2
 
-    ### position the bottom rectsman
+    ## position bottom corners
 
-    ## reference the bottom rectsman in a local variable
+    bottomleft_corner_rect.top = bottomright_corner_rect.top = top
+
+    bottomleft_corner_rect.left = topleft_corner_rect.left
+    bottomright_corner_rect.right = topright_corner_rect.right
+
+    ##
+
+    bg_color = (
+
+        COMMENTED_OUT_NODE_BG
+        if self.data.get('commented_out', False)
+
+        else NODE_BODY_BG
+
+    )
+
+    ## generate visual for foot and position it
+
+    foot = self.foot
+    foot_rect = foot.rect
+
+    foot_width = roof_width
+
+    foot.image = NODE_FOOTS_MAP[(foot_width, bg_color)]
+
+    foot_rect.size = foot.image.get_size()
+
+    foot_rect.top = top
+    foot_rect.left = bottomleft_corner_rect.right
+
+    ###
     bottom_rectsman = self.bottom_rectsman
 
-    ## align the centerx of the bottom rectsman with
-    ## the centerx of the top rectsman, so it is
-    ## horizontally centered on the node
-    bottom_rectsman.centerx = top_rectsman.centerx
+    ### perform extra administrative task: generate body surface and
+    ### update its rect
 
-    ## align the bottom of the bottom rectsman with
-    ## the bottom of the id text object, then push
-    ## the bottom rectsman just a bit down in order
-    ## to compensate for the node outline and add
-    ## a bit of padding
+    body = self.body
 
-    bottom_rectsman.bottom = id_text_rect.bottom
-    bottom_rectsman.top += NODE_OUTLINE_THICKNESS + 4
+    body_rect = body.rect
 
-    ### perform extra administrative task: updating
-    ### the height of self.rect
+    body_rect.width = top_rectsman.width
+    body_rect.height = bottom_rectsman.top - top_rectsman.bottom
+
+    body_rect.midtop = top_rectsman.midbottom
+
+    body.image = render_rect(*body_rect.size, bg_color)
+
+    ### perform extra administrative task: update size and position
+    ### of self.rect
+
+    ## width
+
+    left = top_rectsman.left
+    right = self.callable_output_socket.rect.right
+
+    self.rect.width = right - left
+
+    ## height
     self.rect.height = bottom_rectsman.bottom - top_rectsman.top
+
+    ## midtop
+    self.rect.midtop = top_rectsman.midtop
