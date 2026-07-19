@@ -42,8 +42,9 @@ def reposition_collapsed_elements(self):
     Another administrative task is performed, which is
     updating the height of self.rect.
     """
-    ### determine which paramaters/subparameters/outputs will
-    ### be shown after hiding unconnected ones
+    ### determine which paramaters/subparameters/outputs and other
+    ### related elements will be shown after hiding the unconnected ones
+    ### (or ones associated with unconnected elements)
     self.collapse_unconnected_elements()
 
     ### create a temporary rects manager with its list of rects
@@ -446,7 +447,7 @@ def reposition_collapsed_elements(self):
             topright_corner_rect.right = orectsman.right - SOCKET_RADIUS
 
         else:
-            orectsman.right = topright_corner_rect.right - SOCKET_RADIUS
+            orectsman.right = topright_corner_rect.right + SOCKET_RADIUS
 
     elif vis:
 
@@ -456,11 +457,11 @@ def reposition_collapsed_elements(self):
 
             irectsman.centerx = title_rect.centerx
 
-            topleft_corner_rect.left = irectsman.left - 5
+            topleft_corner_rect.left = irectsman.left + 5
             topright_corner_rect.right = irectsman.right - SOCKET_RADIUS
 
         else:
-            irectsman.right = topright_corner_rect.right - SOCKET_RADIUS
+            irectsman.left = topleft_corner_rect.left - SOCKET_RADIUS
 
 
     ###
@@ -486,19 +487,24 @@ def reposition_collapsed_elements(self):
 
     top = top_rectsman.bottom + BODY_CONTENT_OFFSET
 
-    ### assign and redefine top
+    ### assign and redefine tops if there are visible elements
 
-    if vos:
+    if vis and vos:
 
         orectsman.top = top
 
-        if vis:
+        irectsman.top = orectsman.bottom + INPUT_OFFSET
+        top = irectsman.bottom
 
-            irectsman.top = orectsman.bottom + INPUT_OFFSET
-            top = irectsman.bottom
+    elif vos:
 
-        else:
-            top = orectsman.bottom
+        orectsman.top = top
+        top = orectsman.bottom
+
+    elif vis:
+
+        irectsman.top = top
+        top = irectsman.bottom
 
     ###
 
