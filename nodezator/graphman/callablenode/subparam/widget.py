@@ -224,7 +224,7 @@ class WidgetOps:
         ### reposition all objects within the node
         self.reposition_elements()
 
-        ### reset body's height and image
+        ### redraw body's surface
         self.redraw_body_surface()
 
         ### indicate that changes were made in the data
@@ -382,7 +382,7 @@ class WidgetOps:
         ### reposition all objects within the node
         self.reposition_elements()
 
-        ### reset body's height and image
+        ### redraw body's surface
         self.redraw_body_surface()
 
         ### indicate that changes were made in the data

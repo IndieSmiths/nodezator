@@ -60,7 +60,7 @@ class SegmentOperations:
         ## reposition all objects within the node
         self.reposition_elements()
 
-        ## reset body's height and image
+        ## redraw body's surface
         self.redraw_body_surface()
 
 
@@ -114,7 +114,7 @@ class SegmentOperations:
                 ## reposition all objects within the node
                 self.reposition_elements()
 
-                ## reset body's height and image
+                ## redraw body's surface
                 self.redraw_body_surface()
 
         ### if we have a subparameter input socket, store it

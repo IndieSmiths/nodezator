@@ -212,27 +212,27 @@ def get_collapsed_body_surface(self):
             ## if the subparameter for the visible socket is marked
             ## for unpacking, draw the unpacking icon beside the socket
 
-#            for subparam_index in sorted_subparam_indices:
-#
-#                socket = isl_flmap[param_name][subparam_index]
-#
-#                if socket not in vis:
-#                    continue
-#
-#                unpacking_icon = sui_flmap[param_name].get(subparam_index)
-#
-#                if not unpacking_icon:
-#                    continue
-#
-#                icon_rect = unpacking_icon.rect
-#
-#                _topleft = icon_rect.topleft
-#
-#                icon_rect.move_ip(offset)
-#
-#                unpacking_icon.draw_on_surf(body_surf)
-#
-#                icon_rect.topleft = _topleft
+            for subparam_index in sorted_subparam_indices:
+
+                socket = isl_flmap[param_name][subparam_index]
+
+                if socket not in vis:
+                    continue
+
+                unpacking_icon = sui_flmap[param_name].get(subparam_index)
+
+                if not unpacking_icon:
+                    continue
+
+                icon_rect = unpacking_icon.rect
+
+                _topleft = icon_rect.topleft
+
+                icon_rect.move_ip(offset)
+
+                unpacking_icon.draw_on_surf(body_surf)
+
+                icon_rect.topleft = _topleft
 
 
     ### outline the sides of the body surface

@@ -110,7 +110,7 @@ class UnpackingOps:
         ### reposition all objects within the node
         self.reposition_elements()
 
-        ### reset body's height and image
+        ### redraw body's surface
         self.redraw_body_surface()
 
         ### there's no need to indicate here that changes were made
@@ -222,7 +222,7 @@ class UnpackingOps:
         ### reposition all objects within the node
         self.reposition_elements()
 
-        ### reset body's height and image
+        ### redraw body's surface
         self.redraw_body_surface()
 
         ### there's no need to indicate here that changes were made

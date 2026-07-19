@@ -269,6 +269,11 @@ def reposition_collapsed_elements(self):
             text_rect = pto_map[param_name].rect
             text_rect.top = top
 
+            ## also, since it doesn't have a specific input socket associated
+            ## with it (it represents a variable parameter after all), we
+            ## position it horizontally near the origin
+            text_rect.left = 10
+
             ## add the text object rect as an input rect
             input_rects.append(text_rect)
 
@@ -309,12 +314,12 @@ def reposition_collapsed_elements(self):
                     unpacking_icon = sui_flmap[param_name][subparam_index]
 
                     unpacking_icon.rect.midleft = (
-                        input_socket.rect.move(2, 0).midright
+                        isocket_rect.move(2, 0).midright
                         if kind == 'var_pos'
-                        else input_socket.rect.move(18, 0).midright
+                        else isocket_rect.move(18, 0).midright
                     )
 
-                    temp_rect_list.append(input_socket.rect)
+                    temp_rect_list.append(isocket_rect)
                     temp_rect_list.append(unpacking_icon.rect)
 
                     temp_rectsman.top = top
@@ -457,8 +462,8 @@ def reposition_collapsed_elements(self):
 
             irectsman.centerx = title_rect.centerx
 
-            topleft_corner_rect.left = irectsman.left + 5
-            topright_corner_rect.right = irectsman.right - SOCKET_RADIUS
+            topleft_corner_rect.left = irectsman.left + SOCKET_RADIUS
+            topright_corner_rect.right = irectsman.right + 5
 
         else:
             irectsman.left = topleft_corner_rect.left - SOCKET_RADIUS
@@ -473,7 +478,10 @@ def reposition_collapsed_elements(self):
     roof.image = NODE_ROOFS_MAP[(roof_width, self.category_color)]
 
     roof.rect.size = roof.image.get_size()
-    roof.rect.midtop = midtop
+    roof.rect.topleft = topleft_corner_rect.topright
+
+    ###
+    top_rectsman = self.top_rectsman
 
     ###
 
@@ -482,8 +490,6 @@ def reposition_collapsed_elements(self):
     )
 
     ###
-
-    top_rectsman = self.top_rectsman
 
     top = top_rectsman.bottom + BODY_CONTENT_OFFSET
 
