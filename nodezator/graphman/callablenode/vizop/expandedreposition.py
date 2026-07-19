@@ -597,7 +597,7 @@ def reposition_expanded_elements(self):
     roof.image = NODE_ROOFS_MAP[(roof_width, self.category_color)]
 
     roof.rect.size = roof.image.get_size()
-    roof.rect.midtop = midtop
+    roof.rect.topleft = topleft_corner_rect.topright
 
     ###
 

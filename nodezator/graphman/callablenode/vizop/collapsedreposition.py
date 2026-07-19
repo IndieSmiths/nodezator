@@ -484,6 +484,9 @@ def reposition_collapsed_elements(self):
     top_rectsman = self.top_rectsman
 
     ###
+    title_rect.centerx = top_rectsman.centerx
+
+    ###
 
     self.sigmode_toggle_button.rect.topleft = (
         topleft_corner_rect.move(-1, -1).bottomright
@@ -588,7 +591,7 @@ def reposition_collapsed_elements(self):
         if vis
 
         ## otherwise...
-        else top_rectsman.left - SOCKET_RADIUS
+        else top_rectsman.left - 2
 
     )
 
@@ -599,10 +602,11 @@ def reposition_collapsed_elements(self):
         if vos
 
         ## otherwise...
-        else top_rectsman.right + SOCKET_RADIUS
+        else top_rectsman.right + 2
 
     )
 
+    ##
     self.rect.width = right - left
 
     ## height
