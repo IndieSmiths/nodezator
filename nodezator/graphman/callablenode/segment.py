@@ -1,4 +1,6 @@
-"""Facility with function for injection."""
+"""Facility with class extension for segment-related operations."""
+
+
 
 class SegmentOperations:
 
@@ -6,7 +8,10 @@ class SegmentOperations:
 
         ### if node is not expanded, exit method right away
 
-        if not self.data.get('mode', 'expanded_signature') == 'expanded_signature':
+        if (
+            self.data.get('mode', 'expanded_signature')
+            != 'expanded_signature'
+        ):
             return
 
         ## if we are dealing with a parameter input socket,
@@ -168,7 +173,10 @@ class SegmentOperations:
 
             ### reference the list of subparameters for
             ### unpacking locally for easier access
-            subparams_for_unpacking = self.data["subparam_unpacking_map"][param_name]
+
+            subparams_for_unpacking = (
+                self.data["subparam_unpacking_map"][param_name]
+            )
 
             ### try accessing a widget instance for the
             ### subparameter using its index

@@ -286,8 +286,8 @@ class CallableNode(
         self.data['mode'] = mode_name
 
         ###
-        self.reposition_elements()
-        self.setup_body()
+        self.perform_general_body_setups()
+
         ###
 
         self.perform_mode_related_viewer_setups(

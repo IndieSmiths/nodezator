@@ -107,11 +107,8 @@ class UnpackingOps:
         subparams_for_unpacking.append(subparam_index)
         subparams_for_unpacking.sort()
 
-        ### reposition all objects within the node
-        self.reposition_elements()
-
-        ### redraw body's surface
-        self.redraw_body_surface()
+        ### reposition elements and rebuild body
+        self.rebuild_body()
 
         ### there's no need to indicate here that changes were made
         ### in the data cause this is done by the input socket in
@@ -219,11 +216,8 @@ class UnpackingOps:
 
             (self.data["subparam_keyword_map"][subparam_index]) = keyword_name
 
-        ### reposition all objects within the node
-        self.reposition_elements()
-
-        ### redraw body's surface
-        self.redraw_body_surface()
+        ### reposition elements and rebuild body
+        self.rebuild_body()
 
         ### there's no need to indicate here that changes were made
         ### in the data cause this is done by the input socket in

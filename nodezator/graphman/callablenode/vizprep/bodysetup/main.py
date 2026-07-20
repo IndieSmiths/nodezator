@@ -44,12 +44,21 @@ class BodySetupOperations:
     ### convenience methods to execute combinations of
     ### modular operations for specific purposes
 
-    ## for when body is instantiated
+    ## for whenever geometry changes
 
-    def setup_body(self):
-        """Performs several adjustments to the body."""
-        self.update_label_text_settings()
+    def rebuild_body(self):
+        """Reposition and reconstruct node's body."""
+
+        self.reposition_elements()
         self.redraw_body_surface()
+
+    ## for whenever mode is (re)set
+
+    def perform_general_body_setups(self):
+        """Performs several setups related to the body."""
+
+        self.update_label_text_settings()
+        self.rebuild_body()
         self.assign_bottom_surfaces()
 
     ## for when node is commented out/uncommented

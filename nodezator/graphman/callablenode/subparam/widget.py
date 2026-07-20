@@ -221,11 +221,8 @@ class WidgetOps:
             RectsManager([].__iter__)
         )
 
-        ### reposition all objects within the node
-        self.reposition_elements()
-
-        ### redraw body's surface
-        self.redraw_body_surface()
+        ### reposition elements and rebuild body
+        self.rebuild_body()
 
         ### indicate that changes were made in the data
         indicate_unsaved()
@@ -379,11 +376,8 @@ class WidgetOps:
         ## fix names of remaining subparameters
         self.fix_subparameter_indices(param_name)
 
-        ### reposition all objects within the node
-        self.reposition_elements()
-
-        ### redraw body's surface
-        self.redraw_body_surface()
+        ### reposition elements and rebuild body
+        self.rebuild_body()
 
         ### indicate that changes were made in the data
         indicate_unsaved()
