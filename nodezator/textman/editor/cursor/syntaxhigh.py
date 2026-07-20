@@ -40,7 +40,7 @@ FRAMES_TO_UPDATE_SYNTAX = round(FPS * (_MSECS_TO_UPDATE_SYNTAX / 1000))
 class SyntaxHighlighting:
     """Operations/setups for syntax highlighting support."""
 
-    def set_syntax_highlighting(self, font_path, syntax_highlighting):
+    def set_syntax_highlighting(self, font_key, syntax_highlighting):
         """Perform syntax highlighting setups.
 
         Depends on the requested syntax highlighting,
@@ -60,7 +60,7 @@ class SyntaxHighlighting:
         Parameters
         ==========
 
-        font_path (string)
+        font_key (string or pathlib.Path)
             indicates the font style to be used when
             editing the contents; defaults to ENC_SANS_BOLD_FONT_PATH,
             which uses the normal font of the app; you can
@@ -95,7 +95,7 @@ class SyntaxHighlighting:
 
             default_text_settings = (
                 MONO_FONT_SETTINGS
-                if font_path == FIRA_MONO_BOLD_FONT_PATH
+                if font_key == FIRA_MONO_BOLD_FONT_PATH
                 else SANS_FONT_SETTINGS
             )
 
@@ -179,7 +179,7 @@ class SyntaxHighlighting:
 
             self.background_color = (
                 MONO_FONT_SETTINGS
-                if font_path == FIRA_MONO_BOLD_FONT_PATH
+                if font_key == FIRA_MONO_BOLD_FONT_PATH
                 else SANS_FONT_SETTINGS
             )["background_color"]
 

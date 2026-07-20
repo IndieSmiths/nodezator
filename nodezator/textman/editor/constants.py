@@ -62,14 +62,14 @@ EDITING_AREA_RECT.center = TEXT_EDITOR_RECT.center
 
 SANS_FONT_SETTINGS = {
     "font_height": FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
+    "font_key": ENC_SANS_BOLD_FONT_PATH,
     "foreground_color": TEXT_EDITING_AREA_FG,
     "background_color": TEXT_EDITING_AREA_BG,
 }
 
 MONO_FONT_SETTINGS = {
     "font_height": FONT_HEIGHT,
-    "font_path": FIRA_MONO_BOLD_FONT_PATH,
+    "font_key": FIRA_MONO_BOLD_FONT_PATH,
     "foreground_color": TEXT_EDITING_AREA_FG,
     "background_color": TEXT_EDITING_AREA_BG,
 }

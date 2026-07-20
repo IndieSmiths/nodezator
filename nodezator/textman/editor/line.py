@@ -86,7 +86,7 @@ class Line(List2D):
     ### for users;
 
     @classmethod
-    def set_normal_render_settings(cls, font_path, syntax_highlighting):
+    def set_normal_render_settings(cls, font_key, syntax_highlighting):
         """Reference the render settings for normal text.
 
         Normal text is either text rendered with default
@@ -97,7 +97,7 @@ class Line(List2D):
         Parameters
         ==========
 
-        font_path (string)
+        font_key (string or pathlib.Path)
             indicates the font style of the text.
         syntax_highlighting (string)
             represents the name of a syntax used to
@@ -107,11 +107,11 @@ class Line(List2D):
             isn't available, the default settings are used.
         """
         ### define default render settings, based on the
-        ### value of the 'font_path' argument
+        ### value of the 'font_key' argument
 
         default_render_settings = (
             MONO_FONT_SETTINGS
-            if font_path == FIRA_MONO_BOLD_FONT_PATH
+            if font_key == FIRA_MONO_BOLD_FONT_PATH
             else SANS_FONT_SETTINGS
         )
 
