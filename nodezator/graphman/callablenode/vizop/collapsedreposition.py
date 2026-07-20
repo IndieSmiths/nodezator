@@ -565,8 +565,9 @@ def reposition_collapsed_elements(self):
     ###
     bottom_rectsman = self.bottom_rectsman
 
-    ### perform extra administrative task: generate body surface and
-    ### update its rect
+    ### perform extra administrative tasks
+
+    ## generate body surface and update its rect
 
     body = self.body
 
@@ -579,29 +580,28 @@ def reposition_collapsed_elements(self):
 
     body.image = render_rect(*body_rect.size, bg_color)
 
-    ### perform extra administrative task: update size and position
-    ### of self.rect
+    ## update size and position of self.rect
 
-    ## width
+    # width
 
     left = (
 
-        ## if there are visible parameters (input sockets)...
+        # if there are visible parameters (input sockets)...
         irectsman.left
         if vis
 
-        ## otherwise...
+        # otherwise...
         else top_rectsman.left - 2
 
     )
 
     right = (
 
-        ## if there are visible outputs (output sockets)...
+        # if there are visible outputs (output sockets)...
         orectsman.right
         if vos
 
-        ## otherwise...
+        # otherwise...
         else top_rectsman.right + 2
 
     )
@@ -609,8 +609,23 @@ def reposition_collapsed_elements(self):
     ##
     self.rect.width = right - left
 
-    ## height
+    # height
     self.rect.height = bottom_rectsman.bottom - top_rectsman.top
 
-    ## midtop
+    # midtop
     self.rect.midtop = top_rectsman.midtop
+
+    ## if self.rect.midtop ends up different than midtop, move all
+    ## rects slightly to close the gap; this difference may appear
+    ## when repositioning the upper corners horizontally to fit the
+    ## body elements
+
+    diff = tuple(
+
+        a - b
+        for a, b in zip(midtop, self.rect.midtop)
+
+    )
+
+    if any(diff):
+        self.col_rectsman.move_ip(diff)

@@ -124,8 +124,9 @@ def reposition_callable_elements(self):
     ###
     bottom_rectsman = self.bottom_rectsman
 
-    ### perform extra administrative task: generate body surface and
-    ### update its rect
+    ### perform extra administrative tasks
+
+    ## generate body surface and update its rect
 
     body = self.body
 
@@ -138,18 +139,32 @@ def reposition_callable_elements(self):
 
     body.image = render_rect(*body_rect.size, bg_color)
 
-    ### perform extra administrative task: update size and position
-    ### of self.rect
+    ## update size and position of self.rect
 
-    ## width
+    # width
 
     left = top_rectsman.left
     right = self.callable_output_socket.rect.right
 
     self.rect.width = right - left
 
-    ## height
+    # height
     self.rect.height = bottom_rectsman.bottom - top_rectsman.top
 
-    ## midtop
+    # midtop
     self.rect.midtop = top_rectsman.midtop
+
+    ## if self.rect.midtop ends up different than midtop, move all
+    ## rects slightly to close the gap; this difference may appear
+    ## when, in a repositioning made in a previous mode, the upper
+    ## corners were moved horizontally to fit the body elements
+
+    diff = tuple(
+
+        a - b
+        for a, b in zip(midtop, self.rect.midtop)
+
+    )
+
+    if any(diff):
+        self.cal_rectsman.move_ip(diff)

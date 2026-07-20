@@ -672,8 +672,9 @@ def reposition_expanded_elements(self):
     ###
     bottom_rectsman = self.bottom_rectsman
 
-    ### perform extra administrative task: generate body surface and
-    ### update its rect
+    ### perform extra administrative tasks
+
+    ## generate body surface and update its rect
 
     body = self.body
 
@@ -686,18 +687,17 @@ def reposition_expanded_elements(self):
 
     body.image = render_rect(*body_rect.size, bg_color)
 
-    ### perform extra administrative task: update size and position
-    ### of self.rect
+    ## update size and position of self.rect
 
-    ## width
+    # width
 
     left = (
 
-        ## if there are parameters...
+        # if there are parameters...
         self.input_rectsman.left
         if parameters
 
-        ## otherwise...
+        # otherwise...
         else top_rectsman.left - SOCKET_RADIUS
 
     )
@@ -706,8 +706,25 @@ def reposition_expanded_elements(self):
 
     self.rect.width = right - left
 
-    ## height
+    # height
     self.rect.height = bottom_rectsman.bottom - top_rectsman.top
 
-    ## midtop
+    # midtop
     self.rect.midtop = top_rectsman.midtop
+
+    ## if self.rect.midtop ends up different than midtop, move all
+    ## rects slightly to close the gap; this difference may appear
+    ## when repositioning the upper corners horizontally to fit the
+    ## body elements
+
+    diff = tuple(
+
+        a - b
+        for a, b in zip(midtop, self.rect.midtop)
+
+    )
+
+    if any(diff):
+        self.exp_rectsman.move_ip(diff)
+
+
