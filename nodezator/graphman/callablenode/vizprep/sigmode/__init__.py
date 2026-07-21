@@ -2,13 +2,13 @@
 
 ### local imports
 
-from .....config import APP_REFS
-
 from .....ourstdlibs.collections.fldict.main import FlatListDict
 
 from .....textman.cache import CachedTextObject
 
 from .....rectsman.main import RectsManager
+
+from ....socket.output import OutputSocket
 
 from ....socket.surfs import type_to_codename
 
@@ -16,13 +16,6 @@ from ...constants import (
     NORMAL_LABEL_TEXT_SETTINGS,
     COMMENTED_OUT_LABEL_TEXT_SETTINGS,
 )
-
-
-## classes for composition
-
-from ....socket.output import OutputSocket
-
-from .....rectsman.main import RectsManager
 
 
 ## functions for injection

@@ -417,7 +417,8 @@ def reposition_collapsed_elements(self):
         irectsman = temp_input_rectsman
         orectsman = temp_output_rectsman
 
-        orectsman.right = irectsman.right + SOCKET_DIAMETER
+        irectsman.left = orectsman.left
+        orectsman.right += SOCKET_DIAMETER
 
         ### add padding if too similar in width
 

@@ -552,7 +552,9 @@ def reposition_expanded_elements(self):
     if parameters:
 
         irectsman = self.input_rectsman
-        orectsman.right = irectsman.right + SOCKET_DIAMETER
+
+        irectsman.left = orectsman.left
+        orectsman.right += SOCKET_DIAMETER
 
         ### add padding if too similar in width
 
@@ -600,15 +602,18 @@ def reposition_expanded_elements(self):
     roof.rect.topleft = topleft_corner_rect.topright
 
     ###
+    top_rectsman = self.top_rectsman
+
+    ###
+    title_rect.centerx = top_rectsman.centerx
+
+    ###
 
     self.sigmode_toggle_button.rect.topleft = (
         topleft_corner_rect.move(-1, -1).bottomright
     )
 
     ###
-
-    top_rectsman = self.top_rectsman
-
     top = top_rectsman.bottom + BODY_CONTENT_OFFSET
 
     ### assign and redefine top
