@@ -547,14 +547,22 @@ def reposition_expanded_elements(self):
     topright_corner_rect.left = title_rect.right + 20
 
     orectsman = self.output_rectsman
-    top_width = title_rect.width + (CORNER_WIDTH*2) + 40
+
+    expected_body_width = (
+        title_rect.width
+        + (CORNER_WIDTH*2)
+        + 40
+        + (SOCKET_RADIUS + (SOCKET_RADIUS if parameters else 0))
+    )
 
     if parameters:
 
         irectsman = self.input_rectsman
 
-        irectsman.left = orectsman.left
-        orectsman.right += SOCKET_DIAMETER
+        max_width = max(irectsman.width, orectsman.width)
+
+        irectsman.left = 0
+        orectsman.right = max_width + SOCKET_DIAMETER
 
         ### add padding if too similar in width
 
@@ -565,7 +573,7 @@ def reposition_expanded_elements(self):
 
         _temp_rectsman = RectsManager((irectsman, orectsman).__iter__)
 
-        if _temp_rectsman.width > top_width:
+        if _temp_rectsman.width > expected_body_width:
 
             _temp_rectsman.centerx = title_rect.centerx 
 
@@ -579,7 +587,7 @@ def reposition_expanded_elements(self):
             
     else:
 
-        if orectsman.width > top_width:
+        if orectsman.width > expected_body_width:
 
             orectsman.centerx = title_rect.centerx
 

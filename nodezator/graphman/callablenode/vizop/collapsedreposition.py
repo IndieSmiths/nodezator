@@ -410,15 +410,23 @@ def reposition_collapsed_elements(self):
     topleft_corner_rect.right = title_rect.left - 20
     topright_corner_rect.left = title_rect.right + 20
 
-    top_width = title_rect.width + (CORNER_WIDTH*2) + 40
+    expected_body_width = (
+        title_rect.width
+        + (CORNER_WIDTH*2)
+        + 40
+        + (SOCKET_RADIUS if vos else 0)
+        + (SOCKET_RADIUS if vis else 0)
+    )
 
     if vos and vis:
 
         irectsman = temp_input_rectsman
         orectsman = temp_output_rectsman
 
-        irectsman.left = orectsman.left
-        orectsman.right += SOCKET_DIAMETER
+        max_width = max(irectsman.width, orectsman.width)
+
+        irectsman.left = 0
+        orectsman.right = max_width + SOCKET_DIAMETER
 
         ### add padding if too similar in width
 
@@ -429,7 +437,7 @@ def reposition_collapsed_elements(self):
 
         temp_rect_list.extend((irectsman, orectsman))
 
-        if temp_rectsman.width > top_width:
+        if temp_rectsman.width > expected_body_width:
 
             temp_rectsman.centerx = title_rect.centerx 
 
@@ -445,7 +453,7 @@ def reposition_collapsed_elements(self):
 
         orectsman = temp_output_rectsman
 
-        if orectsman.width > top_width:
+        if orectsman.width > expected_body_width:
 
             orectsman.centerx = title_rect.centerx
 
@@ -459,7 +467,7 @@ def reposition_collapsed_elements(self):
 
         irectsman = temp_input_rectsman
 
-        if irectsman.width > top_width:
+        if irectsman.width > expected_body_width:
 
             irectsman.centerx = title_rect.centerx
 
