@@ -70,6 +70,7 @@ class LoadedFileState:
 
     def loaded_file_event_handling(self):
         """Get and respond to events."""
+
         for event in SERVICES_NS.get_events():
 
             ### QUIT
@@ -623,10 +624,22 @@ class LoadedFileState:
 
                 raise SwitchLoopException(self.menubar)
 
-            ## otherwise the user clicked the canvas, in
-            ## which case we assume the user wants to
-            ## deselect all objects (in case there are
-            ## selected objects)
+            ## otherwise, the user either:
+            ##
+            ## - clicked a connection in order to traverse the graph
+            ##   (using the ziplining feature)
+            ## - or, clicked the canvas, in which case we assume the user
+            ##   wants to deselect all objects (in case there are selected
+            ##   objects)
+
+            # if the shift key is pressed (we use a bitmast to check
+            # that), attempt ziplining
+
+            elif SERVICES_NS.get_pressed_mod_keys() & KMOD_SHIFT:
+                APP_REFS.gm.attemp_ziplining(mouse_pos)
+
+            # otherwise, deselect all selected objects (if any)
+
             else:
                 APP_REFS.ea.deselect_all()
 

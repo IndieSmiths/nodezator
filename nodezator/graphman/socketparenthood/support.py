@@ -1,5 +1,16 @@
 """Facility with class extension with support operations."""
 
+### standard library import
+from math import inf as INFINITY
+
+
+### third-party imports
+
+from pygame import Rect
+
+from pygame.math import Vector2
+
+
 ### local imports
 
 from ...config import APP_REFS
@@ -36,13 +47,13 @@ class SupportOperations:
         if output_socket_n == 0:
 
             raise TypeError(
-                "Can't connect sockets cause both of" " them represent inputs"
+                "Can't connect sockets cause both of them represent inputs"
             )
 
         elif output_socket_n == 2:
 
             raise TypeError(
-                "Can't connect sockets cause both of" " them represent outputs"
+                "Can't connect sockets cause both of them represent outputs"
             )
 
         ### there's no need to connect sockets which are
@@ -106,7 +117,8 @@ class SupportOperations:
         if socket_b.node is node:
 
             raise ValueError(
-                "Connecting given sockets would create a" " cycle in the data flow"
+                "Connecting given sockets would create a"
+                " cycle in the data flow"
             )
 
         ### keep checking the parents of the input sockets
@@ -128,10 +140,7 @@ class SupportOperations:
             ## recursively until no "ancestors" are
             ## left
             else:
-                self.check_cyclic_flow(
-                    parent,
-                    socket_b,
-                )
+                self.check_cyclic_flow(parent, socket_b)
 
     def sever_segment_between_sockets(
         self,
@@ -602,3 +611,26 @@ class SupportOperations:
 
             indicate_unsaved()
             APP_REFS.ea.must_update_birdseye_view_objects = True
+
+    def get_centers_of_nodes_from_crossing_segment(self, center, size):
+        """Return either 2-tuple of points or None.
+
+        Such points, if returned, represent the center of each node in a pair
+        where one of the pair's connections crosses the imaginary rect of
+        given center and size.
+        """
+
+        r = Rect(0, 0, size, size)
+        r.center = center
+
+        for parent in self.parents:
+
+            parent_center = parent.rect.center
+
+            for child in parent.children:
+
+                if r.clipline(parent_center, child.rect.center):
+                    return (parent.node.rect.center, child.node.rect.center)
+
+        return None
+

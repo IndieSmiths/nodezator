@@ -17,6 +17,8 @@ from ...config import APP_REFS
 
 from ...pygamesetup import SERVICES_NS
 
+from ...pygamesetup.constants import SCREEN_RECT
+
 from ...loopman.exception import ContinueLoopException
 
 from ...our3rdlibs.behaviour import indicate_unsaved
@@ -450,6 +452,49 @@ class UserActions:
 
         ### restart the loop
         raise ContinueLoopException
+
+    def attemp_ziplining(self, mouse_pos):
+
+        ### get centers of a pair of nodes where one of the connections
+        ### between them crosses an imaginary rect center at mouse position
+        ### and of given size;
+        ###
+        ### there might be other connections (even from other pair of nodes)
+        ### that collide as well (for instance, if user clicks near an
+        ### intersection between connections); however, such scenarios are
+        ### considered to be too rare/unlikely, so we decided not to address
+        ### them in this solution;
+        ###
+        ### although the time to treat such corner cases could be negligible,
+        ### we don't expect this to be harmful to users's workflows;
+
+        centers_of_pair_of_nodes = (
+            self.get_centers_of_nodes_from_crossing_segment(mouse_pos, 100)
+        )
+
+        ### leave method if none is found
+        if not centers_of_pair_of_nodes: return
+
+        ### otherwise, move the screen so farthest center (among the
+        ### centers of the 02 nodes the segment connects) ends up
+        ### at the center of the screen
+
+        screen_center = Vector2(SCREEN_RECT.center)
+
+        farthest_point = (
+
+            max(
+
+                centers_of_pair_of_nodes,
+
+                # distance to screen center
+                key = screen_center.distance_squared_to,
+
+            )
+
+        )
+
+        APP_REFS.ea.scroll(*(screen_center - farthest_point))
 
 
 get_output_sockets = attrgetter('output_sockets')
