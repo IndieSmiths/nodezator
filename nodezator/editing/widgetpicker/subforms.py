@@ -96,6 +96,7 @@ def get_text_obj(reference_rect, offset, text):
 
 
 class SubformCreation:
+
     def create_checkbutton_subform(self):
         """Create form for checkbutton arguments."""
         ### define an starting offset
@@ -326,47 +327,54 @@ class SubformCreation:
         ### instantiate font style argument widgets
 
         ## define argument name
-        arg_name = "font_path"
+        arg_name = 'pick_monospaced_font'
 
         ## instantiate and store text object
 
-        text_obj = get_text_obj(reference_rect=self.rect, offset=offset, text=arg_name)
+        text_obj = (
+
+            get_text_obj(
+                reference_rect=self.rect,
+                offset=offset,
+                text=arg_name,
+            )
+
+        )
 
         text_display_subform.append(text_obj)
 
-        ### define needed arguments, instantiate and store
-        ### widget for the text_display's font_path argument
+        ### define needed arguments, instantiate and store widget
+        ### for the text_display's pick_monospaced_font argument
 
         ## define widget name
         widget_name = arg_name
 
         ## define position data
 
-        offset = 100, offset[1] + 5
-        coordinates_name = "topleft"
+        offset = text_obj.rect.width + 10, offset[1] + 5
+        coordinates_name = 'topleft'
         coordinates_value = self.rect.move(offset).topleft
 
-        ## define options
-        options = ["sans_bold", "mono_bold"]
 
         ## instantiate and store
 
-        font_path_option_menu = OptionMenu(
-            name=widget_name,
-            value=options[0],
-            loop_holder=self,
-            options=options,
-            draw_on_window_resize=self.draw,
-            coordinates_name=coordinates_name,
-            coordinates_value=coordinates_value,
+        monospaced_check = (
+
+            CheckButton(
+                value=False,
+                name=widget_name,
+                coordinates_name=coordinates_name,
+                coordinates_value=coordinates_value,
+            )
+
         )
 
-        text_display_subform.append(font_path_option_menu)
+        text_display_subform.append(monospaced_check)
 
-        def change_font_path():
-            value_text_display.reset_font_path(font_path_option_menu.get())
+        def use_monospaced_font():
+            value_text_display.use_monospaced_font(monospaced_check.get())
 
-        font_path_option_menu.command = change_font_path
+        monospaced_check.command = use_monospaced_font
 
         ### instantiate syntax highlighting argument widgets
 
@@ -378,7 +386,15 @@ class SubformCreation:
 
         ## instantiate and store text object
 
-        text_obj = get_text_obj(reference_rect=self.rect, offset=offset, text=arg_name)
+        text_obj = (
+
+            get_text_obj(
+                reference_rect=self.rect,
+                offset=offset,
+                text=arg_name,
+            )
+
+        )
 
         text_display_subform.append(text_obj)
 
@@ -391,7 +407,7 @@ class SubformCreation:
 
         ## define position data
 
-        offset = 165, offset[1] + 5
+        offset = text_obj.rect.width + 10, offset[1] + 5
         coordinates_name = "topleft"
         coordinates_value = self.rect.move(offset).topleft
 
@@ -429,7 +445,15 @@ class SubformCreation:
 
         ## instantiate and store text object
 
-        text_obj = get_text_obj(reference_rect=self.rect, offset=offset, text=arg_name)
+        text_obj = (
+
+            get_text_obj(
+                reference_rect=self.rect,
+                offset=offset,
+                text=arg_name,
+            )
+
+        )
 
         text_display_subform.append(text_obj)
 
@@ -474,7 +498,15 @@ class SubformCreation:
 
         ## instantiate and store text object
 
-        text_obj = get_text_obj(reference_rect=self.rect, offset=offset, text=arg_name)
+        text_obj = (
+
+            get_text_obj(
+                reference_rect=self.rect,
+                offset=offset,
+                text=arg_name,
+            )
+
+        )
 
         text_display_subform.append(text_obj)
 

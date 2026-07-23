@@ -616,6 +616,7 @@ class TextDisplay(Object2D):
             ]
 
     def reset_style(self, style_name, new_style_value):
+
         current_style_value = getattr(self, style_name)
 
         if new_style_value != current_style_value:
@@ -624,11 +625,22 @@ class TextDisplay(Object2D):
             self.prepare_style_data()
             self.update_image()
 
-    reset_show_line_number = partialmethod(reset_style, "show_line_number")
+    reset_show_line_number = partialmethod(reset_style, 'show_line_number')
 
-    reset_syntax_highlighting = partialmethod(reset_style, "syntax_highlighting")
+    reset_syntax_highlighting = partialmethod(reset_style, 'syntax_highlighting')
 
-    reset_font_key = partialmethod(reset_style, "font_key")
+    reset_font_key = partialmethod(reset_style, 'font_key')
+
+    def use_monospaced_font(self, boolean):
+
+        self.reset_font_key(
+
+            APP_REFS.mono_font_key
+            if boolean
+
+            else APP_REFS.general_font_key
+
+        )
 
     def edit_value(self):
         """Edit value of widget on the text editor."""
