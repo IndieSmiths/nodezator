@@ -398,7 +398,6 @@ class SessionRecordingForm(Object2D):
         self.window_size_tray = OptionTray(
             value=value,
             options=tuple(TEXT_TO_WINDOW_SIZE.keys()),
-            max_width=0,
             name="window_size",
             command=self.update_window_size,
             coordinates_name="midleft",

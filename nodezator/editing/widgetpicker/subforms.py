@@ -810,6 +810,7 @@ class SubformCreation:
             name=widget_name,
             value=options[0],
             options=options,
+            max_width=0,
             coordinates_name=coordinates_name,
             coordinates_value=offset,
         )
@@ -1607,6 +1608,7 @@ class SubformCreation:
             name=widget_name,
             value=available_options[0],
             options=available_options,
+            max_width=0,
             coordinates_name=coordinates_name,
             coordinates_value=offset,
         )
