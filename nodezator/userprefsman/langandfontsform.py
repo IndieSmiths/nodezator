@@ -51,14 +51,8 @@ from ..our3rdlibs.button import Button
 
 from ..our3rdlibs.behaviour import set_status_message
 
-
 from ..classes2d.single import Object2D
 from ..classes2d.collections import List2D
-
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
 
 from ..textman.render import render_text
 
@@ -97,16 +91,16 @@ t = TRANSLATIONS.language_and_fonts_form
 ### constants
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': WINDOW_FG,
     'background_color': WINDOW_BG,
 }
 
 BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'depth_finish_thickness': 1,
     'foreground_color': BUTTON_FG,

@@ -6,8 +6,6 @@ from .surfsman.icon import render_layered_icon
 
 from .surfsman.render import combine_surfaces
 
-from .fontsman.constants import ENC_SANS_BOLD_FONT_PATH
-
 from .colorsman.colors import (
     BLACK,
     WHITE,

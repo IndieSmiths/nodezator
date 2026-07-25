@@ -24,6 +24,8 @@ from pygame.math import Vector2
 
 from ....pygamesetup import SERVICES_NS, blit_on_screen
 
+from ....config import APP_REFS
+
 from ....ourstdlibs.color.conversion import (
     full_rgb_to_html_name,
     full_rgb_to_hex_string,
@@ -38,8 +40,6 @@ from ....surfsman.draw import draw_border
 from ....surfsman.render import render_rect
 
 from ....textman.render import render_text
-
-from ....fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT
 
 from ...colors import (
     COLOR_VIEWER_COLOR_LIST_FG,
@@ -148,7 +148,7 @@ class ColorListMode:
                 text_obj = Object2D.from_surface(
                     surface=render_text(
                         text=text,
-                        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                        font_height=APP_REFS.general_font_height,
                         foreground_color=(COLOR_VIEWER_COLOR_LIST_FG),
                         background_color=(COLOR_VIEWER_COLOR_LIST_BG),
                     ),

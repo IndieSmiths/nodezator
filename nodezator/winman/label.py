@@ -15,11 +15,6 @@ from ..translatedtext import TRANSLATIONS
 
 from ..pygamesetup import SCREEN_RECT
 
-from ..fontsman.constants import (
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
-
 from ..colorsman.colors import WM_LABEL_FG, WM_LABEL_BG
 
 from ..textman.label.autolabel import AutoLabel
@@ -32,8 +27,8 @@ t = TRANSLATIONS.window_manager
 ### constant definition
 
 AUTOLABEL_KWARGS = {
-    'font_height': FIRA_MONO_BOLD_FONT_HEIGHT,
-    'font_key': FIRA_MONO_BOLD_FONT_PATH,
+    'font_height': APP_REFS.mono_font_height,
+    'font_key': APP_REFS.mono_font_key,
     'foreground_color': WM_LABEL_FG,
     'background_color': (*WM_LABEL_BG, 130),
 }

@@ -35,9 +35,7 @@ from ..our3rdlibs.userlogger import USER_LOGGER
 from ..fontsman.cache import FONTS_DB
 
 from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
     ENC_SANS_BOLD_FONT_PATH,
-    FIRA_MONO_BOLD_FONT_HEIGHT,
     FIRA_MONO_BOLD_FONT_PATH,
 )
 

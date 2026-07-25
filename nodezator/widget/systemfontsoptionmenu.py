@@ -23,6 +23,8 @@ from pygame.draw import rect as draw_rect
 
 ### local imports
 
+from ..config import APP_REFS
+
 from ..ourstdlibs.behaviour import empty_function
 
 from ..our3rdlibs.behaviour import set_status_message
@@ -41,11 +43,6 @@ from ..fontsman.preview.cache import (
 )
 
 from ..fontsman.systemfontspicker import pick_system_fonts
-
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_PATH,
-    ENC_SANS_BOLD_FONT_HEIGHT,
-)
 
 from ..textman.render import render_text
 
@@ -265,8 +262,8 @@ class SystemFontsOptionMenu(Object2D):
 
                 render_text(
                     text=str(self.current_font_name),
-                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-                    font_key=ENC_SANS_BOLD_FONT_PATH,
+                    font_height=APP_REFS.general_font_height,
+                    font_key=APP_REFS.general_font_key,
                     padding=1,
                     max_width=152,
                     ommit_direction='left',

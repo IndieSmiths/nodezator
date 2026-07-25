@@ -35,8 +35,6 @@ from ..textman.render import (
 from ..textman.viewer.main import view_text
 from ..textman.editor.main import edit_text
 
-from ..fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
-
 from ..syntaxman.utils import (
     AVAILABLE_SYNTAXES,
     SYNTAX_TO_MAPPING_FUNCTION,
@@ -421,7 +419,7 @@ class TextDisplay(Object2D):
             lineno_width, _ = get_text_size(
                 "01",
                 font_height=font_height,
-                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=APP_REFS.mono_font_key,
             )
 
             draw_rect(
@@ -535,7 +533,7 @@ class TextDisplay(Object2D):
                 surf = render_text(
                     text=str(line_number).rjust(2, "0"),
                     font_height=font_height,
-                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=APP_REFS.mono_font_key,
                     foreground_color=lineno_fg,
                     background_color=lineno_bg,
                 )
@@ -788,7 +786,7 @@ class TextDisplay(Object2D):
             lineno_width, _ = get_text_size(
                 max_lineno_text,
                 font_height=font_height,
-                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=APP_REFS.mono_font_key,
             )
 
             lineno_rect = rect.copy()
@@ -888,7 +886,7 @@ class TextDisplay(Object2D):
                         x_increment, _ = get_text_size(
                             string,
                             font_height=font_height,
-                            font_key=FIRA_MONO_BOLD_FONT_PATH,
+                            font_key=APP_REFS.mono_font_key,
                         )
 
                         text_fg = text_settings["foreground_color"]
@@ -921,7 +919,7 @@ class TextDisplay(Object2D):
                                 string = fit_text(
                                     text=string,
                                     font_height=font_height,
-                                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                                    font_key=APP_REFS.mono_font_key,
                                     padding=0,
                                     max_width=max_right - temp_x,
                                     ommit_direction="right",

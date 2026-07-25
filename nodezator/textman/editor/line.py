@@ -6,14 +6,14 @@ from pygame import Rect
 
 ### local imports
 
+from ...config import APP_REFS
+
 from ...classes2d.collections import List2D
 
 from ...syntaxman.utils import (
     AVAILABLE_SYNTAXES,
     get_ready_theme,
 )
-
-from ...fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
 
 from ..cache import CachedTextObject
 
@@ -111,7 +111,7 @@ class Line(List2D):
 
         default_render_settings = (
             MONO_FONT_SETTINGS
-            if font_key == FIRA_MONO_BOLD_FONT_PATH
+            if font_key == APP_REFS.mono_font_key
             else SANS_FONT_SETTINGS
         )
 

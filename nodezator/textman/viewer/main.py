@@ -20,11 +20,6 @@ from ...surfsman.render import combine_surfaces
 
 from ...classes2d.single import Object2D
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
-
 from ..label.main import Label
 
 from ..render import (
@@ -74,8 +69,8 @@ from .constants import (
 ### constants
 
 CAPTION_TEXT_KWARGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': TEXT_VIEWER_FG,
     'background_color': TEXT_VIEWER_BG,
@@ -87,8 +82,8 @@ HEADER_TEXT_KWARGS = {
 }
 
 HELP_TEXT_KWARGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': TEXT_VIEWER_HELP_FG,
     'background_color': TEXT_VIEWER_HELP_BG,

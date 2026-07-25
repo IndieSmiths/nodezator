@@ -51,13 +51,6 @@ from ...colorsman.colors import (
 
 from ..render import render_text
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
-
 from ..label.main import Label
 
 from .cursor.main import Cursor
@@ -171,7 +164,7 @@ class TextEditor(Object2D):
                 render_text(
                     text,
                     ## text settings
-                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                    font_height=APP_REFS.general_font_height,
                     padding=5,
                     foreground_color=BUTTON_FG,
                     background_color=BUTTON_BG,
@@ -229,7 +222,7 @@ class TextEditor(Object2D):
                 render_text(
                     "Text editor",
                     ## text settings
-                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                    font_height=APP_REFS.general_font_height,
                     foreground_color=WINDOW_FG,
                     padding=5,
                 )
@@ -247,8 +240,8 @@ class TextEditor(Object2D):
         self.statusbar = Label(
             "Welcome to the text editor",
             ## text settings
-            font_height=FIRA_MONO_BOLD_FONT_HEIGHT,
-            font_key=FIRA_MONO_BOLD_FONT_PATH,
+            font_height=APP_REFS.mono_font_height,
+            font_key=APP_REFS.mono_font_key,
             foreground_color=WINDOW_FG,
             background_color=WINDOW_BG,
         )
@@ -361,7 +354,7 @@ class TextEditor(Object2D):
     def edit_text(
         self,
         text="",
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_key=APP_REFS.general_font_key,
         validation_command=None,
         syntax_highlighting="",
     ):

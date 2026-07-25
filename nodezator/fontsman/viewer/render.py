@@ -4,7 +4,10 @@
 
 from ...classes2d.single import Object2D
 
-from ..constants import FIRA_MONO_BOLD_FONT_HEIGHT, FIRA_MONO_BOLD_FONT_PATH
+from ..constants import (
+    FIRA_MONO_BOLD_FONT_HEIGHT,
+    FIRA_MONO_BOLD_FONT_PATH,
+)
 
 from ...textman.render import render_text
 

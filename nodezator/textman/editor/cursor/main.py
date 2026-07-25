@@ -10,13 +10,11 @@ from pygame import Rect
 
 ### local imports
 
-from ....config import USER_PREFS
+from ....config import APP_REFS, USER_PREFS
 
 from ....surfsman.cache import EMPTY_SURF
 
 from ....classes2d.collections import List2D
-
-from ....fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
 
 from ...render import render_text
 
@@ -265,7 +263,7 @@ class Cursor(
                 render_text(
                     digit,
                     font_height=Line.char_height,
-                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=APP_REFS.mono_font_key,
                     foreground_color=self.lineno_fg,
                     background_color=self.lineno_bg,
                 ),

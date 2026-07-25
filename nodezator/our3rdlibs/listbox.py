@@ -17,12 +17,9 @@ from pygame.draw import rect as draw_rect
 
 from ..pygamesetup import SERVICES_NS
 
-from ..classes2d.single import Object2D
+from ..config import APP_REFS
 
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
+from ..classes2d.single import Object2D
 
 from ..textman.render import render_text
 
@@ -45,8 +42,8 @@ class ListBox(Object2D):
         items=(),
         no_of_visible_lines = 7,
         width=100,
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         padding=0,
         normal_foreground_color = BLACK,
         normal_background_color_a = (245, 245, 245),

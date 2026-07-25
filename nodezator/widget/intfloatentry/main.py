@@ -17,12 +17,9 @@ from pygame.math import Vector2
 
 ### local imports
 
-from ...surfsman.render import render_rect
+from ...config import APP_REFS
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
+from ...surfsman.render import render_rect
 
 from ...ourstdlibs.behaviour import (
     empty_function,
@@ -111,8 +108,8 @@ class IntFloatEntry(IntFloatOperations, IntFloatModes):
         draw_on_window_resize=empty_function,
         position_reference_getter=None,
         width=155,
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         foreground_color=INT_FLOAT_ENTRY_FG,
         background_color=INT_FLOAT_ENTRY_BG,
         coordinates_name="topleft",

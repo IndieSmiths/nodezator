@@ -8,6 +8,8 @@ from pygame import Rect
 
 from ..pygamesetup.constants import GENERAL_NS
 
+from ..config import APP_REFS
+
 from ..ourstdlibs.behaviour import return_untouched
 
 from ..ourstdlibs.color.creation import get_contrasting_bw
@@ -15,11 +17,6 @@ from ..ourstdlibs.color.creation import get_contrasting_bw
 from ..classes2d.single import Object2D
 
 from ..surfsman.render import render_rect
-
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
 
 from ..colorsman.colors import BLACK, WHITE
 
@@ -38,8 +35,8 @@ class SearchBox(Object2D):
     def __init__(
         self,
         value="",
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         width=200,
         name="search_box",
         on_input=return_untouched,

@@ -17,16 +17,13 @@ from pygame.draw import rect as draw_rect
 
 ### local imports
 
+from ...config import APP_REFS
+
 from ...ourstdlibs.behaviour import empty_function
 
 from ...fileman.main import select_paths
 
 from ...classes2d.single import Object2D
-
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_PATH,
-    ENC_SANS_BOLD_FONT_HEIGHT,
-)
 
 from ...textman.render import render_text, fit_text
 
@@ -420,8 +417,8 @@ class _BasePreview(Object2D):
         blit_aligned(
             surface_to_blit=render_text(
                 text=str(self.current_path),
-                font_key=ENC_SANS_BOLD_FONT_PATH,
-                font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                font_key=APP_REFS.general_font_key,
+                font_height=APP_REFS.general_font_height,
                 padding=1,
                 max_width=152,
                 ommit_direction="left",
@@ -514,8 +511,8 @@ class _BasePreview(Object2D):
 
         text_element.text = fit_text(
             text=str(self.current_path),
-            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-            font_key=ENC_SANS_BOLD_FONT_PATH,
+            font_height=APP_REFS.general_font_height,
+            font_key=APP_REFS.general_font_key,
             padding=1,
             max_width=143,
             ommit_direction="left",

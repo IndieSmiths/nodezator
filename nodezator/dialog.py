@@ -39,7 +39,7 @@ from .pygamesetup import (
     blit_on_screen,
 )
 
-from .config import DIALOGS_DATA_PATH
+from .config import APP_REFS, DIALOGS_DATA_PATH
 
 from .ourstdlibs.pyl import load_pyl
 
@@ -56,8 +56,6 @@ from .surfsman.icon import render_layered_icon
 
 from .textman.cache import CachedTextObject
 from .textman.render import render_text
-
-from .fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT
 
 from .surfsman.cache import UNHIGHLIGHT_SURF_MAP
 
@@ -110,14 +108,14 @@ t = TRANSLATIONS.dialogs
 ### constants
 
 NORMAL_TEXT_SETTINGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
+    "font_height": APP_REFS.general_font_height,
     "foreground_color": WINDOW_FG,
     "background_color": WINDOW_BG,
     "padding": 5,
 }
 
 NORMAL_BUTTON_SETTINGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
+    "font_height": APP_REFS.general_font_height,
     "foreground_color": BUTTON_FG,
     "background_color": BUTTON_BG,
     "padding": 5,
@@ -125,7 +123,7 @@ NORMAL_BUTTON_SETTINGS = {
 }
 
 HOVERED_BUTTON_SETTINGS = {
-    "font_height": ENC_SANS_BOLD_FONT_HEIGHT,
+    "font_height": APP_REFS.general_font_height,
     "foreground_color": BUTTON_FG,
     "background_color": HOVERED_BUTTON_BG,
     "padding": 5,
@@ -136,7 +134,7 @@ HOVERED_BUTTON_SETTINGS = {
 DIALOGS_DATA = load_pyl(DIALOGS_DATA_PATH)
 
 ## height for font used
-FONT_HEIGHT = ENC_SANS_BOLD_FONT_HEIGHT
+FONT_HEIGHT = APP_REFS.general_font_height
 
 
 ## icons

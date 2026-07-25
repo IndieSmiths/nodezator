@@ -42,7 +42,6 @@ from ...surfsman.draw import draw_border
 from ...surfsman.render import render_rect
 
 from ...textman.render import render_text
-from ...fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT
 
 from ...surfsman.icon import render_layered_icon
 
@@ -133,7 +132,7 @@ class ColorsViewer(ColorListMode, PatternsMode, LoopHolder):
         surf.blit(
             render_text(
                 "Colors Viewer",
-                font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                font_height=APP_REFS.general_font_height,
                 padding=5,
                 foreground_color=WINDOW_FG,
                 background_color=WINDOW_BG,
@@ -244,7 +243,7 @@ class ColorsViewer(ColorListMode, PatternsMode, LoopHolder):
             surface=(
                 render_text(
                     text="Go back",
-                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                    font_height=APP_REFS.general_font_height,
                     padding=5,
                     foreground_color=BUTTON_FG,
                     background_color=BUTTON_BG,
@@ -277,7 +276,7 @@ class ColorsViewer(ColorListMode, PatternsMode, LoopHolder):
             surface=(
                 render_text(
                     text="Mode:",
-                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                    font_height=APP_REFS.general_font_height,
                     padding=5,
                     foreground_color=WINDOW_FG,
                     background_color=WINDOW_BG,

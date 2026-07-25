@@ -11,6 +11,8 @@ from xml.etree.ElementTree import Element
 
 ### local imports
 
+from ..config import APP_REFS
+
 from ..ourstdlibs.behaviour import empty_function
 
 from ..surfsman.draw import blit_aligned, draw_border
@@ -25,11 +27,6 @@ from ..textman.render import render_text, fit_text
 from ..textman.viewer.main import view_text
 
 from ..surfsman.icon import render_layered_icon
-
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
 
 from ..colorsman.colors import (
     BLACK,
@@ -50,8 +47,8 @@ from ..colorsman.colors import (
 ## keyword arguments for PathPreview text
 
 TEXT_KWARGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'max_width': 130,
     'ommit_direction': 'right',
     'foreground_color': LIST_SORTING_BUTTON_FG,
@@ -436,8 +433,8 @@ class SortingButton(Object2D):
 
         text_element.text = fit_text(
             text=str(self.value),
-            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-            font_key=ENC_SANS_BOLD_FONT_PATH,
+            font_height=APP_REFS.general_font_height,
+            font_key=APP_REFS.general_font_key,
             padding=1,
             max_width=143 - 20,
             ommit_direction="right",

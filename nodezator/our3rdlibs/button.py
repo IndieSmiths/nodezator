@@ -2,6 +2,8 @@
 
 ### local imports
 
+from ..config import APP_REFS
+
 from ..ourstdlibs.behaviour import empty_function
 
 from ..classes2d.single import Object2D
@@ -9,8 +11,6 @@ from ..classes2d.single import Object2D
 from ..imagesman.cache import IMAGE_SURFS_DB
 
 from ..textman.render import render_text
-
-from ..fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT, ENC_SANS_BOLD_FONT_PATH
 
 from ..colorsman.colors import BUTTON_FG, BUTTON_BG
 
@@ -117,8 +117,8 @@ class Button(Object2D):
     def from_text(
         cls,
         text,
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         foreground_color=BUTTON_FG,
         background_color=BUTTON_BG,
         antialiased=True,

@@ -34,11 +34,6 @@ from ...surfsman.icon import render_layered_icon
 
 from ...textman.render import render_text
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
-
 from ...colorsman.colors import (
     BLACK,
     BUTTON_FG,
@@ -95,7 +90,7 @@ class SortingEditor(SortingEditorModes):
 
         title = render_text(
             text="List Sorting Editor",
-            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+            font_height=APP_REFS.general_font_height,
             foreground_color=WINDOW_FG,
             background_color=WINDOW_BG,
         )
@@ -143,8 +138,8 @@ class SortingEditor(SortingEditorModes):
                 surface=(
                     render_text(
                         text=label_text,
-                        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-                        font_key=ENC_SANS_BOLD_FONT_PATH,
+                        font_height=APP_REFS.general_font_height,
+                        font_key=APP_REFS.general_font_key,
                         padding=5,
                         foreground_color=AREA_LABEL,
                     )
@@ -240,7 +235,7 @@ class SortingEditor(SortingEditorModes):
             Object2D.from_surface(
                 surface=render_text(
                     text=text,
-                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                    font_height=APP_REFS.general_font_height,
                     padding=5,
                     depth_finish_thickness=1,
                     foreground_color=BUTTON_FG,
@@ -393,7 +388,7 @@ class SortingEditor(SortingEditorModes):
                     surface=(
                         render_text(
                             text=repr(item),
-                            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                            font_height=APP_REFS.general_font_height,
                             padding=5,
                             depth_finish_thickness=1,
                             foreground_color=(0, 0, 190),

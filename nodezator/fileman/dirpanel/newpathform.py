@@ -39,7 +39,6 @@ from ...our3rdlibs.userlogger import USER_LOGGER
 from ...classes2d.single import Object2D
 from ...classes2d.collections import List2D
 
-from ...fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT
 from ...textman.label.main import Label
 
 from ...surfsman.draw import draw_border, draw_depth_finish
@@ -129,7 +128,7 @@ class PathForm(Object2D):
 
         self.caption_label = Label(
             text=(t.new_path_form.caption),
-            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+            font_height=APP_REFS.general_font_height,
             foreground_color=WINDOW_FG,
             background_color=WINDOW_BG,
             coordinates_name="topleft",
@@ -158,7 +157,7 @@ class PathForm(Object2D):
 
         self.type_name_label = Label(
             text=(t.new_path_form.type_path_name + ":"),
-            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+            font_height=APP_REFS.general_font_height,
             foreground_color=WINDOW_FG,
             background_color=WINDOW_BG,
             coordinates_name="midleft",
@@ -178,7 +177,7 @@ class PathForm(Object2D):
             value="",
             loop_holder=self,
             width=self.rect.width - 20,
-            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+            font_height=APP_REFS.general_font_height,
             draw_on_window_resize=(
                 CallList(
                     [
@@ -210,7 +209,7 @@ class PathForm(Object2D):
 
             button = Button.from_text(
                 text=text,
-                font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                font_height=APP_REFS.general_font_height,
                 padding=5,
                 foreground_color=BUTTON_FG,
                 background_color=BUTTON_BG,

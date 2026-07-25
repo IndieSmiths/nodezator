@@ -51,8 +51,6 @@ from ...loopman.exception import (
     SwitchLoopException,
 )
 
-from ...fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT
-
 from ...graphman.widget.utils import WIDGET_CLASS_MAP
 
 from ...colorsman.colors import (
@@ -79,7 +77,7 @@ t = TRANSLATIONS.graph_manager
 ### constants
 
 ## font height
-FONT_HEIGHT = ENC_SANS_BOLD_FONT_HEIGHT
+FONT_HEIGHT = APP_REFS.general_font_height
 
 ## available widgets
 
