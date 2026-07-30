@@ -205,10 +205,16 @@ class TranslationNode():
                 f"TranslationNode obj doesn't have '{attr_name}' attribute."
             )
 
-        return (
-            self._translation_map[attr_name]
-            .get(self._user_prefs['LOCALE'], 'en_us')
-        )
+        available_translations = self._translation_map[attr_name]
+        locale = self._user_prefs['LOCALE']
+
+        return available_translations[
+
+            locale
+            if locale in available_translations
+            else 'en_us'
+
+        ]
 
 ### translation namespace
 TRANSLATIONS = get_translations_namespace()
