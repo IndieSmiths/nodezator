@@ -25,6 +25,8 @@ from pygame.draw import rect as draw_rect
 
 from ..config import APP_REFS
 
+from ..dialog import create_and_show_dialog
+
 from ..ourstdlibs.behaviour import empty_function
 
 from ..our3rdlibs.behaviour import set_status_message
@@ -46,6 +48,8 @@ from ..fontsman.preview.cache import (
 
 from ..fontsman.systemfontspicker import pick_system_fonts
 
+from ..fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
+
 from ..textman.render import render_text
 
 from .intfloatentry.main import IntFloatEntry
@@ -55,10 +59,18 @@ from .intfloatentry.main import IntFloatEntry
 BUTTON = (
 
     Object2D.from_surface(
-        render_rect(18, 18, (0, 0, 255))
+        render_text(
+            text='SYSFONT',
+            font_height=18,
+            font_key=FIRA_MONO_BOLD_FONT_PATH,
+            foreground_color=(0, 205, 0),
+            background_color=(0, 0, 145),
+        ),
     )
 
 )
+
+
 
 
 PREVIEW_CHARS = (
@@ -119,7 +131,7 @@ class SystemFontsOptionMenu(Object2D):
             min_value=0,
             max_value=max_value,
             numeric_classes_hint='int',
-            font_height=BUTTON.rect.height - 1,
+            font_height=BUTTON.rect.height,
             width=68,
             loop_holder=loop_holder,
             command=self.update_previewed_font_from_entry,
@@ -244,6 +256,7 @@ class SystemFontsOptionMenu(Object2D):
 
     def blit_value_representation(self):
         """Blit representation of current font."""
+
         image = self.image
 
         button_height = BUTTON.rect.height
@@ -279,12 +292,12 @@ class SystemFontsOptionMenu(Object2D):
 
         ### blit rest of elements
 
-        rect = self.image.get_rect()
+        rect = image.get_rect()
         rect.topleft = rect.move(1, -button_height).bottomleft
         rect.height = button_height - 2
         rect.move_ip(0, 1)
 
-        draw_rect(self.image, 'grey', rect)
+        draw_rect(image, 'grey', rect)
 
         ###
 
@@ -303,10 +316,10 @@ class SystemFontsOptionMenu(Object2D):
 
             ),
 
-            target_surface=self.image,
+            target_surface=image,
             retrieve_pos_from='bottomright',
             assign_pos_to='bottomright',
-            offset_pos_by=(-1, -1),
+            offset_pos_by=(-1, 0),
         )
 
         if isinstance(self.value, str) or len(self.value) == 1:
@@ -314,11 +327,14 @@ class SystemFontsOptionMenu(Object2D):
 
         ### blit entry
 
-        BUTTON.rect.topleft = self.rect.move(2, 2).topleft
+        blit_aligned(
 
-        self.image.blit(
-            self.index_entry.image,
-            BUTTON.rect.move(1, 0).topright,
+            surface_to_blit=self.index_entry.image,
+            target_surface=image,
+            retrieve_pos_from='topleft',
+            assign_pos_to='topleft',
+            offset_pos_by=(BUTTON.rect.width + 4, 2),
+
         )
 
     def preview_fonts(self):
@@ -341,7 +357,11 @@ class SystemFontsOptionMenu(Object2D):
 
         if error_msg:
 
-            print(error_msg)
+            create_and_show_dialog(
+                message=error_msg,
+                level_name='error',
+            )
+
             set_status_message(error_msg)
 
     def get(self):
@@ -436,7 +456,10 @@ class SystemFontsOptionMenu(Object2D):
         rect = BUTTON.rect
         rect.topleft = self.rect.move(2, 2).topleft
 
-        if rect.collidepoint(pos):
+        if self.collides_with_entry(pos):
+            pass
+
+        elif rect.collidepoint(pos):
 
             font_names = (
 
@@ -475,4 +498,4 @@ class SystemFontsOptionMenu(Object2D):
             self.rect.move(BUTTON.rect.width+2, 0).topleft
         )
 
-        return entry_rect.rect.collidepoint(pos)
+        return entry_rect.collidepoint(pos)
