@@ -24,7 +24,7 @@ close_file
 quit_app
 
     message
-        en-us There are unsaved chagnes. Are you sure you want to quit?
+        en-us There are unsaved changes. Are you sure you want to quit?
         pt-br Há mudanças não salvas. Tem certeza que quer sair?
         zh-cn 当前存在未保存的更改。您确定要退出吗？
 
