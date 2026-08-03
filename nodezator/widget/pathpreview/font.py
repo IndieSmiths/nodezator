@@ -135,7 +135,19 @@ class FontPreview(_BasePreview):
         """Preview font(s) from path(s)."""
 
         try:
-            view_fonts(self.value)
+
+            view_fonts(
+
+                ## must ensure value refers to one or more Path objects,
+                ## otherwise since view_fonts treats strings as though
+                ## they are names of system fonts
+
+                Path(self.value)
+                if isinstance(self.value, str)
+
+                else [Path(item) for item in self.value]
+
+            )
 
         except FileNotFoundError:
             error_msg = "Font file wasn't found."

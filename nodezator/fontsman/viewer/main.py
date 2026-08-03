@@ -256,13 +256,13 @@ class FontsViewer(Object2D, LoopHolder):
         entry.set_range(0, max_index)
         entry.set(index, False)
 
-        self.font_key = font_keys[0]
+        self.font_key = font_key = font_keys[index]
 
         ### check paths
 
         self.font_obj_map.clear()
 
-        font_class = Font if isinstance(self.font_keys[0], Path) else SysFont
+        font_class = Font if isinstance(font_key, Path) else SysFont
 
         try:
 
@@ -281,8 +281,8 @@ class FontsViewer(Object2D, LoopHolder):
 
             log_message = (
                 "An error ocurred while trying to instantiate a font object"
-                " for one of the given keys"
-                f" (class used was {font_class.__name__})"
+                " for one of the given keys (the class used was pygame.font."
+                f"{font_class.__name__})"
             )
 
             logger.exception(log_message)
