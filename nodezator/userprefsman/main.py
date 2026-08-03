@@ -180,6 +180,23 @@ USER_PREFS.update(
 validate_prefs_data(USER_PREFS)
 
 
+### TODO
+### must make sure USER_LOGGER entries logged here (if at all),
+### persist in the user logger;
+###
+### that is: although the records are kept after this function,
+### the window manager cleans the user logger with a call of
+### a function from memoryman; that call is actually important,
+### so I don't want to get rid of it; instead, it is probably
+### best to allow all such logs to persist indefinitely in the
+### session, or at least store much more; this could be done but
+### saving them in the temp folder; then, instead of using the
+### text viewer for seeing the entire log, we could create a
+### dedicated interface to list all entries (the user could then
+### click each entry to display its contents in the text viewer);
+###
+### this could be integrated with a notification system;
+
 def load_and_preprocess_user_preferences():
 
     ### check whether the APP_CONFIG_DIR exists and create it otherwise
@@ -323,16 +340,54 @@ def load_and_preprocess_user_preferences():
         elif kind == 'system_font':
 
             if match_font(value) is not None:
-                setattr(APP_REFS, font_key_attr_name, value)
+
+                try:
+                    FONTS_DB[value][height]
+
+                except (PygameError, Exception) as err:
+
+                    key = keys[1]
+
+                    message = (
+                        "Could not properly load and render text with system"
+                        f" font named {value!r} (config key is {key!r}) set on"
+                        f" user preferences using height {height} (also set on"
+                        " user preferences). As a result, we are using default"
+                        " font instead."
+                    )
+
+                    warn(message)
+                    USER_LOGGER.warning(message)
+
+                    setattr(
+
+                        APP_REFS,
+                        font_key_attr_name,
+
+                        (
+                            ENC_SANS_BOLD_FONT_PATH
+                            if is_general
+
+                            else FIRA_MONO_BOLD_FONT_PATH
+
+                        ),
+
+                    )
+
+                else:
+                    setattr(APP_REFS, font_key_attr_name, value)
 
             else:
 
                 key = keys[1]
 
-                warn(
-                    f"Could not find system font set on user preferences for {key}"
-                    f" ({value!r}). Using default font instead."
+                message = (
+                    "Could not find system font set on user preferences"
+                    f" for {key} ({value!r}). Using default font instead."
                 )
+
+                warn(message)
+                USER_LOGGER.warning(message)
 
                 setattr(
 
@@ -355,11 +410,14 @@ def load_and_preprocess_user_preferences():
 
                 key = keys[1]
 
-                warn(
+                message = (
                     "Could not find font file on path set on user preferences for"
                     f" {key} ({value!r})."
                     " Using default font instead."
                 )
+
+                warn(message)
+                USER_LOGGER.warning(message)
 
                 setattr(
 
@@ -385,11 +443,14 @@ def load_and_preprocess_user_preferences():
 
                     key = keys[1]
 
-                    warn(
+                    message = (
                         "Could not properly load and render text with font file"
                         " from path set on user preferences for"
                         f" {key} ({value!r}). Using default font instead."
                     )
+
+                    warn(message)
+                    USER_LOGGER.warning(message)
 
                     setattr(
 

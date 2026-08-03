@@ -47,6 +47,18 @@ with StringIO() as _temp_stream:
 
         import pygame
 
+## make sure pygame-ce is initialized (after preinitializing
+## its mixer module)
+
+from pygame import init as init_pygame
+from pygame.mixer import pre_init as pre_init_mixer
+
+# pygame mixer pre-initialization
+pre_init_mixer(44100, -16, 2, 4096)
+
+# pygame initialization
+init_pygame()
+
 
 ### local imports
 
