@@ -30,6 +30,8 @@ from .widgetsetup.button import setup_buttons
 from .widgetsetup.entry import setup_entries
 from .widgetsetup.label import setup_labels
 
+from .initialpositioning import position_elements
+
 
 ## class for composition
 from .panel.main import ColorsPanel
@@ -55,6 +57,9 @@ class ColorsEditor(
     setup_entries = setup_entries
     setup_labels = setup_labels
 
+    ### and this one positions everything
+    position_elements = position_elements
+
     ### constructor
 
     def __init__(self):
@@ -65,10 +70,10 @@ class ColorsEditor(
 
         ## create and surface in the 'image' attribute,
         ## also referencing it locally for further changes
-        image = self.image = render_rect(820, 660, WINDOW_BG)
+        #image = self.image = render_rect(820, 660, WINDOW_BG)
 
         ## draw a border on the image
-        draw_border(image, thickness=2)
+        #draw_border(image, thickness=2)
 
         ## create a surface representing a special area
         ## wherein to locate controls used to edit the
@@ -77,16 +82,16 @@ class ColorsEditor(
         ## 'image' surface
 
         # create surface
-        controls_area_surf = render_rect(785, 400, WINDOW_BG)
+        #controls_area_surf = render_rect(785, 400, WINDOW_BG)
 
         # add a finish around it to convey depth
-        draw_depth_finish(controls_area_surf, outset=False, thickness=5)
+        #draw_depth_finish(controls_area_surf, outset=False, thickness=5)
 
         # blit the area over the 'image' surface
-        image.blit(controls_area_surf, (20, 215))
+        #image.blit(controls_area_surf, (20, 215))
 
         ## create a rect from the 'image' surface
-        self.rect = image.get_rect()
+        #self.rect = image.get_rect()
 
         ### instantiate the colors panel, a special panel
         ### widget used to display the colors we are
@@ -98,13 +103,15 @@ class ColorsEditor(
             no_of_visible_colors=7,
         )
 
-        ### create widget structure to support the
-        ### colors editor's operations
+        ### create widget structure to support the colors editor's operations
+        ### and position all those elements
 
         self.setup_scales()
         self.setup_buttons()
         self.setup_entries()
         self.setup_labels()
+
+        self.position_elements()
 
         ### store topleft coordinates of specific object
         ### groups to use whenever repositioning the

@@ -9,28 +9,22 @@ from ....classes2d.collections import List2D
 from ....our3rdlibs.scale import Scale
 
 
+
 def setup_scales(self):
     """Create and set up scale widgets.
 
-    Function meant to be injected in the ColorsEditor
-    class. Handles the creation of scale widgets.
+    Function meant to be injected in the ColorsEditor class.
+    Handles the creation of scale widgets.
     """
-    ### create special list to store scales, storing it
-    ### in its own attribute as well as referencing it
-    ### locally
-    scales = self.scales = List2D()
-
-    ### define a starting position from where to position
-    ### the scales
-    x, y = self.rect.move(144, 225).topleft
-
-    ### define a vertical padding (space between the scale
-    ### widgets)
-    vertical_padding = 10
-
     ### get an image whose subsurfaces represent scales
 
-    scales_surf = IMAGE_SURFS_DB["colors_editor_scale_images.png"][{"use_alpha": False}]
+    scales_surf = (
+
+        IMAGE_SURFS_DB
+        ['colors_editor_scale_images.png']
+        [{'use_alpha': False}]
+
+    )
 
     ### using the surface we just got, create a map whose
     ### keys are names of scales and the values are surfaces
@@ -48,7 +42,20 @@ def setup_scales(self):
     ### coordinate
 
     scale_name_to_surf = {
-        scale_name: scales_surf.subsurface((0, top_index * 32, 370, 32))
+
+        scale_name: (
+
+            scales_surf
+            .subsurface(
+
+                # rect from where to grab subsurface
+                # on scales_surf
+                (0, top_index * 32, 370, 32)
+
+            )
+
+        )
+
         for scale_name, top_index in (
             ("Hue", 0),
             ("Lightness", 1),
@@ -75,46 +82,42 @@ def setup_scales(self):
         ("Alpha", 255, 255, self.update_from_alpha),
     )
 
-    ### iterate over the data defined previously to create
-    ### and store scales
+    ### iterate over the data defined previously to create and store scales
 
-    for name, initial_value, max_value, command in scale_data:
+    scales = self.scales = (
 
-        ### instantiate scale (it is also positioned in
-        ### this step)
+        List2D(
 
-        scale = Scale(
-            value=initial_value,
-            scale_surf=scale_name_to_surf[name],
-            max_value=max_value,
-            name=name,
-            coordinates_value=(x, y),
-            command=command,
+            Scale(
+
+                value=initial_value,
+                scale_surf=scale_name_to_surf[name],
+                max_value=max_value,
+                name=name,
+                command=command,
+
+            )
+
+            for (
+
+                name,
+                initial_value,
+                max_value,
+                command,
+
+            ) in scale_data
+
         )
 
-        ### store scale
-        scales.append(scale)
+    )
 
-        ### update the y coordinates to be assigned to
-        ### the next scale
-
-        y = (
-            ## the current value of y
-            y
-            ## plus the height of the scale
-            + scale.rect.height
-            ## plus the vertical padding
-            + vertical_padding
-        )
-
-    ### create a map to store specific groupings of scales
-    ### (notice the alpha scale isn't grouped with any
-    ### other scale, because it operates independently
-    ### from all the others)
+    ### create a map to store specific groupings of scales (notice the alpha
+    ### scale isn't grouped with any other scale, since it operates
+    ### independently from all the others)
 
     self.scale_map = {
-        "hls": scales[:3],
-        "hsv": [scales[i] for i in (0, 2, 3)],
-        "rgb": scales[4:7],
-        "alpha": scales[7],
+        'hls': scales[:3],
+        'hsv': [scales[i] for i in (0, 2, 3)],
+        'rgb': scales[4:7],
+        'alpha': scales[7],
     }
