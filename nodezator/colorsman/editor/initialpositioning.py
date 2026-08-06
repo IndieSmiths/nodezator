@@ -1,85 +1,334 @@
 
-def position_elements(self):
+### third-party import
+from pygame import Rect
 
-    ### position buttons
+### local imports
 
-    ## reference the colors panel locally, since we'll reference it so much
-    ## futher ahead
+from ...pygamesetup.constants import SCREEN_RECT
+
+from ...classes2d.single import Object2D
+from ...classes2d.collections import List2D
+
+
+
+def position_elements_and_get_boundaries(self):
+
+    ### collection to gather all objects and manipulate them
+    all_objs = List2D()
+
+    ### reference colors panel locally
     colors_panel = self.colors_panel
 
-    ## position
+    all_objs.append(colors_panel)
 
-    move_left_button.rect.topleft = colors_panel.rect.move(85, 5).bottomleft
-    move_right_button.rect.topleft = move_left_button.rect.move(5, 0).topright
-    remove_color_button.rect.topleft = move_right_button.rect.move(5, 0).topright
-    add_color_button.rect.topleft = remove_color_button.rect.move(5, 0).topright
-    color_add_option_menu.rect.midleft = add_color_button.rect.move(5, 0).midright
-    sort_colors_button.rect.midleft = color_add_option_menu.rect.move(20, 0).midright
-    color_sorting_holder.rect.midleft = sort_colors_button.rect.move(5, 0).midright
-    reverse_order_button.rect.midleft = color_sorting_holder.rect.move(20, 0).midright
-    shuffle_button.rect.topleft = reverse_order_button.rect.move(5, 0).topright
-    remove_duplicates_button.rect.topleft = shuffle_button.rect.move(5, 0).topright
-    html_colors_button.rect.topleft = colors_panel.rect.move(25, 38).bottomleft
-    pygame_colors_button.rect.topleft = html_colors_button.rect.move(5, 0).topright
-    import_colors_button.rect.topleft = pygame_colors_button.rect.move(5, 0).topright
-    export_colors_button.rect.topleft = import_colors_button.rect.move(5, 0).topright
-    ok_button.rect.bottomright = self.rect.move(-10, -10).bottomright
-    cancel_button.rect.bottomright = ok_button.rect.move(-10, 0).bottomleft
-    alpha_checkbutton.rect.midright = self.scale_map["alpha"].rect.move(-10, 0).midleft
-    alpha_checkbutton_label.rect.midright = alpha_checkbutton.rect.move(-2, -2).midleft
-    view_button.rect.midleft = remove_duplicates_button.rect.move(5, 0).midright
+    ### reference all labels
 
-    ### position scales
+    (
 
-    ## define a starting position from where to position the scales
-    x, y = self.rect.move(144, 225).topleft
+        ## color properties/representations
 
-    ## define a vertical padding (space between the scale widgets)
-    vertical_padding = 10
+        scale_label_hue,
+        scale_label_lightness,
+        scale_label_saturation,
+        scale_label_value,
+        scale_label_red,
+        scale_label_green,
+        scale_label_blue,
+        label_hex,
+        label_html_name,
+        label_pygame_name,
+        scale_label_alpha,
 
-    for scale in scales:
+        ## others
 
-        scale.rect.topleft = (x, y)
+        label_current_colors,
+        label_more,
+        label_title,
 
-        ### update the y coordinates to be assigned to
-        ### the next scale
+    ) = self.labels
 
-        y = (
-            ## the current value of y
-            y
-            ## plus the height of the scale
-            + scale.rect.height
-            ## plus the vertical padding
-            + vertical_padding
+    all_objs.append(label_title)
+
+    ### reference all buttons (except entries)
+
+    (
+
+        move_left_button,
+        move_right_button,
+        remove_color_button,
+        add_color_button,
+        sort_colors_button,
+        reverse_order_button,
+        shuffle_button,
+        remove_duplicates_button,
+        html_colors_button,
+        pygame_colors_button,
+        import_colors_button,
+        export_colors_button,
+        ok_button,
+        cancel_button,
+        color_add_option_menu,
+        color_sorting_holder,
+        alpha_checkbutton,
+        alpha_checkbutton_label,
+        view_button,
+
+        *_, # not interested in entries at this point
+
+    ) = self.buttons
+
+
+    ### position colors panel under label title
+    colors_panel.rect.top = label_title.rect.move(0, 10).bottom
+
+    ### position label for current colors under colors panel
+    label_current_colors.rect.topleft = colors_panel.rect.move(0, 5).bottomleft
+
+    ### position "More" label under label for current colors
+    label_more.rect.topleft = label_current_colors.rect.move(0, 5).bottomleft
+
+    ### group and position buttons to the right of those labels
+
+    ## create a collection to hold items temporarily in order to assist
+    ## in positioning them relative to each other and to other objects
+    temp_list2d = List2D()
+
+    ## position buttons
+
+    for label, objects in (
+
+        (
+
+            label_current_colors,
+
+            (
+
+                move_left_button,
+                move_right_button,
+                remove_color_button,
+                add_color_button,
+                color_add_option_menu,
+                sort_colors_button,
+                color_sorting_holder,
+                reverse_order_button,
+                shuffle_button,
+                remove_duplicates_button,
+                view_button,
+
+            ),
+
+        ),
+
+        (
+
+            label_more,
+
+            (
+                html_colors_button,
+                pygame_colors_button,
+                import_colors_button,
+                export_colors_button,
+            ),
+
+        ),
+
+    ):
+
+        temp_list2d.extend(objects)
+
+        temp_list2d.rect.snap_rects_ip(
+            retrieve_pos_from='midright',
+            assign_pos_to='midleft',
+            offset_pos_by=(5, 0),
         )
 
-    ### position entries
+        temp_list2d.rect.midleft = label.rect.move(5, 0).midright
 
-    for entry, scale in zip(self.scale_entries, self.scales):
-        entry.rect.midleft = scale.rect.move(105, -2).midright
+        temp_list2d.clear()
 
-    hex_entry_topleft = self.scales[-1].rect.move(-69, 35).bottomleft
-    html_name_entry_midleft = self.hex_entry.rect.move(135, 0).midright
-    pygame_name_entry_midleft = self.html_name_entry.rect.move(154, 0).midright
+        ## also use the opportunity to reference labels and objects
 
-    ### position labels
+        all_objs.append(label)
+        all_objs.extend(objects)
 
-    ## reference individual scales
-    hue, light, sat, value, red, green, blue, alpha = self.scales
 
-    ## toplefts
+    ### position related scales, labels and entries relative to each other
 
-    hue.rect.move(10, 0).topright),
-    light.rect.move(10, 0).topright),
-    sat.rect.move(10, 0).topright),
-    value.rect.move(10, 0).topright),
-    red.rect.move(10, 0).topright),
-    green.rect.move(10, 0).topright),
-    blue.rect.move(10, 0).topright),
-    alpha.rect.move(-115, 29).bottomleft),
-    alpha.rect.move(50, 29).bottomleft),
-    alpha.rect.move(360, 29).bottomleft),
-    alpha.rect.move(10, 0).topright),
-    self.colors_panel.rect.move(-25, 5).bottomleft),
-    self.colors_panel.rect.move(-25, 38).bottomleft),
-    title_obj.rect.topleft = self.rect.move(5, 5).topleft
+    ## create a collection to hold items temporarily in order to assist
+    ## in positioning them relative to each other and to other objects
+
+    (
+
+        scale_group,
+        label_group,
+        entry_group,
+
+    ) = groups = [List2D() for _ in range(3)]
+
+    scale_group.extend(self.scales)
+
+    label_group.extend((
+        scale_label_hue,
+        scale_label_lightness,
+        scale_label_saturation,
+        scale_label_value,
+        scale_label_red,
+        scale_label_green,
+        scale_label_blue,
+        scale_label_alpha,
+    ))
+
+    entry_group.extend(self.scale_entries)
+
+    ## calculate highest width and height for labels, which will be useful in
+    ## further steps
+    label_widths, label_heights = zip(*(item.rect.size for item in label_group))
+
+    ## since text may vary in size, we position the labels relative to each
+    ## other vertically first (we could've used the entries as well, since
+    ## they also vary in size depending on the font's height)
+
+    distance_between_bottoms = (
+
+        ## highest height
+        max(label_heights)
+
+        ## plus arbitrary padding
+        + 15
+
+    )
+
+    label_group.rect.snap_rects_ip(
+        retrieve_pos_from='bottomleft',
+        assign_pos_to='bottomleft',
+        offset_pos_by=(0, distance_between_bottoms),
+    )
+
+    ## position the other groups relative to the labels
+
+    distance_between_lefts = (
+
+        ## highest width
+        max(label_widths)
+
+        ## plus arbitrary padding
+        + 5
+
+    )
+
+    for scale, label, entry in zip(*groups):
+
+        scale.rect.bottomright = label.rect.move(-5, 0).bottomleft
+
+        entry.rect.bottomleft = (
+            label.rect.move(distance_between_lefts, 0).bottomleft
+        )
+
+    ### position label and checkbutton related to the alpha scale next to it
+
+    alpha_scale = scale_group[-1]
+
+    alpha_checkbutton.rect.midright = alpha_scale.rect.move(-10, 0).midleft
+    alpha_checkbutton_label.rect.midright = (
+        alpha_checkbutton.rect.move(-2, -2).midleft
+    )
+
+    ### 
+
+    control_area_objs = List2D()
+
+    for group in groups:
+
+        control_area_objs.extend(group)
+        group.clear()
+
+    control_area_objs.extend((alpha_checkbutton, alpha_checkbutton_label))
+
+    ### position other entries and their related labels relative to this
+    ### last group of scale-label-entry triplets (and the alpha related
+    ### widgets we just added to it)
+
+    row = List2D()
+
+    x = 0
+
+    for pair in (
+
+        (label_hex, self.hex_entry),
+        (label_html_name, self.html_name_entry),
+        (label_pygame_name, self.pygame_name_entry),
+
+    ):
+
+        row.extend(pair)
+
+        label, entry = pair
+
+        label.rect.x = x
+        entry.rect.bottomleft = label.rect.move(5, 0).bottomright
+
+        x = entry.rect.right + 20
+
+    distance_between_bottoms = (
+
+        ## highest height
+        row.rect.height
+
+        ## plus arbitrary padding
+        + 10
+
+    )
+
+    row.rect.bottomleft = (
+        control_area_objs.rect.move(0, distance_between_bottoms).bottomleft
+    )
+
+    control_area_objs.extend(row)
+
+    ###
+
+    _temp_obj = Object2D()
+    _temp_obj.rect = control_area_objs.rect.inflate(20, 20)
+    _temp_obj.rect.topleft = label_more.rect.move(0, 10).bottomleft
+    control_area_objs.rect.center = _temp_obj.rect.center
+    control_area_objs.append(_temp_obj)
+
+    all_objs.extend(control_area_objs)
+
+
+    ### finally, position remaining buttons relative to all objects so far
+
+    row.clear()
+    row.extend((cancel_button, ok_button))
+
+    row.rect.snap_rects_ip(
+        retrieve_pos_from='midright',
+        assign_pos_to='midleft',
+        offset_pos_by=(5, 0),
+    )
+
+    distance_between_bottoms = (
+
+        ## highest height
+        row.rect.height
+
+        ## plus arbitrary padding
+        + 10
+
+    )
+
+    row.rect.bottomright = (
+        all_objs.rect.move(0, distance_between_bottoms).bottomright
+    )
+
+    all_objs.extend(row)
+
+    all_objs.rect.move_ip(10, 10)
+    boundaries_rect = all_objs.rect.inflate(20, 20)
+    all_objs.clear()
+
+
+    return (
+        boundaries_rect,
+        control_area_objs.rect.copy(),
+    )

@@ -120,7 +120,7 @@ def setup_labels(self):
 
     ## combine surfs into a single one in a new object
 
-    self.title_obj = (
+    title_obj = (
 
         Object2D.from_surface(
 
@@ -138,4 +138,4 @@ def setup_labels(self):
     )
 
     ## finally, store the title object as a label
-    self.labels.append(self.title_obj)
+    self.labels.append(title_obj)
