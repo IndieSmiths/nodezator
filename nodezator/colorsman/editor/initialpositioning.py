@@ -89,67 +89,88 @@ def position_elements_and_get_boundaries(self):
 
     ### group and position buttons to the right of those labels
 
-    ## create a collection to hold items temporarily in order to assist
-    ## in positioning them relative to each other and to other objects
-    temp_list2d = List2D()
+    ## "Current colors" label
 
-    ## position buttons
+    group_a = List2D((
 
-    for label, objects in (
+        move_left_button,
+        move_right_button,
+        remove_color_button,
+        add_color_button,
+        color_add_option_menu,
 
-        (
+    ))
 
-            label_current_colors,
+    group_b = List2D((
+        sort_colors_button,
+        color_sorting_holder,
+    ))
 
-            (
+    group_c = List2D((
+        reverse_order_button,
+        shuffle_button,
+        remove_duplicates_button,
+        view_button,
+    ))
 
-                move_left_button,
-                move_right_button,
-                remove_color_button,
-                add_color_button,
-                color_add_option_menu,
-                sort_colors_button,
-                color_sorting_holder,
-                reverse_order_button,
-                shuffle_button,
-                remove_duplicates_button,
-                view_button,
+    label_current_colors_groups = List2D((
+        group_a,
+        group_b,
+        group_c,
+    ))
 
-            ),
+    for group in label_current_colors_groups:
 
-        ),
-
-        (
-
-            label_more,
-
-            (
-                html_colors_button,
-                pygame_colors_button,
-                import_colors_button,
-                export_colors_button,
-            ),
-
-        ),
-
-    ):
-
-        temp_list2d.extend(objects)
-
-        temp_list2d.rect.snap_rects_ip(
+        group.rect.snap_rects_ip(
             retrieve_pos_from='midright',
             assign_pos_to='midleft',
             offset_pos_by=(5, 0),
         )
 
-        temp_list2d.rect.midleft = label.rect.move(5, 0).midright
+    label_current_colors_groups.rect.snap_rects_ip(
+        retrieve_pos_from='midright',
+        assign_pos_to='midleft',
+        offset_pos_by=(30, 0),
+    )
 
-        temp_list2d.clear()
+    label_current_colors_groups.rect.midleft = (
+        label_current_colors.rect.move(5, 0).midright
+    )
 
-        ## also use the opportunity to reference labels and objects
+    ## "More" label
 
-        all_objs.append(label)
-        all_objs.extend(objects)
+    label_more_objs = List2D((
+        html_colors_button,
+        pygame_colors_button,
+        import_colors_button,
+        export_colors_button,
+    ))
+
+    label_more_objs = List2D(label_more_objs)
+
+    label_more_objs.rect.snap_rects_ip(
+        retrieve_pos_from='midright',
+        assign_pos_to='midleft',
+        offset_pos_by=(5, 0),
+    )
+
+    label_more_objs.rect.midleft = label_more.rect.move(5, 0).midright
+
+    ### also use the opportunity to reference labels and objects (and clearing
+    ### group we won't need anymore)
+
+    all_objs.append(label_current_colors)
+
+    for group in label_current_colors_groups:
+
+        all_objs.extend(group)
+        group.clear()
+
+    label_current_colors_groups.clear()
+
+    all_objs.append(label_more)
+    all_objs.extend(label_more_objs)
+    label_more_objs.clear()
 
 
     ### position related scales, labels and entries relative to each other
@@ -221,7 +242,7 @@ def position_elements_and_get_boundaries(self):
         scale.rect.bottomright = label.rect.move(-5, 0).bottomleft
 
         entry.rect.bottomleft = (
-            label.rect.move(distance_between_lefts, 0).bottomleft
+            label.rect.move(distance_between_lefts, -5).bottomleft
         )
 
     ### position label and checkbutton related to the alpha scale next to it
@@ -265,7 +286,7 @@ def position_elements_and_get_boundaries(self):
         label, entry = pair
 
         label.rect.x = x
-        entry.rect.bottomleft = label.rect.move(5, 0).bottomright
+        entry.rect.bottomleft = label.rect.move(5, -5).bottomright
 
         x = entry.rect.right + 20
 
@@ -288,9 +309,9 @@ def position_elements_and_get_boundaries(self):
     ###
 
     _temp_obj = Object2D()
-    _temp_obj.rect = control_area_objs.rect.inflate(20, 20)
+    _temp_obj.rect = control_area_objs.rect.inflate(20, 30)
     _temp_obj.rect.topleft = label_more.rect.move(0, 10).bottomleft
-    control_area_objs.rect.center = _temp_obj.rect.center
+    control_area_objs.rect.center = _temp_obj.rect.move(0, 10).center
     control_area_objs.append(_temp_obj)
 
     all_objs.extend(control_area_objs)

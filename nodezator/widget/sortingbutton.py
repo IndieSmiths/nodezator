@@ -60,10 +60,10 @@ TEXT_KWARGS = {
 ICON_SURF = render_layered_icon(
     chars=[chr(ordinal) for ordinal in (104, 105)],
     dimension_name='height',
-    dimension_value=19,
+    dimension_value=APP_REFS.general_font_height,
     colors=[BLACK, (30, 130, 70)],
-    background_width=20,
-    background_height=20,
+    background_width=APP_REFS.general_font_height + 2,
+    background_height=APP_REFS.general_font_height + 2,
 )
 
 ## message when displaying value of widget
@@ -133,15 +133,31 @@ class SortingButton(Object2D):
         self.name = name
         self.command = command
 
-        ### create a surface to clean the image attribute
-        ### surface every time the value changes
+        ### create a surface to clean the image attribute surface every time
+        ### the value changes
 
-        ### TODO make this 155 to be the result of some
-        ### meaningful calculation; probably a new max width
-        ### argument minus the width of the icon;
+        self.clean_surf = (
 
-        self.clean_surf = render_rect(width, 19, LIST_SORTING_BUTTON_BG)
+            render_rect(
+                width,
+                APP_REFS.general_font_height + 4,
+                LIST_SORTING_BUTTON_BG,
+            )
 
+        )
+
+        ## use blit aligned to blit icon aligned to the midleft of the surface
+        ## in the image attribute, just one extra pixel to the left
+
+        blit_aligned(
+            ICON_SURF,
+            self.clean_surf,
+            'midleft',
+            'midleft',
+            offset_pos_by=(1, 0),
+        )
+
+        ## draw a border around it
         draw_border(self.clean_surf, LIST_SORTING_BUTTON_FG)
 
         ### create an image from the clean surf
@@ -286,28 +302,24 @@ class SortingButton(Object2D):
 
     def update_image(self):
         """Update widget image."""
+
         ### clean image surface
         self.image.blit(self.clean_surf, (0, 0))
 
-        ### use blit aligned to blit icon aligned to the
-        ### midleft of the surface in the image attribute,
-        ### just one extra pixel to the left
-
-        # TODO it would probably be better to blit this
-        # icon in the 'clean_surf' itself, since it
-        # doesn't change anyway
-        blit_aligned(ICON_SURF, self.image, "midleft", "midleft", offset_pos_by=(1, 0))
-
         ### render a text surface from the retrieved text
-
         text_surf = render_text(text=str(self.value), **TEXT_KWARGS)
 
-        ### use blit aligned to blit text surface aligned to
-        ### the midleft of the surface in the image
-        ### attribute, a bit more to the left, so it sits
-        ### beside the icon
+        ### use blit aligned to blit text surface aligned to the midleft
+        ### of the surface in the image attribute, a bit more to the left,
+        ### so it sits beside the icon
 
-        blit_aligned(text_surf, self.image, "midleft", "midleft", offset_pos_by=(22, 0))
+        blit_aligned(
+            text_surf,
+            self.image,
+            'midleft',
+            'midleft',
+            offset_pos_by=(ICON_SURF.get_width() + 2, 0),
+        )
 
     def change_value(self):
         """Sort the values.
