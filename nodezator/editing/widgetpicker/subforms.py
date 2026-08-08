@@ -236,14 +236,18 @@ class SubformCreation:
 
         ## instantiate and store
 
-        validation_command_option_menu = OptionMenu(
-            name=widget_name,
-            loop_holder=self,
-            value=options[0],
-            options=options,
-            draw_on_window_resize=self.draw,
-            coordinates_name=coordinates_name,
-            coordinates_value=offset,
+        validation_command_option_menu = (
+
+            OptionMenu(
+                name=widget_name,
+                loop_holder=self,
+                value=options[0],
+                options=options,
+                draw_on_window_resize=self.draw,
+                coordinates_name=coordinates_name,
+                coordinates_value=offset,
+            )
+
         )
 
         string_entry_subform.append(validation_command_option_menu)
@@ -438,14 +442,18 @@ class SubformCreation:
 
         ## instantiate and store
 
-        syntax_highlighting_option_menu = OptionMenu(
-            name=widget_name,
-            loop_holder=self,
-            value=options[0],
-            options=options,
-            draw_on_window_resize=self.draw,
-            coordinates_name=coordinates_name,
-            coordinates_value=offset,
+        syntax_highlighting_option_menu = (
+
+            OptionMenu(
+                name=widget_name,
+                loop_holder=self,
+                value=options[0],
+                options=options,
+                draw_on_window_resize=self.draw,
+                coordinates_name=coordinates_name,
+                coordinates_value=offset,
+            )
+
         )
 
         text_display_subform.append(syntax_highlighting_option_menu)
@@ -806,13 +814,16 @@ class SubformCreation:
 
         ## instantiate and store
 
-        numeric_classes_hint_option_tray = OptionTray(
-            name=widget_name,
-            value=options[0],
-            options=options,
-            max_width=0,
-            coordinates_name=coordinates_name,
-            coordinates_value=offset,
+        numeric_classes_hint_option_tray = (
+
+            OptionTray(
+                name=widget_name,
+                value=options[0],
+                options=options,
+                coordinates_name=coordinates_name,
+                coordinates_value=offset,
+            )
+
         )
 
         int_float_entry_subform.append(numeric_classes_hint_option_tray)
@@ -1266,14 +1277,19 @@ class SubformCreation:
         options = ["rgb_ints", "hex_string"]
 
         # instantiate and store
-        color_format_option_menu = OptionMenu(
-            name=widget_name,
-            loop_holder=self,
-            value=options[0],
-            options=options,
-            draw_on_window_resize=self.draw,
-            coordinates_name=coordinates_name,
-            coordinates_value=offset,
+
+        color_format_option_menu = (
+
+            OptionMenu(
+                name=widget_name,
+                loop_holder=self,
+                value=options[0],
+                options=options,
+                draw_on_window_resize=self.draw,
+                coordinates_name=coordinates_name,
+                coordinates_value=offset,
+            )
+
         )
 
         colorbutton_subform.append(color_format_option_menu)
@@ -1407,14 +1423,18 @@ class SubformCreation:
         offset = text_obj.rect.width + 10, offset[1] + 5
         coordinates_name = "topleft"
 
-        value_option_menu = OptionMenu(
-            name=widget_name,
-            loop_holder=self,
-            value=available_options[0],
-            options=available_options,
-            draw_on_window_resize=self.draw,
-            coordinates_name=coordinates_name,
-            coordinates_value=offset,
+        value_option_menu = (
+
+            OptionMenu(
+                name=widget_name,
+                loop_holder=self,
+                value=available_options[0],
+                options=available_options,
+                draw_on_window_resize=self.draw,
+                coordinates_name=coordinates_name,
+                coordinates_value=offset,
+            )
+
         )
 
         option_menu_subform.append(value_option_menu)
@@ -1604,13 +1624,16 @@ class SubformCreation:
         offset = text_obj.rect.width + 10, offset[1] + 5
         coordinates_name = "topleft"
 
-        value_option_tray = OptionTray(
-            name=widget_name,
-            value=available_options[0],
-            options=available_options,
-            max_width=0,
-            coordinates_name=coordinates_name,
-            coordinates_value=offset,
+        value_option_tray = (
+
+            OptionTray(
+                name=widget_name,
+                value=available_options[0],
+                options=available_options,
+                coordinates_name=coordinates_name,
+                coordinates_value=offset,
+            )
+
         )
 
         option_tray_subform.append(value_option_tray)

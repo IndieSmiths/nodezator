@@ -160,6 +160,7 @@ class WidgetPicker(Object2D, SubformCreation):
                 value='string_entry',
                 options=AVAILABLE_WIDGETS,
                 font_height=FONT_HEIGHT,
+                max_width=0,
                 draw_on_window_resize=self.draw,
                 command=self.update_widget_subform,
             )

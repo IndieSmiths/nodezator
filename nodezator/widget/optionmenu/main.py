@@ -147,7 +147,7 @@ class OptionMenu(OptionMenuLifetimeOperations):
         loop_holder=None,
 
         clamp_area=SCREEN_RECT,
-        max_width=155,
+        max_width=0,
 
         font_height=APP_REFS.general_font_height,
         font_key=APP_REFS.general_font_key,

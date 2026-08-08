@@ -266,7 +266,6 @@ class NodePacksSelectionChangeForm(Object2D):
             loop_holder=self,
             value=OPTION_MENU_DEFAULT_STRING,
             options=[OPTION_MENU_DEFAULT_STRING] + get_known_node_packs(),
-            max_width=700,
             command=self.pick_chosen_node_pack,
             draw_on_window_resize=self.draw,
             coordinates_name="midleft",

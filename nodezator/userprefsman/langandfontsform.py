@@ -195,67 +195,90 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         ### create specific widgets to edit user preferences
 
-        lang_option_menu = OptionMenu(
-            loop_holder=self,
-            options=AVAILABLE_LOCALES,
-            value=USER_PREFS['LOCALE'],
-            draw_on_window_resize=self.draw,
-            name='LOCALE',
-            max_width=0,
-        )
+        lang_option_menu = (
 
-        general_font_size_intfloat_entry = IntFloatEntry(
-            loop_holder=self,
-            value=USER_PREFS['GENERAL_FONT_HEIGHT'],
-            name='GENERAL_FONT_HEIGHT',
-            width=90,
-            min_value=min(GENERAL_FONT_HEIGHT_RANGE),
-            max_value=max(GENERAL_FONT_HEIGHT_RANGE),
-            numeric_classes_hint='int',
-            allow_none=False,
-            draw_on_window_resize=self.draw,
-        )
-
-        mono_font_size_intfloat_entry = IntFloatEntry(
-            loop_holder=self,
-            value=USER_PREFS['MONO_FONT_HEIGHT'],
-            name='MONO_FONT_HEIGHT',
-            min_value=min(MONO_FONT_HEIGHT_RANGE),
-            max_value=max(MONO_FONT_HEIGHT_RANGE),
-            width=90,
-            numeric_classes_hint='int',
-            allow_none=False,
-            draw_on_window_resize=self.draw,
-        )
-
-        general_font_kind_option_menu = self.gen_font_option = OptionMenu(
-            loop_holder=self,
-            options=FONT_KIND_OPTIONS,
-            value=USER_PREFS['GENERAL_FONT_KIND'],
-            name='GENERAL_FONT_KIND',
-            draw_on_window_resize=self.draw,
-            command=self.switch_general_font_use_widget,
-            max_width=0,
-        )
-
-        mono_font_kind_option_menu = self.mono_font_option = OptionMenu(
-            loop_holder=self,
-            options=FONT_KIND_OPTIONS,
-            value=USER_PREFS['MONO_FONT_KIND'],
-            name='MONO_FONT_KIND',
-            draw_on_window_resize=self.draw,
-            command=self.switch_mono_font_use_widget,
-            max_width=0,
-        )
-
-        self.prefs_widgets = prefs_widgets = List2D(
-            (
-                lang_option_menu,
-                general_font_size_intfloat_entry,
-                mono_font_size_intfloat_entry,
-                general_font_kind_option_menu,
-                mono_font_kind_option_menu,
+            OptionMenu(
+                loop_holder=self,
+                options=AVAILABLE_LOCALES,
+                value=USER_PREFS['LOCALE'],
+                draw_on_window_resize=self.draw,
+                name='LOCALE',
             )
+
+        )
+
+        general_font_size_intfloat_entry = (
+
+            IntFloatEntry(
+                loop_holder=self,
+                value=USER_PREFS['GENERAL_FONT_HEIGHT'],
+                name='GENERAL_FONT_HEIGHT',
+                width=90,
+                min_value=min(GENERAL_FONT_HEIGHT_RANGE),
+                max_value=max(GENERAL_FONT_HEIGHT_RANGE),
+                numeric_classes_hint='int',
+                allow_none=False,
+                draw_on_window_resize=self.draw,
+            )
+
+        )
+
+        mono_font_size_intfloat_entry = (
+
+            IntFloatEntry(
+                loop_holder=self,
+                value=USER_PREFS['MONO_FONT_HEIGHT'],
+                name='MONO_FONT_HEIGHT',
+                min_value=min(MONO_FONT_HEIGHT_RANGE),
+                max_value=max(MONO_FONT_HEIGHT_RANGE),
+                width=90,
+                numeric_classes_hint='int',
+                allow_none=False,
+                draw_on_window_resize=self.draw,
+            )
+
+        )
+
+        general_font_kind_option_menu = self.gen_font_option = (
+
+            OptionMenu(
+                loop_holder=self,
+                options=FONT_KIND_OPTIONS,
+                value=USER_PREFS['GENERAL_FONT_KIND'],
+                name='GENERAL_FONT_KIND',
+                draw_on_window_resize=self.draw,
+                command=self.switch_general_font_use_widget,
+            )
+
+        )
+
+        mono_font_kind_option_menu = self.mono_font_option = (
+
+            OptionMenu(
+                loop_holder=self,
+                options=FONT_KIND_OPTIONS,
+                value=USER_PREFS['MONO_FONT_KIND'],
+                name='MONO_FONT_KIND',
+                draw_on_window_resize=self.draw,
+                command=self.switch_mono_font_use_widget,
+            )
+
+        )
+
+        self.prefs_widgets = prefs_widgets = (
+
+            List2D(
+
+                (
+                    lang_option_menu,
+                    general_font_size_intfloat_entry,
+                    mono_font_size_intfloat_entry,
+                    general_font_kind_option_menu,
+                    mono_font_kind_option_menu,
+                )
+
+            )
+
         )
 
         right = max(label.rect.right for label in labels) + 5

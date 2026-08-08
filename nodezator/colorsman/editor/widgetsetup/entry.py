@@ -88,7 +88,7 @@ def setup_entries(self):
         value="#ff0000",
         loop_holder=self,
         font_height=FONT_HEIGHT,
-        width=85,
+        width=170,
         draw_on_window_resize=self.draw,
         command=self.update_from_hex_entry,
         validation_command=validate_hex_color_string,

@@ -243,8 +243,8 @@ class ImageExportForm(Object2D):
         ### instantiate widgets for image type
 
         image_type_label = Object2D.from_surface(
-            render_text("Image type:", **TEXT_SETTINGS),
-            coordinates_name="topleft",
+            render_text('Image type:', **TEXT_SETTINGS),
+            coordinates_name='topleft',
             coordinates_value=topleft,
         )
 
@@ -254,13 +254,17 @@ class ImageExportForm(Object2D):
 
         midleft = image_type_label.rect.move(10, 0).midright
 
-        self.image_type_tray = OptionTray(
-            value=".html",
-            options=(".html", ".svg", ".png"),
-            name="image_type",
-            command=self.update_image_type,
-            coordinates_name="midleft",
-            coordinates_value=midleft,
+        self.image_type_tray = (
+
+            OptionTray(
+                value='.html',
+                options=('.html', '.svg', '.png'),
+                name='image_type',
+                command=self.update_image_type,
+                coordinates_name='midleft',
+                coordinates_value=midleft,
+            )
+
         )
 
         self.widgets.append(self.image_type_tray)
@@ -279,7 +283,7 @@ class ImageExportForm(Object2D):
                 text=(t.image_export_form.background_color) + ":",
                 **TEXT_SETTINGS,
             ),
-            coordinates_name="topleft",
+            coordinates_name='topleft',
             coordinates_value=topleft,
         )
 
@@ -291,8 +295,8 @@ class ImageExportForm(Object2D):
 
         bg_colorbutton = ColorButton(
             value=GRAPH_BG,
-            name="background_color",
-            coordinates_name="midleft",
+            name='background_color',
+            coordinates_name='midleft',
             coordinates_value=midleft,
         )
 
@@ -307,7 +311,7 @@ class ImageExportForm(Object2D):
         set_bg_button = Button.from_text(
             text=(t.image_export_form.restore_default),
             command=command,
-            coordinates_name="midleft",
+            coordinates_name='midleft',
             coordinates_value=midleft,
             **BUTTON_SETTINGS,
         )
@@ -329,7 +333,7 @@ class ImageExportForm(Object2D):
 
         margins_label = Object2D.from_surface(
             surface=render_text(text=text, **TEXT_SETTINGS),
-            coordinates_name="topleft",
+            coordinates_name='topleft',
             coordinates_value=topleft,
         )
 
