@@ -475,13 +475,14 @@ class UserActions:
         ### leave method if none is found
         if not centers_of_pair_of_nodes: return
 
-        ### otherwise, move the screen so farthest center (among the
-        ### centers of the 02 nodes the segment connects) ends up
-        ### at the center of the screen
+        ### otherwise...
+
+        ## calculate which of the centers is the farthest one from the center
+        ## of the screen
 
         screen_center = Vector2(SCREEN_RECT.center)
 
-        farthest_point = (
+        farthest_center = (
 
             max(
 
@@ -494,7 +495,12 @@ class UserActions:
 
         )
 
-        APP_REFS.ea.scroll(*(screen_center - farthest_point))
+        ## trigger smooth scrolling if possible (will perform regular scrolling
+        ## otherwise)
+
+        APP_REFS.ea.trigger_smoothscrolling_if_possible(
+            *(screen_center - farthest_center)
+        )
 
 
 get_output_sockets = attrgetter('output_sockets')

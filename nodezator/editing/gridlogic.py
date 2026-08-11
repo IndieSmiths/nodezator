@@ -19,6 +19,8 @@ from ..pygamesetup import SCREEN, SCREEN_RECT
 
 from ..pygamesetup.constants import FPS
 
+from ..loopman.exception import ContinueLoopException
+
 from ..dialog import create_and_show_dialog
 
 from ..ourstdlibs.collections.general import CallList
@@ -145,7 +147,7 @@ class GridHandling:
     def scroll_to_origin(self):
         """Scroll back to (0, 0) scrolling amount."""
         dx, dy = -self.scrolling_amount
-        self.scroll(dx, dy)
+        self.trigger_smoothscrolling_if_possible(dx, dy)
 
     def scroll(self, dx, dy):
         """Scroll grid and objects."""
@@ -198,3 +200,50 @@ class GridHandling:
         dy = y_direction * SCROLL_SPEED
 
         self.scroll(dx, dy)
+
+    def trigger_smoothscrolling_if_possible(self, dx, dy):
+        """Trigger smoothscrolling if possible, otherwise scroll normally.
+
+        It is possible if the movement is far enough in both dimensions,
+        otherwise there is not enough space to scroll smoothly.
+        """
+
+        if abs(dx) < 20 and abs(dy) < 20:
+
+            self.scroll(dx, dy)
+            return
+
+        ### otherwise
+
+        deltas = []
+
+        for percent in (5, 5, 5, 5, 60, 5, 5, 5, 5):
+
+            factor = percent/100
+
+            x_amount = round(dx * factor)
+            y_amount = round(dy * factor)
+
+            deltas.append([x_amount, y_amount])
+
+        dxs, dys = zip(*deltas)
+
+        dxs_sum = sum(dxs)
+        dys_sum = sum(dys)
+
+        x_diff = dx - dxs_sum
+        y_diff = dy - dys_sum
+
+        if x_diff:
+            deltas[-1][0] += x_diff
+
+        if y_diff:
+            deltas[-1][1] += y_diff
+
+        APP_REFS.wm.smoothscrolling_steps.extend(deltas)
+
+        ## set smoothscrolling state
+        APP_REFS.wm.set_state('smoothscrolling')
+
+        ## restart the loop
+        raise ContinueLoopException

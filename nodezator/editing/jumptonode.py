@@ -238,7 +238,7 @@ class JumpToNodeForm(Object2D):
 
         ### create and store behaviour for exiting the form
         ### (equivalent to setting the 'running' flag to False)
-        self.leave = partial(setattr, self, "running", False)
+        self.trigger_form_exit = partial(setattr, self, "running", False)
 
     def check_id_and_jump(self):
 
@@ -264,8 +264,10 @@ class JumpToNodeForm(Object2D):
 
             return
 
-        ### otherwise, we'll perform operations to move canvas to requested
-        ### node and leave this form
+        ### otherwise, we'll trigger exit of this form and perform operations
+        ### to move canvas to requested node
+
+        self.trigger_form_exit()
 
         ea = APP_REFS.ea
 
@@ -273,11 +275,9 @@ class JumpToNodeForm(Object2D):
 
         ea.add_obj_to_selection(node)
 
-        ea.scroll(
+        ea.trigger_smoothscrolling_if_possible(
             *(Vector2(SCREEN_RECT.center) - node.rect.center)
         )
-
-        self.leave()
 
 
     def present_jump_to_node_form(self):
@@ -348,7 +348,7 @@ class JumpToNodeForm(Object2D):
             elif event.type == KEYUP:
 
                 if event.key == K_ESCAPE:
-                    self.leave()
+                    self.trigger_form_exit()
 
                 elif event.key in (K_RETURN, K_KP_ENTER):
                     self.check_id_and_jump()
@@ -374,7 +374,7 @@ class JumpToNodeForm(Object2D):
                     ## leave form if mouse left button is released
                     ## out of boundaries
                     else:
-                        self.leave()
+                        self.trigger_form_exit()
 
     # XXX in the future, maybe a "Reset" button would be
     # nice

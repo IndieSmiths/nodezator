@@ -1,10 +1,16 @@
 """Facility for window manager class."""
 
+### standard library import
+from collections import deque
+
+
 ### third-party imports
 
 from pygame import Rect
 
 from pygame.display import set_caption
+
+from pygame.math import Vector2
 
 
 ### local imports
@@ -83,6 +89,7 @@ from .states.segmentsev import SegmentSeveranceState
 from .states.movingobject import MovingObjectState
 from .states.boxselection import BoxSelectionState
 from .states.birdseyeview import BirdsEyeViewState
+from .states.smoothscrolling import SmoothscrollingState
 
 from .menu import MenuSetup
 from .label import MonitorLabelSetup
@@ -106,6 +113,7 @@ STATE_NAMES = (
     'segment_severance',
     'box_selection',
     'birdseye_view',
+    'smoothscrolling',
 )
 
 BEHAVIOUR_NAMES = (
@@ -129,6 +137,7 @@ class WindowManager(
     MovingObjectState,
     BoxSelectionState,
     BirdsEyeViewState,
+    SmoothscrollingState,
 
     ### support operations
 
@@ -179,6 +188,10 @@ class WindowManager(
 
         ### create separator obj
         self.separator = Object2D(rect=Rect(0, 0, 0, 0))
+
+        ### create collection to help keep track of remaining amounts
+        ### for smoothscrolling
+        self.smoothscrolling_steps = deque()
 
         ### append window resize setup method
         APP_REFS.window_resize_setups.append(self.resize_setups)
