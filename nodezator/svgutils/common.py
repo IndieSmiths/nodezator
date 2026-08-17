@@ -6,8 +6,6 @@ from collections.abc import Iterable
 
 from xml.dom.minidom import parseString
 
-from re import sub
-
 
 
 def format_color(color):
@@ -57,38 +55,92 @@ def _change_transform(element, transform_name, value_string):
     if not value_string:
         raise ValueError("'value_string' must not be empty")
 
+    ### if a transform attribute already exists, either:
     ###
+    ### - replace the value of the specific transform function
+    ###   if there's one already
+    ### - add it to the existing transforms already present
 
     if element.hasAttribute('transform'):
 
         transform = element.getAttribute('transform')
 
-        ##
+        ### replace value if tranform function already present
 
         if transform_name in transform:
 
-            new_transform = sub(
-                f'({transform_name}\(.*\))',
-                f'{transform_name}({value_string})',
-                transform,
+            new_transform = (
+
+                _substitute_old_value(
+                    transform_name,
+                    transform,
+                    value_string,
+                )
+
             )
 
-        ##
+        ### otherwise add it
 
         else:
 
-            transform_text = f'{transform_name}({value_string})'
+            ## build call
+            transform_call_text = f'{transform_name}({value_string})'
 
-            if transform:
-                new_transform = f'{transform} {transform_text}'
+            ## add this call to existing ones (if any) or use it
+            ## as-is if there aren't others
 
-            else:
-                new_transform = transform_text
+            new_transform = (
 
-    ###
+                f'{transform} {transform_call_text}'
+                if transform
+
+                else transform_call_text
+
+            )
+
+    ### if otherwise a transform attribute does not exist,
+    ### use call to the transform using the given value to
+    ### use as the transform text
     else:
         new_transform = f'{transform_name}({value_string})'
 
-    ###
+
+    ### finally set the new transform text built in the attribute
     element.setAttribute('transform', new_transform)
 
+
+def _substitute_old_value(
+    transform_name,
+    transform_text,
+    value_string,
+):
+    """Return transform text with value replaced by given value string.
+
+    Uses string indexing and slicing to build the new string with the value
+    replaced.
+    """
+
+    ## index of transform name
+    t_index = transform_text.index(transform_name)
+
+    ## index of open parenthesis
+    op_index = transform_text.index('(', t_index)
+
+    ## index of close parenthesis
+    cp_index = transform_text.index(')', op_index)
+
+    ## return text with content between parentheses replaced
+
+    return (
+
+        ## everything before opening parenthesis + the open parenthesis
+        ## itself
+        transform_text[:op_index+1]
+
+        ## the new value
+        + value_string
+
+        ## the close parenthesis and everything after it
+        + transform_text[cp_index:]
+
+    )
