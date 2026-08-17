@@ -35,7 +35,7 @@ TEXT_EDITOR_BEHAVIOR_OPTIONS = ('default', 'vim-like')
 GENERAL_FONT_HEIGHT_RANGE = range(16, 40)
 MONO_FONT_HEIGHT_RANGE = range(16, 40)
 
-FONT_KIND_OPTIONS = ('default', 'system font', 'font file')
+FONT_KIND_OPTIONS = ('default', 'system_font', 'font_file')
 
 
 ### function definitions

@@ -59,11 +59,6 @@ from ...our3rdlibs.behaviour import (
 from ...classes2d.single import Object2D
 from ...classes2d.collections import List2D
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
-
 from ...textman.render import render_text
 from ...textman.label.main import Label
 
@@ -129,16 +124,16 @@ t = TRANSLATIONS.editing
 ### constants
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': WINDOW_FG,
     'background_color': WINDOW_BG,
 }
 
 BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'depth_finish_thickness': 1,
     'foreground_color': BUTTON_FG,
@@ -271,7 +266,6 @@ class NodePacksSelectionChangeForm(Object2D):
             loop_holder=self,
             value=OPTION_MENU_DEFAULT_STRING,
             options=[OPTION_MENU_DEFAULT_STRING] + get_known_node_packs(),
-            max_width=700,
             command=self.pick_chosen_node_pack,
             draw_on_window_resize=self.draw,
             coordinates_name="midleft",
@@ -466,8 +460,8 @@ class NodePacksSelectionChangeForm(Object2D):
         text_surf = (
             render_text(
                 text="How to load nodes",
-                font_height= ENC_SANS_BOLD_FONT_HEIGHT,
-                font_key= ENC_SANS_BOLD_FONT_PATH,
+                font_height= APP_REFS.general_font_height,
+                font_key= APP_REFS.general_font_key,
                 foreground_color= BUTTON_FG,
                 background_color= BUTTON_BG,
             )

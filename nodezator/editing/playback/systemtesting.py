@@ -29,7 +29,7 @@ from pygame.transform import (
 
 ### local imports
 
-from ...config import APP_REFS
+from ...config import APP_REFS, USER_PREFS
 
 from ...pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
@@ -48,11 +48,6 @@ from ...our3rdlibs.listbox import ListBox
 from ...classes2d.single import Object2D
 from ...classes2d.collections import List2D
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
-
 from ...textman.render import render_text
 
 from ...surfsman.cache import UNHIGHLIGHT_SURF_MAP
@@ -68,7 +63,6 @@ from ...loopman.exception import (
 
 from ...systemtesting.constants import TEST_ID_TO_TITLE, ID_FORMAT_SPEC
 
-from ...userprefsman.main import USER_PREFS
 from ...userprefsman.constants import TEST_SESSION_SETTINGS_KEY
 
 from ...colorsman.colors import (
@@ -89,24 +83,24 @@ from ...widget.intfloatentry.main import IntFloatEntry
 ### constants
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': WINDOW_FG,
     'background_color': WINDOW_BG,
 }
 
 BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': BUTTON_FG,
     'background_color': BUTTON_BG,
 }
 
 HIGHLIGHTED_SPEED_BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'depth_finish_thickness': 1,
     'foreground_color': BUTTON_FG,

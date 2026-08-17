@@ -17,9 +17,7 @@ from pygame.math import Vector2
 
 ## general widgets and other tools
 
-from ..config import APP_REFS
-
-from ..userprefsman.main import USER_PREFS
+from ..config import APP_REFS, USER_PREFS
 
 from ..dialog import create_and_show_dialog, show_dialog_from_key
 

@@ -9,9 +9,15 @@ from pygame import quit as quit_pygame
 from pygame.display import update
 
 
-### local imports and provisional screen filling
+### local imports and related measures
 
 from .config import APP_REFS
+
+from .userprefsman.main import load_and_preprocess_user_preferences
+
+## before going on, make sure user preferences are loaded and
+## preprocessed
+load_and_preprocess_user_preferences()
 
 from .pygamesetup import (
     SERVICES_NS,
@@ -23,7 +29,6 @@ from .pygamesetup import (
 from .pygamesetup.constants import GENERAL_NS
 
 from .colorsman.colors import WINDOW_BG
-
 
 ## before going on, fill the screen with the window
 ## background color; this is an usability measure,

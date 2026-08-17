@@ -23,11 +23,6 @@ from ..loopman.exception import SwitchLoopException
 
 from ..rectsman.utils import get_relative_point
 
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
-
 from ..textman.render import render_text
 
 from ..classes2d.single import Object2D
@@ -51,8 +46,8 @@ VIEW_ALPHA = 230 # 0 for fully transparent, 255 for fully opaque
 VIEW_BG = (0, 0, 0, VIEW_ALPHA)
 
 LABEL_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': WINDOW_FG,
 }

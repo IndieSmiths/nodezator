@@ -33,7 +33,7 @@ from ..pygamesetup import (
     blit_on_screen,
 )
 
-from ..config import APP_REFS
+from ..config import APP_REFS, USER_PREFS
 
 from ..translatedtext import TRANSLATIONS
 
@@ -51,13 +51,6 @@ from ..imagesman.cache import IMAGE_SURFS_DB
 
 from ..classes2d.single import Object2D
 from ..classes2d.collections import List2D
-
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
 
 from ..textman.render import render_text
 
@@ -83,7 +76,7 @@ from ..colorsman.colors import (
     WINDOW_BG,
 )
 
-from .main import USER_PREFS, CONFIG_FILEPATH
+from .main import CONFIG_FILEPATH
 
 from .validation import (
     ORDERED_SOCKET_DETECTION_GRAPHICS,
@@ -98,24 +91,24 @@ t = TRANSLATIONS.user_preferences_form
 ### constants
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': WINDOW_FG,
     'background_color': WINDOW_BG,
 }
 
 NUMBER_LABEL_SETTINGS = {
-    'font_height': FIRA_MONO_BOLD_FONT_HEIGHT,
-    'font_key': FIRA_MONO_BOLD_FONT_PATH,
+    'font_height': APP_REFS.mono_font_height,
+    'font_key': APP_REFS.mono_font_key,
     'padding': 0,
     'foreground_color': WINDOW_FG,
     'background_color': WINDOW_BG,
 }
 
 BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'depth_finish_thickness': 1,
     'foreground_color': BUTTON_FG,

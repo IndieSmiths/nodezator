@@ -53,6 +53,8 @@ from ..pygamesetup import SERVICES_NS
 
 from ..pygamesetup.constants import GENERAL_NS, WINDOW_RESIZE_EVENT_TYPE
 
+from ..config import APP_REFS
+
 from ..ourstdlibs.behaviour import empty_function
 
 from ..ourstdlibs.color.creation import get_contrasting_bw
@@ -60,11 +62,6 @@ from ..ourstdlibs.color.creation import get_contrasting_bw
 from ..classes2d.single import Object2D
 
 from ..surfsman.render import render_rect
-
-from ..fontsman.constants import (
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
 
 from ..textman.editor.main import edit_text
 
@@ -88,8 +85,8 @@ class LiteralEntry(Object2D):
         self,
         value=None,
         loop_holder=None,
-        font_height=FIRA_MONO_BOLD_FONT_HEIGHT,
-        font_key=FIRA_MONO_BOLD_FONT_PATH,
+        font_height=APP_REFS.mono_font_height,
+        font_key=APP_REFS.mono_font_key,
         width=155,
         name="literal_entry",
         command=empty_function,

@@ -115,6 +115,22 @@ class VisualRelatedPreparations:
             ## instantiating the widget
             kwargs = widget_data["widget_kwargs"]
 
+            ## if we are dealing with a text display widget,
+            ## replace the 'font_path' option by an appropriate one;
+            ##
+            ## the 'font_path' option, used in previous version isn't
+            ## valid anymore; in fact, it shouldn't have been exposed
+            ## to users to begin with (that is, not the way it was, but
+            ## as a toggle, like now)
+
+            if widget_name == 'text_display' and 'font_path' in kwargs:
+
+                fpath = kwargs.pop('font_path')
+
+                kwargs['pick_monospaced_font'] = (
+                    True if fpath == 'mono_bold' else False
+                )
+
             ## instantiate the widget using the keyword
             ## arguments
             widget = self.widget = widget_cls(**kwargs)

@@ -18,8 +18,6 @@ from ...syntaxman.exception import SyntaxMappingError
 
 from ...syntaxman.utils import get_ready_theme
 
-from ...fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
-
 from ...ourstdlibs.timeutils import get_friendly_time
 from ...ourstdlibs.behaviour import empty_function
 
@@ -408,7 +406,7 @@ class TextPreparation:
 
         ### override the font style settings to force the
         ### digits to use a monospaced font
-        digits_text_settings['font_key'] = FIRA_MONO_BOLD_FONT_PATH
+        digits_text_settings['font_key'] = APP_REFS.mono_font_key
 
         ### iterate over the digits, creating key-value
         ### pairs of each digit string and its corresponding

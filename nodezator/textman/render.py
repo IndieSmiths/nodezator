@@ -12,12 +12,9 @@ from pygame import Surface
 
 ### local imports
 
-from ..fontsman.cache import FONTS_DB
+from ..config import APP_REFS, USER_PREFS
 
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_PATH,
-    ENC_SANS_BOLD_FONT_HEIGHT,
-)
+from ..fontsman.cache import FONTS_DB
 
 from ..surfsman.draw import draw_border, draw_depth_finish
 
@@ -29,8 +26,8 @@ from ..colorsman.colors import BLACK
 
 def get_text_size(
     text,
-    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-    font_key=ENC_SANS_BOLD_FONT_PATH,
+    font_height=APP_REFS.general_font_height,
+    font_key=APP_REFS.general_font_key,
     padding=0,
 ):
     """Return size of text as if rendered as text surface.
@@ -60,8 +57,8 @@ def fit_text(
     text,
     max_width,
     ommit_direction,
-    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-    font_key=ENC_SANS_BOLD_FONT_PATH,
+    font_height=APP_REFS.general_font_height,
+    font_key=APP_REFS.general_font_key,
     padding=0,
 ):
     """Return optimal text to fit max_width passed."""
@@ -142,8 +139,8 @@ def fit_text(
 
 def render_text(
     text,
-    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-    font_key=ENC_SANS_BOLD_FONT_PATH,
+    font_height=APP_REFS.general_font_height,
+    font_key=APP_REFS.general_font_key,
     antialiased=True,
     padding=0,
     foreground_color=BLACK,
@@ -312,8 +309,8 @@ def render_multiline_text(
 
     ## same parameters as render_text()
 
-    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-    font_key=ENC_SANS_BOLD_FONT_PATH,
+    font_height=APP_REFS.general_font_height,
+    font_key=APP_REFS.general_font_key,
     antialiased=True,
     padding=0,
     foreground_color=BLACK,

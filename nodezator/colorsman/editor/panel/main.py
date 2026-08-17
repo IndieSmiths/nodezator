@@ -32,9 +32,11 @@ from ...colors import BLACK, WINDOW_BG
 
 from .constants import COLOR_WIDGET_SIZE
 
-from .data import ImportExportOperations
+## class extensions
 
+from .data import ImportExportOperations
 from .colorsop import ColorsOperations
+
 
 
 ### module constants
@@ -68,13 +70,6 @@ class ColorsPanel(
             class, a loop holder for editing multiple colors.
         no_of_visible_colors (integer)
             number of colors
-        coordinates_name (string)
-            name of a pygame.Rect attribute to which the
-            coordinates_value must be assigned.
-        coordinates_value (sequence with 2 integers)
-            represents a position in 2d space which will
-            be assigned to the coordinates named on the
-            coordinates_name attribute.
         """
         ### store the colors editor reference
         self.colors_editor = colors_editor
@@ -107,11 +102,7 @@ class ColorsPanel(
         self.clean_bg = self.image.copy()
 
         ### obtain a rect from the surface in self.image
-        ### and position it relative to the editor
-
         self.rect = self.image.get_rect()
-
-        self.rect.midtop = self.colors_editor.rect.move(0, 45).midtop
 
         ### finally create the scroll buttons
         self.create_scroll_buttons()
@@ -138,7 +129,7 @@ class ColorsPanel(
         x_deflation = (SCROLL_BUTTON_WIDTH * 2) * -1
         scroll_area = self.rect.inflate(x_deflation, 0)
 
-        if hasattr(self, "widgets"):
+        if hasattr(self, 'widgets'):
 
             delta = Vector2(scroll_area.topleft) - self.scroll_area.topleft
 
@@ -146,7 +137,7 @@ class ColorsPanel(
 
         self.scroll_area = scroll_area
 
-        attr_names = ("topleft", "topright")
+        attr_names = ('topleft', 'topright')
 
         for attr_name, button in zip(attr_names, self.buttons):
 
@@ -166,26 +157,40 @@ class ColorsPanel(
         ### iterate over the buttons creation data
         ### instantiating and setting up the buttons
 
-        self.buttons = List2D(
-            Object2D.from_surface(
-                render_layered_icon(
-                    chars=[chr(82)],
-                    dimension_name="height",
-                    dimension_value=button_height - 8,
-                    colors=[BLACK],
-                    background_width=button_width,
-                    background_height=button_height,
-                    background_color=WINDOW_BG,
-                    rotation_degrees=90,
-                    flip_x=flip_x,
-                    depth_finish_thickness=1,
-                ),
-                command=command,
+        self.buttons = (
+
+            List2D(
+
+                Object2D.from_surface(
+
+                    render_layered_icon(
+
+                        chars=[chr(82)],
+                        dimension_name="height",
+                        dimension_value=button_height - 8,
+                        colors=[BLACK],
+                        background_width=button_width,
+                        background_height=button_height,
+                        background_color=WINDOW_BG,
+                        rotation_degrees=90,
+                        flip_x=flip_x,
+                        depth_finish_thickness=1,
+
+                    ),
+
+                    command=command,
+
+                )
+
+                for flip_x, command in (
+
+                    (False, self.scroll_left),
+                    (True, self.scroll_right),
+
+                )
+
             )
-            for flip_x, command in (
-                (False, self.scroll_left),
-                (True, self.scroll_right),
-            )
+
         )
 
         ## store buttons on their own attribute

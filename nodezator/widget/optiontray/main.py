@@ -11,16 +11,13 @@ from xml.etree.ElementTree import Element
 
 ### local imports
 
+from ...config import APP_REFS
+
 from ...ourstdlibs.behaviour import empty_function
 from ...ourstdlibs.dictutils import settings_to_hashable_repr
 
 
 from ...textman.render import get_text_size
-
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
 
 from ...colorsman.colors import (
     OPTION_TRAY_FG,
@@ -79,7 +76,7 @@ def isliteral(value):
 ##        'True',            # antialiased
 ##        '(38, 38, 38)',    # background_color
 ##        '17',              # font_height
-##        ENC_SANS_BOLD_FONT_PATH,       # font_key
+##        APP_REFS.general_font_key, # font_key
 ##        '(238, 238, 238)', # foreground_color
 ##        '(90, 90, 110)',   # selected_background_color
 ##        '(210, 110, 210)'  # selected_foreground_color
@@ -125,8 +122,8 @@ OPTIONS_TO_STYLE_DATA = {}
 ##
 ##      (
 ##
-##        '17',       # font_height
-##        ENC_SANS_BOLD_FONT_PATH # font_key
+##        '17', # font_height
+##        APP_REFS.general_font_key # font_key
 ##
 ##      ) : (
 ##
@@ -164,9 +161,9 @@ class OptionTray(
         self,
         value="",
         options=("",),
-        max_width=155,
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        max_width=0,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         antialiased=True,
         foreground_color=OPTION_TRAY_FG,
         background_color=OPTION_TRAY_BG,

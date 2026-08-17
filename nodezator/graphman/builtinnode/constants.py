@@ -251,7 +251,7 @@ def _exec2(
         "widget_name": "text_display",
         "widget_kwargs": {
             "syntax_highlighting": "python",
-            "font_path": "mono_bold",
+            "pick_monospaced_font": True,
         },
         "type": str,
     } = "",

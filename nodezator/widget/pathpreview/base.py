@@ -17,16 +17,13 @@ from pygame.draw import rect as draw_rect
 
 ### local imports
 
+from ...config import APP_REFS
+
 from ...ourstdlibs.behaviour import empty_function
 
 from ...fileman.main import select_paths
 
 from ...classes2d.single import Object2D
-
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_PATH,
-    ENC_SANS_BOLD_FONT_HEIGHT,
-)
 
 from ...textman.render import render_text, fit_text
 
@@ -48,7 +45,7 @@ from .constants import (
 )
 
 
-GET_TOPLEFT = attrgetter("rect.topleft")
+GET_TOPLEFT = attrgetter('rect.topleft')
 
 
 class _BasePreview(Object2D):
@@ -63,14 +60,14 @@ class _BasePreview(Object2D):
 
     def __init__(
         self,
-        value=".",
+        value='.',
         loop_holder=None,
         string_when_single=True,
-        name="path_preview",
+        name='path_preview',
         width=155,
         draw_on_window_resize=empty_function,
         command=empty_function,
-        coordinates_name="topleft",
+        coordinates_name='topleft',
         coordinates_value=(0, 0),
     ):
         """Store arguments and define button image.
@@ -112,8 +109,7 @@ class _BasePreview(Object2D):
         self.command = command
         self.width = width
 
-        ### define control attribute for when there's
-        ### more than one path listed
+        ### define control attribute for when there's more than one path listed
         self.path_index = 0
 
         ### entry to display/change index
@@ -166,18 +162,18 @@ class _BasePreview(Object2D):
 
             if not value:
 
-                raise ValueError("if 'value' is of 'str' type, it" " must not be empty")
+                raise ValueError(
+                    "if 'value' is of 'str' type, it must not be empty"
+                )
 
             elif not self.string_when_single:
 
                 raise ValueError(
-                    "if 'string_when_single' is"
-                    " False, 'value' must always"
+                    "if 'string_when_single' is False, 'value' must always"
                     " be a tuple"
                 )
 
-        ### if it is a tuple , more conditions need to be
-        ### checked
+        ### if it is a tuple, more conditions need to be checked
 
         elif value_type is tuple:
 
@@ -219,9 +215,7 @@ class _BasePreview(Object2D):
         ### is a string
         value_is_string = isinstance(value, str)
 
-        ### create variable specifying whether there's more
-        ### than one path
-
+        ### create variable specifying whether there's more than one path
         multiple_paths = not value_is_string and len(value) > 1
 
         ### if there are multiple paths...
@@ -236,7 +230,6 @@ class _BasePreview(Object2D):
         else:
 
             ### define path
-
             self.current_path = value if value_is_string else value[0]
 
         ### blit all buttons
@@ -306,10 +299,12 @@ class _BasePreview(Object2D):
             entry.set_range(0, max_value)
 
             ### if requested, execute the custom command
+
             if custom_command:
                 self.command()
 
             ### if requested, update the widget image
+
             if update_image:
                 self.update_image()
 
@@ -420,8 +415,8 @@ class _BasePreview(Object2D):
         blit_aligned(
             surface_to_blit=render_text(
                 text=str(self.current_path),
-                font_key=ENC_SANS_BOLD_FONT_PATH,
-                font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                font_key=APP_REFS.general_font_key,
+                font_height=APP_REFS.general_font_height,
                 padding=1,
                 max_width=152,
                 ommit_direction="left",
@@ -514,8 +509,8 @@ class _BasePreview(Object2D):
 
         text_element.text = fit_text(
             text=str(self.current_path),
-            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-            font_key=ENC_SANS_BOLD_FONT_PATH,
+            font_height=APP_REFS.general_font_height,
+            font_key=APP_REFS.general_font_key,
             padding=1,
             max_width=143,
             ommit_direction="left",

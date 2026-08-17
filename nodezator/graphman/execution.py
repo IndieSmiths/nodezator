@@ -17,15 +17,13 @@ from itertools import chain
 
 ### local imports
 
-from ..config import APP_REFS
+from ..config import APP_REFS, USER_PREFS
 
 from ..appinfo import (
     BACKDOOR_INDICATIVE_VAR_NAMES,
     SIDEVIZ_FROM_OUTPUT_VAR_NAME,
     LOOPVIZ_FROM_OUTPUT_VAR_NAME,
 )
-
-from ..userprefsman.main import USER_PREFS
 
 from ..logman.main import get_new_logger
 

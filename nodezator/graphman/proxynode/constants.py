@@ -1,8 +1,9 @@
 ### local imports
 
-from ...fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT
+from ...config import APP_REFS
 
 from ..socket.surfs import SOCKET_DIAMETER
+
 
 
 NODE_OUTLINE_THICKNESS = 2
@@ -15,7 +16,7 @@ HEADER_LABEL_WIDTH_INCREMENT = LABEL_X_PADDING * 2
 
 WIDGET_BUTTON_HEIGHT = 16
 
-FONT_HEIGHT = ENC_SANS_BOLD_FONT_HEIGHT
+FONT_HEIGHT = APP_REFS.general_font_height
 
 HEADER_HEIGHT = FONT_HEIGHT + (2 * NODE_OUTLINE_THICKNESS) + 4
 

@@ -22,7 +22,7 @@ from pygame.image import load as load_image
 
 from ..rectsman.main import RectsManager
 
-from ..svgutils import get_ellipse_svg_text, get_line_svg_text
+from ..svgutils.generalshapes import get_ellipse_svg_text, get_line_svg_text
 
 from ..colorsman.colors import (
     BLACK,

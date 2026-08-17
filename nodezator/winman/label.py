@@ -3,7 +3,9 @@
 ### standard library imports
 
 from math import floor
+
 from functools import partial
+
 from itertools import cycle
 
 
@@ -14,11 +16,6 @@ from ..config import APP_REFS
 from ..translatedtext import TRANSLATIONS
 
 from ..pygamesetup import SCREEN_RECT
-
-from ..fontsman.constants import (
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
 
 from ..colorsman.colors import WM_LABEL_FG, WM_LABEL_BG
 
@@ -32,34 +29,40 @@ t = TRANSLATIONS.window_manager
 ### constant definition
 
 AUTOLABEL_KWARGS = {
-    'font_height': FIRA_MONO_BOLD_FONT_HEIGHT,
-    'font_key': FIRA_MONO_BOLD_FONT_PATH,
+    'font_height': APP_REFS.mono_font_height,
+    'font_key': APP_REFS.mono_font_key,
     'foreground_color': WM_LABEL_FG,
     'background_color': (*WM_LABEL_BG, 130),
 }
 
-##### utility functions and objects
 
+##### utility function
 
 def get_scrolling_amount(assistant):
-    """Return custom formatted, scroll amount.
+    """Return formatted scrolling amount.
 
+    Parameters
+    ==========
     assistant (the editing.EditingAssistant instance)
+        A context object with useful information for our purpose.
     """
-    ### we get the opposite of the scrolling amount
-    ### vector (using the opposite is an usability measure,
-    ### so the scrolling amount shows a number as if the
-    ### screen had moved, when in fact it was the objects in
-    ### the world which moved in the opposite direction) and
-    ### map it to the int constructor
-    result = map(int, -assistant.scrolling_amount)
 
-    ### then return the formated version of the result
-    return "({:>4}, {:>4})".format(*result)
+    return "({:>4}, {:>4})".format(
+
+        ### scrolling amount;
+        ###
+        ### we get the opposite of the scrolling amount vector and map it
+        ### to the int constructor;
+        ###
+        ### (using the opposite is a usability measure, so the scrolling amount
+        ### shows a number as if the screen had moved, when in fact it were the
+        ### objects in the world which moved in the opposite direction)
+        *map(int, -assistant.scrolling_amount)
+
+    )
 
 
 ##### class definition
-
 
 class MonitorLabelSetup:
     """Data and behaviour for monitor label setup."""
@@ -68,20 +71,28 @@ class MonitorLabelSetup:
         """Instantiate and set monitoring labels."""
         ### status label
 
-        self.status_label = AutoLabel(
-            partial(getattr, APP_REFS, "status_message"),
-            formatter=(t.status + ": {}").format,
-            text="Opened file",
-            **AUTOLABEL_KWARGS,
+        self.status_label = (
+
+            AutoLabel(
+                partial(getattr, APP_REFS, "status_message"),
+                formatter=(t.status + ": {}").format,
+                text="--",
+                **AUTOLABEL_KWARGS,
+            )
+
         )
 
         ### scrolling amount
 
-        self.scrolling_label = AutoLabel(
-            partial(get_scrolling_amount, APP_REFS.ea),
-            formatter="x, y: {}".format,
-            text="(    0,    0)",
-            **AUTOLABEL_KWARGS,
+        self.scrolling_label = (
+
+            AutoLabel(
+                partial(get_scrolling_amount, APP_REFS.ea),
+                formatter="x, y: {}".format,
+                text="(    0,    0)",
+                **AUTOLABEL_KWARGS,
+            )
+
         )
 
         ### position labels

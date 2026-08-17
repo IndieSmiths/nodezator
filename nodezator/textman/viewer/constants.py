@@ -3,12 +3,10 @@
 ### third-party import
 from pygame import Rect
 
+
 ### local imports
 
-from ...fontsman.constants import (
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
+from ...config import APP_REFS
 
 from ...colorsman.colors import (
     TEXT_VIEWER_FG,
@@ -18,18 +16,19 @@ from ...colorsman.colors import (
 )
 
 
+
 ### general text settings presets
 
 DEFAULT_TEXT_SETTINGS = {
-    "font_height": FIRA_MONO_BOLD_FONT_HEIGHT,
-    "font_path": FIRA_MONO_BOLD_FONT_PATH,
+    "font_height": APP_REFS.mono_font_height,
+    "font_key": APP_REFS.mono_font_key,
     "foreground_color": TEXT_VIEWER_FG,
     "background_color": TEXT_VIEWER_BG,
 }
 
 CUSTOM_STDOUT_TEXT_SETTINGS = {
-    "font_height": FIRA_MONO_BOLD_FONT_HEIGHT,
-    "font_path": FIRA_MONO_BOLD_FONT_PATH,
+    "font_height": APP_REFS.mono_font_height,
+    "font_key": APP_REFS.mono_font_key,
     "foreground_color": CUSTOM_STDOUT_FG,
     "background_color": CUSTOM_STDOUT_BG,
 }

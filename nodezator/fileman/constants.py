@@ -1,11 +1,12 @@
 """Constants for the file manager subpackage."""
 
-from ..fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT
-
 from ..pygamesetup.constants import FPS
 
+from ..config import APP_REFS
 
-FONT_HEIGHT = ENC_SANS_BOLD_FONT_HEIGHT  # height of font in pixels
+
+
+FONT_HEIGHT = APP_REFS.general_font_height  # height of font in pixels
 
 
 ### sizes

@@ -8,6 +8,8 @@ from functools import partial, partialmethod
 
 ### third-party imports
 
+from pygame import Rect
+
 from pygame.locals import (
     QUIT,
     KEYUP,
@@ -49,8 +51,6 @@ from ...loopman.exception import (
     SwitchLoopException,
 )
 
-from ...fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT
-
 from ...graphman.widget.utils import WIDGET_CLASS_MAP
 
 from ...colorsman.colors import (
@@ -77,29 +77,36 @@ t = TRANSLATIONS.graph_manager
 ### constants
 
 ## font height
-FONT_HEIGHT = ENC_SANS_BOLD_FONT_HEIGHT
+FONT_HEIGHT = APP_REFS.general_font_height
 
-## availabel widgets
+## available widgets
 
-# use the keys from the widget class map, removing some
-# of them
+# use the keys from the widget class map, removing some of them;
+#
+# specialized versions of most of the removed ones will be reintroduced next,
+# that is, except for the default holder (at least for now we don't think
+# making it available in this context would be useful)
 
 AVAILABLE_WIDGETS = list(WIDGET_CLASS_MAP.keys())
 
-for key in ("default_holder", "option_menu", "option_tray", "sorting_button"):
+for key in (
+    'default_holder',
+    'option_menu',
+    'option_tray',
+    'sorting_button',
+):
     AVAILABLE_WIDGETS.remove(key)
 
-# also add some new ones, which actually are variations
-# of some of the keys we just removed
+# reintroduce specialized versions of some of the ones we just removed
 
 AVAILABLE_WIDGETS.extend(
     (
-        "option_menu_with_strings",
-        "option_menu_with_intfloats",
-        "option_tray_with_strings",
-        "option_tray_with_intfloats",
-        "sorting_button_with_strings",
-        "sorting_button_with_intfloats",
+        'option_menu_with_strings',
+        'option_menu_with_intfloats',
+        'option_tray_with_strings',
+        'option_tray_with_intfloats',
+        'sorting_button_with_strings',
+        'sorting_button_with_intfloats',
     )
 )
 
@@ -121,64 +128,118 @@ class WidgetPicker(Object2D, SubformCreation):
 
     def __init__(self):
         """Build widget structure for the form."""
-        ### build surf and rect for background
-
-        self.image = render_rect(360, 540, WINDOW_BG)
-        draw_border(self.image)
-
-        self.rect = self.image.get_rect()
-
         ### create and store caption
 
-        self.caption = Object2D.from_surface(
-            surface=(
-                render_text(
-                    text=(t.widget_picker.caption),
-                    font_height=17,
-                    padding=5,
-                    foreground_color=WINDOW_FG,
-                    border_thickness=2,
-                    border_color=WINDOW_FG,
-                )
-            ),
-            coordinates_name="topleft",
-            coordinates_value=(self.rect.move(10, 10).topleft),
+        self.caption = caption = (
+
+            Object2D.from_surface(
+
+                surface=(
+
+                    render_text(
+                        text=(t.widget_picker.caption),
+                        font_height=17,
+                        padding=5,
+                        foreground_color=WINDOW_FG,
+                        border_thickness=2,
+                        border_color=WINDOW_FG,
+                    )
+
+                ),
+
+            )
+
         )
 
-        ### build option menu
-        self.build_option_menu()
+        ### instantiate option menu
+
+        self.widget_kind_options = kind_options = (
+
+            OptionMenu(
+                loop_holder=self,
+                value='string_entry',
+                options=AVAILABLE_WIDGETS,
+                font_height=FONT_HEIGHT,
+                max_width=0,
+                draw_on_window_resize=self.draw,
+                command=self.update_widget_subform,
+            )
+
+        )
+
+        ### create and store form related buttons
+
+        ## assign behaviour for exiting the form (equivalent to setting the
+        ## running flag to False, which triggers the exiting of the loop)
+        self.exit_form = partial(setattr, self, 'running', False)
+
+        self.cancel_button = cancel_button = (
+
+            Button.from_text(
+                text=(t.widget_picker.cancel),
+                padding=5,
+                foreground_color=BUTTON_FG,
+                background_color=BUTTON_BG,
+                depth_finish_thickness=1,
+                command=self.exit_form,
+            )
+
+        )
+
+        self.submit_button = submit_button = (
+
+            Button.from_text(
+                text=(t.widget_picker.submit),
+                padding=5,
+                foreground_color=BUTTON_FG,
+                background_color=BUTTON_BG,
+                depth_finish_thickness=1,
+                command=self.submit_data,
+            )
+
+        )
 
         ### build widget subforms
         self.build_widget_subforms()
 
-        ### assign behaviour for exiting the form
-        ### (equivalent to setting the running flag to
-        ### False, which triggers the exiting of the
-        ### loop)
-        self.exit_form = partial(setattr, self, "running", False)
+        ### build surf and rect for background
 
-        ### create and store form related buttons
+        widths, heights = zip(
 
-        self.cancel_button = Button.from_text(
-            text=(t.widget_picker.cancel),
-            padding=5,
-            foreground_color=BUTTON_FG,
-            background_color=BUTTON_BG,
-            depth_finish_thickness=1,
-            command=self.exit_form,
+            *(
+                subform.rect.size
+                for subform in self.subform_map.values()
+            )
+
         )
 
-        self.submit_button = Button.from_text(
-            text=(t.widget_picker.submit),
-            padding=5,
-            foreground_color=BUTTON_FG,
-            background_color=BUTTON_BG,
-            depth_finish_thickness=1,
-            command=self.submit_data,
-        )
+        width = (
 
-        ### assign subform according to current
-        ### kind of widget selected
+            max(
+
+                max(widths),
+                caption.rect.width,
+                kind_options.rect.width,
+                (cancel_button.rect.width + 10 + submit_button.rect.width),
+            )
+
+        ) + 10 # padding
+
+        height = (
+
+            max(heights)
+            + 10 + caption.rect.height
+            + 10 + kind_options.rect.height
+            + 10 + cancel_button.rect.height
+
+        ) + 10 # padding
+
+        self.image = render_rect(width, height, WINDOW_BG)
+        draw_border(self.image)
+
+        self.rect = self.image.get_rect()
+
+        ### assign subform according to current kind of widget selected
         self.update_widget_subform()
 
         ### center widget picker form and append centering
@@ -208,35 +269,6 @@ class WidgetPicker(Object2D, SubformCreation):
 
         self.semitransp_obj = Object2D.from_surface(
             render_rect(*SCREEN_RECT.size, (*CONTRAST_LAYER_COLOR, 130))
-        )
-
-    def build_option_menu(self):
-        """Build option menu to pick the kind of widget."""
-        ### define arguments for option menu instantiation
-
-        ## a (default) value
-        value = "string_entry"
-
-        ## position related arguments
-
-        coordinates_name = "topleft"
-        coordinates_value = self.caption.rect.move(0, 10).bottomleft
-
-        ## command
-        command = self.update_widget_subform
-
-        ### instantiate option menu
-
-        self.widget_kind_options = OptionMenu(
-            loop_holder=self,
-            value=value,
-            options=AVAILABLE_WIDGETS,
-            max_width=230,
-            font_height=FONT_HEIGHT,
-            draw_on_window_resize=self.draw,
-            coordinates_name=coordinates_name,
-            coordinates_value=coordinates_value,
-            command=command,
         )
 
     def build_widget_subforms(self):
@@ -284,25 +316,27 @@ class WidgetPicker(Object2D, SubformCreation):
 
     def reposition_form_elements(self):
         """Position form buttons below widget subform."""
-        ### align subform below widget kind option menu
-        self.widget_subform.rect.topleft = self.widget_kind_options.rect.move(
-            0, 10
-        ).bottomleft
 
-        ### align cancel button left with the self.rect
-        ### left, with a little offset
-        self.cancel_button.rect.left = self.rect.move(5, 0).left
+        rect = self.rect
 
-        ### align cancel button top with the widget subform
-        ### bottom, then offset it a little
+        caption_rect = self.caption.rect
+        kind_options_rect = self.widget_kind_options.rect
+        widget_subform_rect = self.widget_subform.rect
 
-        self.cancel_button.rect.top = self.widget_subform.rect.bottom
-        self.cancel_button.rect.y += 10
+        submit_button_rect = self.submit_button.rect
+        cancel_button_rect = self.cancel_button.rect
 
-        ### then align the submit button topleft with the
-        ### cancel button topright just a little bit more
-        ### to the right
-        self.submit_button.rect.topleft = self.cancel_button.rect.move(10, 0).topright
+        ###
+
+        rect.center = SCREEN_RECT.center
+
+        caption_rect.topleft = rect.move(5, 5).topleft
+        kind_options_rect.topleft = caption_rect.move(0, 10).bottomleft
+        widget_subform_rect.topleft = kind_options_rect.move(0, 10).bottomleft
+
+        cancel_button_rect.bottomleft = rect.move(5, -5).bottomleft
+        submit_button_rect.topleft = cancel_button_rect.move(10, 0).topright
+
 
     def pick_widget(self):
         """Display form; return widget instantiation data."""

@@ -9,7 +9,6 @@ from warnings import catch_warnings, simplefilter
 ### third-party imports
 
 from pygame import (
-    init as init_pygame,
     get_sdl_version,
     locals as pygame_locals,
 )
@@ -28,8 +27,6 @@ from pygame.locals import (
     KMOD_NONE,
 
 )
-
-from pygame.mixer import pre_init as pre_init_mixer
 
 from pygame.key import set_repeat
 
@@ -70,15 +67,10 @@ from ..loopman.exception import QuitAppException
 
 
 
-### pygame initialization setups
+### at this point pygame.mixer should be already preinitialized and pygame
+### itself initialized (in the mainloop.py module)
 
-## pygame mixer pre-initialization
-pre_init_mixer(44100, -16, 2, 4096)
-
-## pygame initialization
-init_pygame()
-
-## store whether the system support full HD resolution
+### store whether the system support full HD resolution
 APP_REFS.full_hd_available = (1920, 1080) in list_modes()
 
 

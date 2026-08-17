@@ -43,11 +43,6 @@ from ...our3rdlibs.button import Button
 from ...classes2d.single import Object2D
 from ...classes2d.collections import List2D
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
-
 from ...textman.render import render_text
 from ...textman.label.main import Label
 
@@ -83,16 +78,16 @@ from ...widget.stringentry import StringEntry
 ### constants
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': WINDOW_FG,
     'background_color': WINDOW_BG,
 }
 
 BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'depth_finish_thickness': 1,
     'foreground_color': BUTTON_FG,
@@ -403,7 +398,6 @@ class SessionRecordingForm(Object2D):
         self.window_size_tray = OptionTray(
             value=value,
             options=tuple(TEXT_TO_WINDOW_SIZE.keys()),
-            max_width=0,
             name="window_size",
             command=self.update_window_size,
             coordinates_name="midleft",

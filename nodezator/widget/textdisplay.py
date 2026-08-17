@@ -13,6 +13,8 @@ from pygame.draw import rect as draw_rect
 
 ### local imports
 
+from ..config import APP_REFS
+
 from ..ourstdlibs.behaviour import empty_function
 
 from ..ourstdlibs.stringutils import VALIDATION_COMMAND_MAP
@@ -32,12 +34,6 @@ from ..textman.render import (
 
 from ..textman.viewer.main import view_text
 from ..textman.editor.main import edit_text
-
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
 
 from ..syntaxman.utils import (
     AVAILABLE_SYNTAXES,
@@ -83,14 +79,6 @@ ICON_SURF = combine_surfaces(
 ICON_WIDTH, ICON_HEIGHT = ICON_SURF.get_size()
 
 
-### map associating keys with font paths
-
-FONT_PATH_MAP = {
-    "sans_bold": ENC_SANS_BOLD_FONT_PATH,
-    "mono_bold": FIRA_MONO_BOLD_FONT_PATH,
-}
-
-
 ### class definition
 
 
@@ -100,11 +88,12 @@ class TextDisplay(Object2D):
     def __init__(
         self,
         value="",
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         width=155,
         no_of_visible_lines=7,
         syntax_highlighting="",
+        pick_monospaced_font=False,
         show_line_number=False,
         name="text_display",
         command=empty_function,
@@ -175,13 +164,22 @@ class TextDisplay(Object2D):
 
             raise ValueError("'no_of_visible_lines' must be >= 1")
 
-        ### store the font_key argument
-        self.font_key = font_key
+        ### store the font_key argument, that is, depending on the value
+        ### of pick_monospaced_font
+
+        if pick_monospaced_font:
+
+            self.font_key = APP_REFS.mono_font_key
+            self.font_height = APP_REFS.mono_font_height
+
+        else:
+
+            self.font_height = font_height
+            self.font_key = font_key
 
         ### store other arguments
 
         self.value = value
-        self.font_height = font_height
 
         self.syntax_highlighting = syntax_highlighting
         self.show_line_number = show_line_number
@@ -421,7 +419,7 @@ class TextDisplay(Object2D):
             lineno_width, _ = get_text_size(
                 "01",
                 font_height=font_height,
-                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=APP_REFS.mono_font_key,
             )
 
             draw_rect(
@@ -535,7 +533,7 @@ class TextDisplay(Object2D):
                 surf = render_text(
                     text=str(line_number).rjust(2, "0"),
                     font_height=font_height,
-                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=APP_REFS.mono_font_key,
                     foreground_color=lineno_fg,
                     background_color=lineno_bg,
                 )
@@ -616,6 +614,7 @@ class TextDisplay(Object2D):
             ]
 
     def reset_style(self, style_name, new_style_value):
+
         current_style_value = getattr(self, style_name)
 
         if new_style_value != current_style_value:
@@ -624,11 +623,22 @@ class TextDisplay(Object2D):
             self.prepare_style_data()
             self.update_image()
 
-    reset_show_line_number = partialmethod(reset_style, "show_line_number")
+    reset_show_line_number = partialmethod(reset_style, 'show_line_number')
 
-    reset_syntax_highlighting = partialmethod(reset_style, "syntax_highlighting")
+    reset_syntax_highlighting = partialmethod(reset_style, 'syntax_highlighting')
 
-    reset_font_key = partialmethod(reset_style, "font_key")
+    reset_font_key = partialmethod(reset_style, 'font_key')
+
+    def use_monospaced_font(self, boolean):
+
+        self.reset_font_key(
+
+            APP_REFS.mono_font_key
+            if boolean
+
+            else APP_REFS.general_font_key
+
+        )
 
     def edit_value(self):
         """Edit value of widget on the text editor."""
@@ -776,7 +786,7 @@ class TextDisplay(Object2D):
             lineno_width, _ = get_text_size(
                 max_lineno_text,
                 font_height=font_height,
-                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=APP_REFS.mono_font_key,
             )
 
             lineno_rect = rect.copy()
@@ -876,7 +886,7 @@ class TextDisplay(Object2D):
                         x_increment, _ = get_text_size(
                             string,
                             font_height=font_height,
-                            font_key=FIRA_MONO_BOLD_FONT_PATH,
+                            font_key=APP_REFS.mono_font_key,
                         )
 
                         text_fg = text_settings["foreground_color"]
@@ -909,7 +919,7 @@ class TextDisplay(Object2D):
                                 string = fit_text(
                                     text=string,
                                     font_height=font_height,
-                                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                                    font_key=APP_REFS.mono_font_key,
                                     padding=0,
                                     max_width=max_right - temp_x,
                                     ommit_direction="right",

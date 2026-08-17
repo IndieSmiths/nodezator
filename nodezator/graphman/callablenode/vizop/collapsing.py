@@ -61,7 +61,7 @@ def collapse_unconnected_elements(self):
 
                 ### if socket has a parent, it must be included as a
                 ### visible one
-                
+
                 input_socket = isl_flmap[param_name][subparam_index]
 
                 has_parent = (

@@ -12,11 +12,14 @@ from .....config import APP_REFS
 
 from .....classes2d.single import Object2D
 
+from .....textman.cache import CachedTextObject
+
 from ....widget.utils import WIDGET_CLASS_MAP
 
 from ....socket.surfs import type_to_codename
 
 from ...utils import update_with_widget
+
 
 ## classes for composition
 
@@ -37,11 +40,11 @@ from ...surfs import (
     UNPACKING_ICON_SURFS_MAP,
 )
 
-from ...constants import FONT_HEIGHT, SUBPARAM_KEYWORD_ENTRY_WIDTH
+from ...constants import SUBPARAM_KEYWORD_ENTRY_WIDTH
 
 
 
-def create_var_parameter_objs(self, param_obj):
+def create_var_parameter_objs(self, param_obj, label_text_settings):
     """Create socket(s) and widget(s) for the parameter.
 
     The parameter in question must not be of non-variable
@@ -55,10 +58,32 @@ def create_var_parameter_objs(self, param_obj):
     param_obj (inspect.Parameter instance)
         an object representing a parameter from a callable,
         containing related data.
+    label_text_settings (dict)
+        text settings used for labels.
     """
     ### retrieve the name of the parameter
     param_name = param_obj.name
 
+    ### define specific kind of this variable parameter
+    kind = self.var_kind_map[param_name]
+
+    ### create and store text object representing parameter
+
+    ## define prefix based on kind
+    prefix = '*' if kind == 'var_pos' else '**'
+
+    ## instantite/store
+
+    self.parameter_text_obj_map[param_name] = (
+
+        CachedTextObject(
+
+            text=prefix+param_name,
+            text_settings=label_text_settings,
+
+        )
+
+    )
 
     ### since we'll use their information, let's
     ### reference subparameter-related maps, locally
@@ -109,13 +134,6 @@ def create_var_parameter_objs(self, param_obj):
     ### when the graph is executed, creating such list in
     ### case it doesn't exist
     subparams_for_unpacking = subparam_unpacking_map.setdefault(param_name, [])
-
-    ### instantiate socket for each subparameter if
-    ### there's any subparameter (also instantiate
-    ### related widgets if any)
-
-    ## define specific kind of this variable parameter
-    kind = self.var_kind_map[param_name]
 
     ### also retrieve the expected type of the
     ### parameter and use it to obtain a string
@@ -299,7 +317,7 @@ def create_var_parameter_objs(self, param_obj):
 
             subparam_keyword_entry = StringEntry(
                 value=keyword_name,
-                font_height=FONT_HEIGHT,
+                font_height=APP_REFS.general_font_height,
                 width=SUBPARAM_KEYWORD_ENTRY_WIDTH,
                 command=command,
             )

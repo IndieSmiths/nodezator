@@ -2,15 +2,11 @@
 
 ### local imports
 
-from ...fontsman.constants import (
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
+from ...config import APP_REFS
 
 
-
-FONT_KEY = FIRA_MONO_BOLD_FONT_PATH
-FONT_HEIGHT = FIRA_MONO_BOLD_FONT_HEIGHT - 2
+FONT_KEY = APP_REFS.mono_font_key
+FONT_HEIGHT = APP_REFS.mono_font_height
 PADDING = 5
 
 OUTLINE_THICKNESS = 2

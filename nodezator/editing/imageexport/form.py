@@ -43,11 +43,6 @@ from ...our3rdlibs.button import Button
 from ...classes2d.single import Object2D
 from ...classes2d.collections import List2D
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
-
 from ...textman.render import render_text
 from ...textman.label.main import Label
 
@@ -88,16 +83,16 @@ t = TRANSLATIONS.editing
 ### constants
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': WINDOW_FG,
     'background_color': WINDOW_BG,
 }
 
 BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'depth_finish_thickness': 1,
     'foreground_color': BUTTON_FG,
@@ -248,8 +243,8 @@ class ImageExportForm(Object2D):
         ### instantiate widgets for image type
 
         image_type_label = Object2D.from_surface(
-            render_text("Image type:", **TEXT_SETTINGS),
-            coordinates_name="topleft",
+            render_text('Image type:', **TEXT_SETTINGS),
+            coordinates_name='topleft',
             coordinates_value=topleft,
         )
 
@@ -259,13 +254,17 @@ class ImageExportForm(Object2D):
 
         midleft = image_type_label.rect.move(10, 0).midright
 
-        self.image_type_tray = OptionTray(
-            value=".html",
-            options=(".html", ".svg", ".png"),
-            name="image_type",
-            command=self.update_image_type,
-            coordinates_name="midleft",
-            coordinates_value=midleft,
+        self.image_type_tray = (
+
+            OptionTray(
+                value='.html',
+                options=('.html', '.svg', '.png'),
+                name='image_type',
+                command=self.update_image_type,
+                coordinates_name='midleft',
+                coordinates_value=midleft,
+            )
+
         )
 
         self.widgets.append(self.image_type_tray)
@@ -284,7 +283,7 @@ class ImageExportForm(Object2D):
                 text=(t.image_export_form.background_color) + ":",
                 **TEXT_SETTINGS,
             ),
-            coordinates_name="topleft",
+            coordinates_name='topleft',
             coordinates_value=topleft,
         )
 
@@ -296,8 +295,8 @@ class ImageExportForm(Object2D):
 
         bg_colorbutton = ColorButton(
             value=GRAPH_BG,
-            name="background_color",
-            coordinates_name="midleft",
+            name='background_color',
+            coordinates_name='midleft',
             coordinates_value=midleft,
         )
 
@@ -312,7 +311,7 @@ class ImageExportForm(Object2D):
         set_bg_button = Button.from_text(
             text=(t.image_export_form.restore_default),
             command=command,
-            coordinates_name="midleft",
+            coordinates_name='midleft',
             coordinates_value=midleft,
             **BUTTON_SETTINGS,
         )
@@ -334,7 +333,7 @@ class ImageExportForm(Object2D):
 
         margins_label = Object2D.from_surface(
             surface=render_text(text=text, **TEXT_SETTINGS),
-            coordinates_name="topleft",
+            coordinates_name='topleft',
             coordinates_value=topleft,
         )
 

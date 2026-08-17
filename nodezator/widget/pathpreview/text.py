@@ -13,6 +13,8 @@ from pygame.draw import rect as draw_rect
 
 ### local imports
 
+from ...config import APP_REFS
+
 from ...dialog import create_and_show_dialog
 
 from ...logman.main import get_new_logger
@@ -28,11 +30,6 @@ from ...surfsman.icon import render_layered_icon
 from ...surfsman.svgexport import get_not_found_surface_svg_repr
 
 from ...surfsman.cache import NOT_FOUND_SURF_MAP
-
-from ...fontsman.constants import (
-    FIRA_MONO_BOLD_FONT_PATH,
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-)
 
 from ...textman.render import (
     fit_text,
@@ -71,10 +68,10 @@ from ...syntaxman.exception import SyntaxMappingError
 ### constants
 
 GENERAL_TEXT_SETTINGS = {
-    "font_height": FIRA_MONO_BOLD_FONT_HEIGHT,
-    "font_path": FIRA_MONO_BOLD_FONT_PATH,
-    "foreground_color": TEXTPREVIEW_FG,
-    "background_color": TEXTPREVIEW_BG,
+    'font_key': APP_REFS.general_font_key,
+    'font_height': APP_REFS.general_font_height,
+    'foreground_color': TEXTPREVIEW_FG,
+    'background_color': TEXTPREVIEW_BG,
 }
 
 DOT_PATH = Path('.')
@@ -292,8 +289,8 @@ class TextPreview(_BasePreview):
 
         no_of_visible_lines = 7
         show_line_number = True
-        font_height = FIRA_MONO_BOLD_FONT_HEIGHT
-        font_path = FIRA_MONO_BOLD_FONT_PATH
+        font_height = APP_REFS.general_font_height
+        font_key = APP_REFS.general_font_key
 
         syntax_highlighting = "python" if path.suffix.lower() in (".py", ".pyl") else ""
 
@@ -345,7 +342,7 @@ class TextPreview(_BasePreview):
             lineno_width, _ = get_text_size(
                 "01",
                 font_height=font_height,
-                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=APP_REFS.general_font_key,
             )
 
             draw_rect(
@@ -433,7 +430,7 @@ class TextPreview(_BasePreview):
                 surf = render_text(
                     text=line_text,
                     font_height=font_height,
-                    font_key=font_path,
+                    font_key=font_key,
                     foreground_color=foreground_color,
                     background_color=background_color,
                 )
@@ -453,7 +450,7 @@ class TextPreview(_BasePreview):
                 surf = render_text(
                     text=str(line_number).rjust(2, "0"),
                     font_height=font_height,
-                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=APP_REFS.general_font_key,
                     foreground_color=lineno_fg,
                     background_color=lineno_bg,
                 )
@@ -491,7 +488,7 @@ class TextPreview(_BasePreview):
 
         no_of_visible_lines = 7
         show_line_number = True
-        font_height = FIRA_MONO_BOLD_FONT_HEIGHT
+        font_height = APP_REFS.general_font_height
 
         syntax_highlighting = "python" if path.suffix.lower() in (".py", ".pyl") else ""
 
@@ -557,7 +554,7 @@ class TextPreview(_BasePreview):
             lineno_width, _ = get_text_size(
                 max_lineno_text,
                 font_height=font_height,
-                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=APP_REFS.general_font_key,
             )
 
             lineno_rect = rect.copy()
@@ -655,7 +652,7 @@ class TextPreview(_BasePreview):
                         x_increment, _ = get_text_size(
                             string,
                             font_height=font_height,
-                            font_key=FIRA_MONO_BOLD_FONT_PATH,
+                            font_key=APP_REFS.general_font_key,
                         )
 
                         text_fg = text_settings["foreground_color"]
@@ -686,7 +683,7 @@ class TextPreview(_BasePreview):
                                 string = fit_text(
                                     text=string,
                                     font_height=font_height,
-                                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                                    font_key=APP_REFS.general_font_key,
                                     padding=0,
                                     max_width=max_right - temp_x,
                                     ommit_direction="right",
@@ -728,7 +725,7 @@ class TextPreview(_BasePreview):
                 line_text = fit_text(
                     text=line_text,
                     font_height=font_height,
-                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=APP_REFS.general_font_key,
                     padding=0,
                     max_width=125,
                     ommit_direction='right',

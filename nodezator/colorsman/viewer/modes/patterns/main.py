@@ -20,6 +20,8 @@ from pygame.locals import (
 
 from .....pygamesetup import SERVICES_NS, blit_on_screen
 
+from .....config import APP_REFS
+
 from .....ourstdlibs.behaviour import (
     empty_function,
     get_oblivious_callable,
@@ -32,7 +34,6 @@ from .....widget.optionmenu.main import OptionMenu
 from .....classes2d.single import Object2D
 
 from .....textman.render import render_text
-from .....fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT
 
 from ....colors import BUTTON_FG, BUTTON_BG, WINDOW_FG, WINDOW_BG
 
@@ -64,7 +65,7 @@ class PatternsMode:
             surface=(
                 render_text(
                     text="Pattern:",
-                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                    font_height=APP_REFS.general_font_height,
                     padding=5,
                     foreground_color=WINDOW_FG,
                     background_color=WINDOW_BG,
@@ -93,7 +94,7 @@ class PatternsMode:
             surface=(
                 render_text(
                     text="Redraw",
-                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
+                    font_height=APP_REFS.general_font_height,
                     padding=5,
                     foreground_color=BUTTON_FG,
                     background_color=BUTTON_BG,

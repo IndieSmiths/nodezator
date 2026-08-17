@@ -14,6 +14,8 @@ from xml.etree.ElementTree import Element
 
 from ...pygamesetup import SCREEN_RECT
 
+from ...config import APP_REFS
+
 from ...ourstdlibs.behaviour import (
     empty_function,
     empty_oblivious_function,
@@ -23,12 +25,6 @@ from ...ourstdlibs.dictutils import settings_to_hashable_repr
 
 from ...classes2d.single import Object2D
 from ...classes2d.collections import List2D
-
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
-
 
 from ...colorsman.colors import (
     OPTION_MENU_FG,
@@ -93,7 +89,7 @@ def isliteral(value):
 ##        'True',           # antialiased
 ##        '(38, 38, 38)',   # background_color
 ##        '17',             # font_height
-##        ENC_SANS_BOLD_FONT_PATH,      # font_key
+##        APP_REFS.general_font_key, # font_key
 ##        '(238, 238, 238)' # foreground_color
 ##
 ##      ) : {
@@ -114,7 +110,7 @@ def isliteral(value):
 ##        'True',            # antialiased
 ##        '(38, 38, 38)',    # background_color
 ##        '17',              # font_height
-##        ENC_SANS_BOLD_FONT_PATH,       # font_key
+##        APP_REFS.general_font_key, # font_key
 ##        '(238, 238, 238)', # foreground_color
 ##        '140'              # max width
 ##
@@ -144,25 +140,37 @@ class OptionMenu(OptionMenuLifetimeOperations):
 
     def __init__(
         self,
+
         value="",
         options=("",),
+
         loop_holder=None,
+
         clamp_area=SCREEN_RECT,
-        max_width=155,
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        max_width=0,
+
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
+
         antialiased=True,
+
         foreground_color=OPTION_MENU_FG,
         background_color=OPTION_MENU_BG,
+
         hovered_foreground_color=OPTION_MENU_HOVERED_FG,
         hovered_background_color=OPTION_MENU_HOVERED_BG,
         unhovered_foreground_color=(OPTION_MENU_UNHOVERED_FG),
         unhovered_background_color=(OPTION_MENU_UNHOVERED_BG),
+
         draw_on_window_resize=empty_function,
+
         name="option_menu",
+
         coordinates_name="topleft",
         coordinates_value=(0, 0),
+
         command=empty_function,
+
     ):
         """Store data and perform setups.
 

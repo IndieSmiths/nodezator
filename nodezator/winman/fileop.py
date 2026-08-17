@@ -6,9 +6,9 @@ from pathlib import Path
 
 ### local imports
 
-from ..config import APP_REFS
+from ..config import APP_REFS, USER_PREFS
 
-from ..userprefsman.main import USER_PREFS, TEMP_FILE_SWAP
+from ..userprefsman.main import TEMP_FILE_SWAP
 
 from ..appinfo import NATIVE_FILE_EXTENSION
 

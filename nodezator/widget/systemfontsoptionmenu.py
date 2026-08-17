@@ -2,8 +2,6 @@
 
 ### standard library imports
 
-from ast import literal_eval
-
 from string import (
     ascii_uppercase,
     ascii_lowercase,
@@ -11,23 +9,31 @@ from string import (
     punctuation,
 )
 
+from functools import partial
+
+from operator import attrgetter
+
 
 ### third-party imports
 
 from pygame import Surface, error as PygameError
-
-from pygame.font import SysFont, get_fonts
 
 from pygame.draw import rect as draw_rect
 
 
 ### local imports
 
+from ..config import APP_REFS
+
+from ..dialog import create_and_show_dialog
+
 from ..ourstdlibs.behaviour import empty_function
 
 from ..our3rdlibs.behaviour import set_status_message
 
 from ..classes2d.single import Object2D
+
+from ..surfsman.render import render_rect
 
 from ..surfsman.cache import NOT_FOUND_SURF_MAP
 
@@ -42,18 +48,30 @@ from ..fontsman.preview.cache import (
 
 from ..fontsman.systemfontspicker import pick_system_fonts
 
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_PATH,
-    ENC_SANS_BOLD_FONT_HEIGHT,
-)
+from ..fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
 
 from ..textman.render import render_text
 
+from .intfloatentry.main import IntFloatEntry
 
 
-BUTTON_SURF = Surface((20, 20)).convert()
-BUTTON_SURF.fill('blue')
-BUTTON_HEIGHT = 18
+
+BUTTON = (
+
+    Object2D.from_surface(
+        render_text(
+            text='SYSFONT',
+            font_height=18,
+            font_key=FIRA_MONO_BOLD_FONT_PATH,
+            foreground_color=(0, 205, 0),
+            background_color=(0, 0, 145),
+        ),
+    )
+
+)
+
+
+
 
 PREVIEW_CHARS = (
     digits
@@ -66,20 +84,21 @@ PREVIEW_CHARS = (
 )
 
 
+GET_TOPLEFT = attrgetter('rect.topleft')
+
+
 class SystemFontsOptionMenu(Object2D):
     """Helps users pick system fonts and display them."""
 
     def __init__(
         self,
         value='',
-        string_when_single=True,
         loop_holder=None,
-        width=155,
+        string_when_single=True,
         name='system_font_option_menu',
-        command=empty_function,
-        update_behind=empty_function,
-        draw_behind=empty_function,
+        width=155,
         draw_on_window_resize=empty_function,
+        command=empty_function,
         coordinates_name='topleft',
         coordinates_value=(0, 0),
     ):
@@ -98,6 +117,30 @@ class SystemFontsOptionMenu(Object2D):
         self.command = command
         self.loop_holder = loop_holder
 
+        ### define control attribute for when there's more than one name listed
+        self.name_index = 0
+
+        ### entry to dipslay/change index
+
+        max_value = len(value) - 1 if not isinstance(value, str) else 0
+
+        topleft = BUTTON.rect.move(1, 0).topright
+
+        self.index_entry = IntFloatEntry(
+            value=0,
+            min_value=0,
+            max_value=max_value,
+            numeric_classes_hint='int',
+            font_height=BUTTON.rect.height,
+            width=68,
+            loop_holder=loop_holder,
+            command=self.update_previewed_font_from_entry,
+            draw_on_window_resize=draw_on_window_resize,
+            position_reference_getter=(partial(GET_TOPLEFT, self)),
+            coordinates_name='topleft',
+            coordinates_value=topleft,
+        )
+
         ### create image and rect, then position rect
 
         self.image = Surface((width, 170)).convert()
@@ -114,13 +157,7 @@ class SystemFontsOptionMenu(Object2D):
         self.update_image()
 
     def validate_value(self, value):
-
-        try:
-            literal_eval(repr(value))
-
-        except Exception as err:
-            raise ValueError("Value is not a Python literal") from err
-
+        """Check whether type is of allowed type."""
         value_type = type(value)
 
         ### if value is a string, it can be any value, so we don't need
@@ -176,8 +213,6 @@ class SystemFontsOptionMenu(Object2D):
         ### clean image surface
         image.fill('grey')
 
-        image.blit(BUTTON_SURF, (0, 0))
-
         ###
         value = self.value
 
@@ -185,9 +220,7 @@ class SystemFontsOptionMenu(Object2D):
         ### is a string
         value_is_string = isinstance(value, str)
 
-        ### create variable specifying whether there's more
-        ### than one font name
-
+        ### create variable specifying whether there's more than one font name
         multiple_names = not value_is_string and len(value) > 1
 
         ### if there are multiple font names...
@@ -195,7 +228,7 @@ class SystemFontsOptionMenu(Object2D):
         if multiple_names:
 
             ### define current font name
-            self.current_font_name = value[self.value_index]
+            self.current_font_name = value[self.name_index]
 
         ### if there's just one font name, though...
 
@@ -205,9 +238,7 @@ class SystemFontsOptionMenu(Object2D):
             self.current_font_name = value if value_is_string else value[0]
 
         ### blit all buttons
-
-        #for surf, rect in zip(self.button_surfs, self.button_rects):
-        #    image.blit(surf, rect)
+        image.blit(BUTTON.image, (2, 2))
 
         ### blit font representation
         self.blit_value_representation()
@@ -215,15 +246,26 @@ class SystemFontsOptionMenu(Object2D):
         ### draw depth finish
         draw_depth_finish(image)
 
+    def update_previewed_font_from_entry(self):
+        """"""
+        self.name_index = self.index_entry.get()
+
+        self.current_font_name = self.value[self.name_index]
+
+        self.blit_value_representation()
+
     def blit_value_representation(self):
         """Blit representation of current font."""
+
         image = self.image
+
+        button_height = BUTTON.rect.height
 
         rect = (
             1,
-            BUTTON_HEIGHT + 2,
+            button_height + 2,
             self.rect.width - 2,
-            self.rect.height - ((BUTTON_HEIGHT * 2) + 2),
+            self.rect.height - ((button_height * 2) + 2),
         )
 
         draw_rect(image, 'grey', rect)
@@ -250,12 +292,12 @@ class SystemFontsOptionMenu(Object2D):
 
         ### blit rest of elements
 
-        rect = self.image.get_rect()
-        rect.topleft = rect.move(1, -BUTTON_HEIGHT).bottomleft
-        rect.height = BUTTON_HEIGHT - 2
+        rect = image.get_rect()
+        rect.topleft = rect.move(1, -button_height).bottomleft
+        rect.height = button_height - 2
         rect.move_ip(0, 1)
 
-        draw_rect(self.image, 'grey', rect)
+        draw_rect(image, 'grey', rect)
 
         ###
 
@@ -265,8 +307,8 @@ class SystemFontsOptionMenu(Object2D):
 
                 render_text(
                     text=str(self.current_font_name),
-                    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-                    font_key=ENC_SANS_BOLD_FONT_PATH,
+                    font_height=APP_REFS.general_font_height,
+                    font_key=APP_REFS.general_font_key,
                     padding=1,
                     max_width=152,
                     ommit_direction='left',
@@ -274,10 +316,10 @@ class SystemFontsOptionMenu(Object2D):
 
             ),
 
-            target_surface=self.image,
+            target_surface=image,
             retrieve_pos_from='bottomright',
             assign_pos_to='bottomright',
-            offset_pos_by=(-1, -1),
+            offset_pos_by=(-1, 0),
         )
 
         if isinstance(self.value, str) or len(self.value) == 1:
@@ -285,9 +327,15 @@ class SystemFontsOptionMenu(Object2D):
 
         ### blit entry
 
-        #self.image.blit(
-        #    self.index_entry.image, self.button_rects[1].move(1, 0).topright
-        #)
+        blit_aligned(
+
+            surface_to_blit=self.index_entry.image,
+            target_surface=image,
+            retrieve_pos_from='topleft',
+            assign_pos_to='topleft',
+            offset_pos_by=(BUTTON.rect.width + 4, 2),
+
+        )
 
     def preview_fonts(self):
         """Preview font(s) from system."""
@@ -309,7 +357,11 @@ class SystemFontsOptionMenu(Object2D):
 
         if error_msg:
 
-            print(error_msg)
+            create_and_show_dialog(
+                message=error_msg,
+                level_name='error',
+            )
+
             set_status_message(error_msg)
 
     def get(self):
@@ -355,36 +407,59 @@ class SystemFontsOptionMenu(Object2D):
             self.value = value
 
             ### reset index
-            self.value_index = 0
+            self.name_index = 0
 
             ### reset index value and max value
 
-            #entry = self.index_entry
+            entry = self.index_entry
 
-            #entry.set(0, False)
+            entry.set(0, False)
 
-            #max_value = 0 if isinstance(value, str) else len(value) - 1
+            max_value = 0 if isinstance(value, str) else len(value) - 1
 
-            #entry.set_range(0, max_value)
+            entry.set_range(0, max_value)
 
             ### if requested, execute the custom command
+
             if custom_command:
                 self.command()
 
             ### if requested, update the widget image
+
             if update_image:
                 self.update_image()
 
+    def on_mouse_click(self, event):
+        """Reposition and give focus to entry."""
+        if self.collides_with_entry(event.pos):
+            self.index_entry.on_mouse_click(event)
+
     def on_mouse_release(self, event):
+        """Act according to mouse release position.
+
+        Parameters
+        ==========
+        event
+            (pygame.event.Event of pygame.MOUSEBUTTONUP type)
+
+            It is required in order to comply with
+            protocol used. We retrieve the mouse position
+            from its "pos" attribute.
+
+            Check pygame.event module documentation on
+            pygame website for more info about this event
+            object.
+        """
 
         pos = event.pos
 
-        rect = self.rect.copy()
+        rect = BUTTON.rect
+        rect.topleft = self.rect.move(2, 2).topleft
 
-        rect.width = 20
-        rect.height = 20
+        if self.collides_with_entry(pos):
+            pass
 
-        if rect.collidepoint(pos):
+        elif rect.collidepoint(pos):
 
             font_names = (
 
@@ -409,3 +484,18 @@ class SystemFontsOptionMenu(Object2D):
             
         else:
             self.preview_fonts()
+
+    def collides_with_entry(self, pos):
+        """Return whether given pos collides with entry."""
+        ### TODO review/refactor this "if block"
+
+        if isinstance(self.value, str) or len(self.value) == 1:
+            return False
+
+        entry_rect = self.index_entry.rect
+
+        entry_rect.topleft = (
+            self.rect.move(BUTTON.rect.width+2, 0).topleft
+        )
+
+        return entry_rect.collidepoint(pos)

@@ -1,13 +1,26 @@
 """Facility for visuals related node class extension."""
 
+### standard library import
+from itertools import chain
+
+
 ### local imports
 
+from .....colorsman.colors import (
+    NODE_BODY_BG,
+    COMMENTED_OUT_NODE_BG,
+)
+
 from ...surfs import (
-    NORMAL_NODE_FOOT,
-    COMMENTED_OUT_NODE_FOOT,
+    NODE_FOOTS_MAP,
     NORMAL_BOTTOM_CORNERS,
     COMMENTED_OUT_BOTTOM_CORNERS,
     UNPACKING_ICON_SURFS_MAP,
+)
+
+from ...constants import (
+    NORMAL_LABEL_TEXT_SETTINGS,
+    COMMENTED_OUT_LABEL_TEXT_SETTINGS,
 )
 
 ## functions for injection
@@ -15,6 +28,7 @@ from ...surfs import (
 from .expandedcreation import get_expanded_body_surface
 from .collapsedcreation import get_collapsed_body_surface
 from .callablecreation import get_callable_body_surface
+
 
 
 class BodySetupOperations:
@@ -30,22 +44,47 @@ class BodySetupOperations:
     ### convenience methods to execute combinations of
     ### modular operations for specific purposes
 
-    ## for when body is instantiated
+    ## for whenever geometry changes
 
-    def setup_body(self):
-        """Performs several adjustments to the body."""
-        self.reset_body_height_and_image()
+    def rebuild_body(self):
+        """Reposition and reconstruct node's body."""
+
+        self.reposition_elements()
+        self.redraw_body_surface()
+
+    ## for whenever mode is (re)set
+
+    def perform_general_body_setups(self):
+        """Performs several setups related to the body."""
+
+        self.update_label_text_settings()
+        self.rebuild_body()
         self.assign_bottom_surfaces()
 
     ## for when node is commented out/uncommented
 
     def perform_commenting_uncommenting_setups(self):
         """Performs several adjustments to the body."""
+
+        ### fill body's surface with appropriate color
+
+        self.body.image.fill(
+
+            COMMENTED_OUT_NODE_BG
+            if self.data.get("commented_out", False)
+
+            else NODE_BODY_BG
+
+        )
+
+        ### update text settings for labels
+        self.update_label_text_settings()
+
+        ### redraw the body's surface
+        self.redraw_body_surface()
+
         ###
         self.assign_bottom_surfaces()
-
-        ### create and store the body's surface
-        self.body.image = self.create_body_surface()
 
         ###
         self.assign_unpacking_icon_surfs()
@@ -55,15 +94,29 @@ class BodySetupOperations:
 
     ### methods representing modular operations
 
-    def reset_body_height_and_image(self):
-        """Calculate and set body height and create new image."""
-        ### the body height is equivalent to the interval
-        ### between the top rectsman's bottom and the bottom
-        ### rectsman's top
-        self.body.rect.height = self.bottom_rectsman.top - self.top_rectsman.bottom
+    def update_label_text_settings(self):
 
-        ### create and store a new surface for the body
-        self.body.image = self.create_body_surface()
+        ### define text settings used for node labels bg, based on whether node
+        ### is commented out or not
+
+        label_text_settings = (
+
+            COMMENTED_OUT_LABEL_TEXT_SETTINGS
+            if self.data.get("commented_out", False)
+
+            else NORMAL_LABEL_TEXT_SETTINGS
+
+        )
+
+        ### apply such settings
+
+        for text_obj in chain(
+            self.parameter_text_obj_map.values(),
+            self.output_text_obj_map.values(),
+        ):
+
+            text_obj.change_text_settings(label_text_settings)
+            text_obj.rect.size = text_obj.image.get_size()
 
     def assign_bottom_surfaces(self):
         """Assign proper surfaces to node's bottom objects.
@@ -84,16 +137,41 @@ class BodySetupOperations:
         ## it
         bottomleft_corner, bottomright_corner = self.corners[2:]
 
+        ##
+
+        foot_width = (
+            bottomright_corner.rect.left
+            - bottomleft_corner.rect.right
+        )
+
         ## assign the appropriate surfaces to the 'image'
         ## attribute of the respective objects
 
-        (self.foot.image, bottomleft_corner.image, bottomright_corner.image) = (
+        (
+
+            self.foot.image,
+            bottomleft_corner.image,
+            bottomright_corner.image,
+
+        ) = (
+
             ## surfaces for commented out nodes,
             ## when the node is commented out
-            (COMMENTED_OUT_NODE_FOOT, *COMMENTED_OUT_BOTTOM_CORNERS)
+
+            (
+                NODE_FOOTS_MAP[(foot_width, COMMENTED_OUT_NODE_BG)],
+                *COMMENTED_OUT_BOTTOM_CORNERS,
+            )
+
             if self.data.get("commented_out", False)
+
             ## otherwise, surfaces for uncommented nodes
-            else (NORMAL_NODE_FOOT, *NORMAL_BOTTOM_CORNERS)
+
+            else (
+                NODE_FOOTS_MAP[(foot_width, NODE_BODY_BG)],
+                *NORMAL_BOTTOM_CORNERS,
+            )
+
         )
 
     def assign_unpacking_icon_surfs(self):

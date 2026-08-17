@@ -11,6 +11,9 @@ from ....config import APP_REFS
 from ....classes2d.single import Object2D
 
 from ....textman.render import render_text
+from ....textman.cache import CachedTextObject
+
+from ....surfsman.cache import EMPTY_SURF
 
 from ....rectsman.main import RectsManager
 
@@ -22,7 +25,13 @@ from ....colorsman.colors import (
     BLACK,
 )
 
-from ..constants import FONT_HEIGHT, NODE_WIDTH
+## other objects for composition
+
+from ..surfs import (
+    TOP_CORNERS_MAP,
+    NORMAL_BOTTOM_CORNERS,
+    SIGMODE_TOGGLE_BUTTON_MAP,
+)
 
 
 ## class extensions
@@ -33,22 +42,13 @@ from .sigmode import SignatureModeVisualPreparations
 from .calmode import CallableModeVisualPreparations
 
 
-## other objects for composition
-
-from ..surfs import (
-    NODE_ROOFS_MAP,
-    TOP_CORNERS_MAP,
-    NORMAL_BOTTOM_CORNERS,
-    NORMAL_NODE_FOOT,
-    SIGMODE_TOGGLE_BUTTON_MAP,
-)
 
 
 class VisualPreparations(
     BodySetupOperations,
     SignatureModeVisualPreparations,
     CallableModeVisualPreparations,
-    ):
+):
     """Manages creation and setup of node visuals."""
 
     ### define remaining methods
@@ -64,11 +64,16 @@ class VisualPreparations(
         self.reference_tiny_icons()
         self.pick_tiny_icon()
 
+        ## create list to store corners
+        ##
+        ## corners will use surfaces from imported maps
+        self.corners = []
+
         ### create elements situated on top of the node
         self.create_top_objects()
 
         ### create title of node
-        self.create_title_object()
+        self.create_title_text_object()
 
         ### create sigmode toggle button
         self.create_sigmode_toggle_button()
@@ -80,26 +85,21 @@ class VisualPreparations(
         self.create_node_id_text()
 
         ### create a body for the node
+        self.body = Object2D.from_surface(EMPTY_SURF)
 
-        body_topleft = self.top_rectsman.bottomleft
-        body_size = (NODE_WIDTH, 0)
-
-        self.body = Object2D(rect=Rect(body_topleft, body_size))
-
-        ### gather references to "background" and text
-        ### elements for easy retrieval and drawing
+        ### gather references to "background" and text elements
+        ### for easy retrieval and drawing
 
         self.background_and_text_elements = (
-            *self.corners,
             self.roof,
             self.body,
             self.foot,
             self.title_text_obj,
             self.id_text_obj,
+            *self.corners,
         )
 
-        ### create a rect to be used as the boundaries
-        ### of the node
+        ### create a rect to be used as the boundaries of the node
         self.rect = Rect(0, 0, 0, 0)
 
         ### create expanded signature mode visuals
@@ -123,7 +123,18 @@ class VisualPreparations(
         so that it can be overriden by subclasses as
         neeeded.
         """
-        self.color_index = APP_REFS.category_index_map[self.data["script_id"][:2]]
+
+        self.color_index = (
+
+            APP_REFS
+            .category_index_map
+
+            [
+                self
+                .data["script_id"]
+                [:2]
+            ]
+        )
 
         self.category_color = NODE_CATEGORY_COLORS[self.color_index]
 
@@ -144,35 +155,26 @@ class VisualPreparations(
 
     def create_top_objects(self):
         """Create objects that lie on top of the node."""
-        ### create and position roof and top corner objects
-        ### using surfaces from imported maps
+        ### create roof and top corner objects
 
         ## roof
-
-        roof = self.roof = Object2D()
-        roof.image = NODE_ROOFS_MAP[self.category_color]
-        roof.rect = roof.image.get_rect()
-
-        ## create list to store corners
-        self.corners = []
+        roof = self.roof = Object2D.from_surface(EMPTY_SURF)
 
         # topleft corner
 
-        topleft_corner = Object2D()
-        topleft_corner.image = TOP_CORNERS_MAP[self.category_color][0]
-
-        topleft_corner.rect = topleft_corner.image.get_rect()
-
-        topleft_corner.rect.topright = roof.rect.topleft
+        topleft_corner = (
+            Object2D.from_surface(
+                TOP_CORNERS_MAP[self.category_color][0]
+            )
+        )
 
         # topright corner
 
-        topright_corner = Object2D()
-        topright_corner.image = TOP_CORNERS_MAP[self.category_color][1]
-
-        topright_corner.rect = topright_corner.image.get_rect()
-
-        topright_corner.rect.topleft = roof.rect.topright
+        topright_corner = (
+            Object2D.from_surface(
+                TOP_CORNERS_MAP[self.category_color][1]
+            )
+        )
 
         self.corners.append(topleft_corner)
         self.corners.append(topright_corner)
@@ -193,84 +195,65 @@ class VisualPreparations(
         ## store it in its own attribute
         self.top_rectsman = RectsManager(get_top_rects)
 
-        ## align the top rectsman midtop with the
-        ## midtop coordinates of the node
-        self.top_rectsman.midtop = self.midtop
-
-    def create_title_object(self):
+    def create_title_text_object(self):
         """Instatiate object representing title of the node.
 
         Create and store a text object to represent the
         node's title. We use the name of the callable the
         node represents as the text.
         """
-        ### reference the roof's rect
-        roof_rect = self.roof.rect
 
-        ### create text object for title
+        self.title_text_obj = (
 
-        ## calculate midtop for title object so that it has
-        ## its midtop coordinate just a bit below the
-        ## midtop of the roof of the node
-        title_midtop = roof_rect.move(0, 3).midtop
+            CachedTextObject(
 
-        ## instantiate text object
-
-        self.title_text_obj = Object2D.from_surface(
-            surface=render_text(
-                # text for surface
                 text=self.title_text,
-                # font settings (note that we use the
-                # roof width as the max width)
-                font_height=FONT_HEIGHT,
-                foreground_color=NODE_TITLE,
-                background_color=self.category_color,
-                max_width=roof_rect.width,
-            ),
-            coordinates_name="midtop",
-            coordinates_value=title_midtop,
+
+                text_settings={
+                    'font_key': APP_REFS.general_font_key,
+                    'font_height': APP_REFS.general_font_height,
+                    'foreground_color': NODE_TITLE,
+                    'background_color': self.category_color,
+                },
+
+            )
+
         )
 
     def create_sigmode_toggle_button(self):
         """Instatiate button to toggle between signature modes."""
-        button = self.sigmode_toggle_button = Object2D()
-        button.image = SIGMODE_TOGGLE_BUTTON_MAP[self.category_color][0]
-        button.rect = button.image.get_rect()
-        button.rect.topleft = self.top_rectsman.move(2, 0).bottomleft
-        button.on_mouse_release = self.toggle_sigmode
+
+        self.sigmode_toggle_button = (
+
+            Object2D.from_surface(
+                surface=SIGMODE_TOGGLE_BUTTON_MAP[self.category_color][0],
+                on_mouse_release = self.toggle_sigmode,
+            )
+
+        )
 
     def create_bottom_objects(self):
         """Create objects that lie at the node's bottom."""
-        ### create and position foot and remaining corners
-        ### using imported surfaces
-        ###
-        ### the actual surfaces used for the foot and
-        ### bottom corners might change if the node is
-        ### currently commented out, but we we don't need
-        ### to worry about it here (this is taken care of
-        ### in another module)
+
+        ### create foot
+
+        ### the actual surface for the foot will be generated later
+        ### when we know the needed width
+
+        ### the actual surfaces for the bottom corners might change
+        ### if the node is currently commented out, but we we don't need
+        ### to worry about it here (this is taken care of in another spot)
 
         ## foot
+        self.foot = Object2D.from_surface(EMPTY_SURF)
 
-        self.foot = Object2D()
-        self.foot.image = NORMAL_NODE_FOOT
-        self.foot.rect = self.foot.image.get_rect()
-
-        ## corners
+        ### create remaining corners using imported surfaces
 
         # bottomleft corner
-
-        bottomleft_corner = Object2D()
-        bottomleft_corner.image = NORMAL_BOTTOM_CORNERS[0]
-        bottomleft_corner.rect = bottomleft_corner.image.get_rect()
-        bottomleft_corner.rect.topright = self.foot.rect.topleft
+        bottomleft_corner = Object2D.from_surface(NORMAL_BOTTOM_CORNERS[0])
 
         # bottomright corner
-
-        bottomright_corner = Object2D()
-        bottomright_corner.image = NORMAL_BOTTOM_CORNERS[1]
-        bottomright_corner.rect = bottomright_corner.image.get_rect()
-        bottomright_corner.rect.topleft = self.foot.rect.topright
+        bottomright_corner = Object2D.from_surface(NORMAL_BOTTOM_CORNERS[1])
 
         self.corners.append(bottomleft_corner)
         self.corners.append(bottomright_corner)
@@ -299,17 +282,22 @@ class VisualPreparations(
         """
         ### instantiate
 
+        node_id = self.id
+
         self.id_text_obj = Object2D.from_surface(
+
             render_text(
-                ### use node id as the text
-                text=" {} ".format(self.id),
-                # font settings (note that we use the
-                # foot width as the max width)
-                font_height=FONT_HEIGHT,
+
+                text=f" {node_id} ",
+
+                ### text settings
+
+                font_key=APP_REFS.general_font_key,
+                font_height=APP_REFS.general_font_height,
                 foreground_color=NODE_TITLE,
                 background_color=self.category_color,
                 border_thickness=1,
                 border_color=BLACK,
-                max_width=self.foot.rect.width,
             )
+
         )

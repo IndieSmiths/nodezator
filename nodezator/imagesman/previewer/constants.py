@@ -4,10 +4,10 @@
 
 from ...pygamesetup import SCREEN_RECT
 
+from ...config import APP_REFS
+
 from ...classes2d.single import Object2D
 from ...classes2d.collections import List2D
-
-from ...fontsman.constants import ENC_SANS_BOLD_FONT_HEIGHT, ENC_SANS_BOLD_FONT_PATH
 
 from ...textman.label.main import Label
 
@@ -71,8 +71,8 @@ PREVIEWER_OBJS.append(PREVIEWER_ICON)
 PREVIEWER_CAPTION = Object2D.from_surface(
     render_text(
         text="Images Previewer",
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         padding=5,
         foreground_color=IMAGES_PREVIEWER_FG,
         background_color=IMAGES_PREVIEWER_BG,
@@ -136,8 +136,8 @@ PREVIEWER_OBJS.append(SMALL_THUMB)
 
 PATH_LABEL = Label(
     text="dummy text",
-    font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-    font_key=ENC_SANS_BOLD_FONT_PATH,
+    font_height=APP_REFS.general_font_height,
+    font_key=APP_REFS.general_font_key,
     padding=2,
     max_width=LARGE_THUMB_WIDTH,
     foreground_color=IMAGES_PREVIEWER_FG,

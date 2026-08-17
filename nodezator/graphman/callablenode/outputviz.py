@@ -71,7 +71,6 @@ from ...colorsman.colors import (
 )
 
 from .constants import (
-    FONT_HEIGHT,
     SIDEVIZ_TEXT_SETTINGS,
     SIDEVIZ_MONOSPACED_TEXT_SETTINGS,
     SIDEVIZ_PYTHON_SOURCE_SETTINGS,
@@ -239,7 +238,7 @@ class OutputVisualization:
         reload_label_surf = (
             render_text(
                 'Reload',
-                font_height=FONT_HEIGHT,
+                font_height=APP_REFS.general_font_height,
                 foreground_color=NODE_LABELS,
                 background_color=NODE_BODY_BG,
             )
@@ -297,7 +296,7 @@ class OutputVisualization:
             loop_toggle_label = Object2D.from_surface(
                 render_text(
                     'Loop on execution',
-                    font_height=FONT_HEIGHT,
+                    font_height=APP_REFS.general_font_height,
                     padding=2,
                     foreground_color=NODE_LABELS,
                     background_color=NODE_BODY_BG,
@@ -678,6 +677,8 @@ def draw_panel_on_surf(panel, surf):
 
 
 ### svg export utilities
+
+FONT_HEIGHT = APP_REFS.general_font_height
 
 PREVIEW_OBJECTS_CSS = f"""
 

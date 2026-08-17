@@ -8,11 +8,13 @@ from functools import partial
 
 ### local imports
 
+from .....textman.cache import CachedTextObject
+
 from ....widget.utils import WIDGET_CLASS_MAP
 
-from ...utils import update_with_widget
-
 from ....socket.surfs import type_to_codename
+
+from ...utils import update_with_widget
 
 
 ## classes for composition
@@ -22,7 +24,8 @@ from ....socket.input import InputSocket
 from .....widget.defaultholder import DefaultHolder
 
 
-def create_parameter_objs(self, param_obj):
+
+def create_parameter_objs(self, param_obj, label_text_settings):
     """Build socket and widget for the parameter.
 
     The parameter in question must not be of variable
@@ -36,9 +39,22 @@ def create_parameter_objs(self, param_obj):
     param_obj (inspect.Parameter instance)
         an object representing a parameter from a callable
         object, containing related data.
+    label_text_settings (dict)
+        text settings used for labels.
     """
     ### retrieve the name of the parameter
     param_name = param_obj.name
+
+    ### create and store text object representing parameter
+
+    self.parameter_text_obj_map[param_name] = (
+
+        CachedTextObject(
+            text=param_name,
+            text_settings=label_text_settings,
+        )
+
+    )
 
     ### let's also alias the live instances map for
     ### the input sockets using a variable of low
@@ -57,8 +73,14 @@ def create_parameter_objs(self, param_obj):
 
     ### instantiate socket
 
-    input_socket = InputSocket(
-        node=self, type_codename=type_codename, parameter_name=param_name,
+    input_socket = (
+
+        InputSocket(
+            node=self,
+            type_codename=type_codename,
+            parameter_name=param_name,
+        )
+
     )
 
     ### store the input socket instance in the
@@ -94,6 +116,22 @@ def create_parameter_objs(self, param_obj):
         ## retrieve keyword arguments to use when
         ## instantiating the widget
         kwargs = param_widget_meta["widget_kwargs"]
+
+        ## if we are dealing with a text display widget,
+        ## replace the 'font_path' option by an appropriate one;
+        ##
+        ## the 'font_path' option, used in previous version isn't
+        ## valid anymore; in fact, it shouldn't have been exposed
+        ## to users to begin with (that is, not the way it was, but
+        ## as a toggle, like now)
+
+        if widget_name == 'text_display' and 'font_path' in kwargs:
+
+            fpath = kwargs.pop('font_path')
+
+            kwargs['pick_monospaced_font'] = (
+                True if fpath == 'mono_bold' else False
+            )
 
         ## instantiate the widget using the keyword arguments
         ## as well as the position data

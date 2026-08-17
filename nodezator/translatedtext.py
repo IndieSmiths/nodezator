@@ -9,7 +9,7 @@ from itertools import takewhile
 
 ### local imports
 
-from .config import TRANSLATIONS_DIR
+from .config import USER_PREFS, TRANSLATIONS_DIR
 
 from .ourstdlibs.collections.general import CallList
 
@@ -188,9 +188,7 @@ def get_translations_namespace():
 
 class TranslationNode():
 
-    # placeholder attribute (to be set within the user preferences
-    # subpackage)
-    _user_prefs = None
+    _user_prefs = USER_PREFS
 
     def __init__(self):
 

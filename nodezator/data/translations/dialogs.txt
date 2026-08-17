@@ -24,7 +24,7 @@ close_file
 quit_app
 
     message
-        en-us There are unsaved chagnes. Are you sure you want to quit?
+        en-us There are unsaved changes. Are you sure you want to quit?
         pt-br Há mudanças não salvas. Tem certeza que quer sair?
         zh-cn 当前存在未保存的更改。您确定要退出吗？
 
@@ -162,4 +162,4 @@ cant_use_picker_for_no_system_fonts_were_detected
 
     message
         en-us It is not possible to use the system fonts picker because no system fonts were detected
-        pt-br Não é possível usar o seletor the fontes do sisstem porque não foram detectadas
+        pt-br Não é possível usar o seletor the fontes do sistema porque não foram detectadas

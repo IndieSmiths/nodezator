@@ -6,10 +6,7 @@ from pygame import Rect
 
 ### local imports
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_PATH,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
+from ...config import APP_REFS
 
 from ...colorsman.colors import (
     TEXT_EDITING_AREA_FG,
@@ -62,14 +59,14 @@ EDITING_AREA_RECT.center = TEXT_EDITOR_RECT.center
 
 SANS_FONT_SETTINGS = {
     "font_height": FONT_HEIGHT,
-    "font_path": ENC_SANS_BOLD_FONT_PATH,
+    "font_key": APP_REFS.general_font_key,
     "foreground_color": TEXT_EDITING_AREA_FG,
     "background_color": TEXT_EDITING_AREA_BG,
 }
 
 MONO_FONT_SETTINGS = {
     "font_height": FONT_HEIGHT,
-    "font_path": FIRA_MONO_BOLD_FONT_PATH,
+    "font_key": APP_REFS.mono_font_key,
     "foreground_color": TEXT_EDITING_AREA_FG,
     "background_color": TEXT_EDITING_AREA_BG,
 }

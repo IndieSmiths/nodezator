@@ -6,11 +6,11 @@ from pygame import Rect
 
 ### local imports
 
+from ...config import APP_REFS
+
 from ...classes2d.single import Object2D
 
 from ...surfsman.render import render_rect
-
-from ...fontsman.constants import ENC_SANS_BOLD_FONT_PATH
 
 from ..cache import TEXT_SURFS_DB
 
@@ -35,8 +35,8 @@ class Label(Object2D):
         text="",
         *,
         name="label",
-        font_height=22,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         foreground_color=BLACK,
         background_color=(*BLACK, 0),
         padding=5,

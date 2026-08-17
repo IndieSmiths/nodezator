@@ -5,12 +5,7 @@ from string import Template
 
 ### local imports
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
+from ...config import APP_REFS
 
 from ...colorsman.colors import (
     BUTTON_FG,
@@ -51,24 +46,24 @@ PIE_INNER_OUTLINE_WIDTH = 2
 PIE_OUTER_OUTLINE_WIDTH = 2
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 2,
     'foreground_color': REPORT_FG,
     'background_color': REPORT_BG,
 }
 
 MONO_TEXT_SETTINGS = {
-    'font_height': FIRA_MONO_BOLD_FONT_HEIGHT,
-    'font_key': FIRA_MONO_BOLD_FONT_PATH,
+    'font_height': APP_REFS.mono_font_height,
+    'font_key': APP_REFS.mono_font_key,
     'padding': 2,
     'foreground_color': REPORT_FG,
     'background_color': REPORT_BG,
 }
 
 BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': BUTTON_FG,
     'background_color': BUTTON_BG,

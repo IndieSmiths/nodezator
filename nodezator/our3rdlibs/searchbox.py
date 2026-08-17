@@ -8,6 +8,8 @@ from pygame import Rect
 
 from ..pygamesetup.constants import GENERAL_NS
 
+from ..config import APP_REFS
+
 from ..ourstdlibs.behaviour import return_untouched
 
 from ..ourstdlibs.color.creation import get_contrasting_bw
@@ -16,14 +18,10 @@ from ..classes2d.single import Object2D
 
 from ..surfsman.render import render_rect
 
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
-
 from ..colorsman.colors import BLACK, WHITE
 
 from ..textman.entryedition.cursor import EntryCursor
+
 
 
 class SearchBox(Object2D):
@@ -37,8 +35,8 @@ class SearchBox(Object2D):
     def __init__(
         self,
         value="",
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_path=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         width=200,
         name="search_box",
         on_input=return_untouched,
@@ -55,10 +53,10 @@ class SearchBox(Object2D):
             initial value of the widget.
         font_height (integer)
             desired font height in pixels.
-        font_path (string, defaults to "default")
-            represents font style. Check local
-            font.py module for available styles. In doubt
-            use 'default' for default font.
+        font_key (pathlib.Path or string)
+            represents font to be used (font file if pathlib.Path, system font
+            if a string; a string, if given, must be recognized by
+            pygame.font.match_font())
         width (integer)
             width of the widget.
         name (string)
@@ -123,7 +121,7 @@ class SearchBox(Object2D):
 
         render_settings = {
             "font_height": font_height,
-            "font_path": font_path,
+            "font_key": font_key,
             "foreground_color": foreground_color,
             "background_color": background_color,
         }

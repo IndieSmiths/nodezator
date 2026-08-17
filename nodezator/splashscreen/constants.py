@@ -2,10 +2,7 @@
 
 ### local imports
 
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
+from ..config import APP_REFS
 
 from ..colorsman.colors import (
     SPLASH_FONT,
@@ -17,16 +14,16 @@ from ..colorsman.colors import (
 
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 0,
     'foreground_color': SPLASH_FONT,
     'background_color': SPLASH_BG,
 }
 
 URL_TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 2,
     'foreground_color': SPLASH_URL_FG,
     'background_color': SPLASH_URL_BG,
@@ -39,7 +36,7 @@ SUBHEADING_FONT_HEIGHT = 28
 
 RELEASE_LEVEL_TEXT_SETTINGS = {
     'font_height': 20,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_key': APP_REFS.general_font_key,
     'padding': 2,
     'foreground_color': SPLASH_BG,
     'background_color': SPLASH_FONT,

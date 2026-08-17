@@ -19,6 +19,8 @@ from pygame.draw import rect as draw_rect
 
 ### local imports
 
+from ..config import APP_REFS
+
 from ..ourstdlibs.behaviour import empty_function
 from ..ourstdlibs.exceptionutils import bool_func_from_raiser
 
@@ -37,11 +39,6 @@ from ..textman.render import (
 
 from ..textman.viewer.main import view_text
 from ..textman.editor.main import edit_text
-
-from ..fontsman.constants import (
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
 
 from ..syntaxman.utils import (
     AVAILABLE_SYNTAXES,
@@ -97,7 +94,7 @@ class LiteralDisplay(Object2D):
     def __init__(
         self,
         value=None,
-        font_height=FIRA_MONO_BOLD_FONT_HEIGHT,
+        font_height=APP_REFS.mono_font_height,
         width=155,
         no_of_visible_lines=7,
         show_line_number=False,
@@ -288,7 +285,7 @@ class LiteralDisplay(Object2D):
             lineno_width, _ = get_text_size(
                 "01",
                 font_height=font_height,
-                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=APP_REFS.mono_font_key,
             )
 
             draw_rect(
@@ -376,7 +373,7 @@ class LiteralDisplay(Object2D):
                 surf = render_text(
                     text=str(line_number).rjust(2, "0"),
                     font_height=font_height,
-                    font_key=FIRA_MONO_BOLD_FONT_PATH,
+                    font_key=APP_REFS.mono_font_key,
                     foreground_color=lineno_fg,
                     background_color=lineno_bg,
                 )
@@ -391,7 +388,7 @@ class LiteralDisplay(Object2D):
 
         general_text_settings = {
             "font_height": self.font_height,
-            "font_key": FIRA_MONO_BOLD_FONT_PATH,
+            "font_key": APP_REFS.mono_font_key,
         }
 
         ### store a theme map ready for usage with the
@@ -453,7 +450,7 @@ class LiteralDisplay(Object2D):
 
         text = edit_text(
             text=pformat(self.value, width=84),
-            font_key=FIRA_MONO_BOLD_FONT_PATH,
+            font_key=APP_REFS.mono_font_key,
             syntax_highlighting="python",
             validation_command=is_python_literal,
         )
@@ -594,7 +591,7 @@ class LiteralDisplay(Object2D):
             lineno_width, _ = get_text_size(
                 max_lineno_text,
                 font_height=font_height,
-                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                font_key=APP_REFS.mono_font_key,
             )
 
             lineno_rect = rect.copy()
@@ -692,7 +689,7 @@ class LiteralDisplay(Object2D):
                     x_increment, _ = get_text_size(
                         string,
                         font_height=font_height,
-                        font_key=FIRA_MONO_BOLD_FONT_PATH,
+                        font_key=APP_REFS.mono_font_key,
                     )
 
                     text_fg = text_settings["foreground_color"]
@@ -725,7 +722,7 @@ class LiteralDisplay(Object2D):
                             string = fit_text(
                                 text=string,
                                 font_height=font_height,
-                                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                                font_key=APP_REFS.mono_font_key,
                                 padding=0,
                                 max_width=max_right - temp_x,
                                 ommit_direction="right",

@@ -4,18 +4,18 @@
 
 from .....ourstdlibs.collections.fldict.main import FlatListDict
 
-from .....classes2d.single import Object2D
+from .....textman.cache import CachedTextObject
 
 from .....rectsman.main import RectsManager
-
-from ....socket.surfs import type_to_codename
-
-
-## classes for composition
 
 from ....socket.output import OutputSocket
 
-from .....rectsman.main import RectsManager
+from ....socket.surfs import type_to_codename
+
+from ...constants import (
+    NORMAL_LABEL_TEXT_SETTINGS,
+    COMMENTED_OUT_LABEL_TEXT_SETTINGS,
+)
 
 
 ## functions for injection
@@ -38,18 +38,27 @@ class SignatureModeVisualPreparations():
 
     def create_exp_mode_visual_elements(self):
         """Create visual elements for node's expanded signature mode."""
-        ### create input related widgets
-        self.create_input_related_objects()
 
-        ### create output sockets
-        self.create_output_sockets()
+        ### define text settings used for node labels bg, based on whether node
+        ### is commented out or not
 
-        ### reposition all objects within the node (also
-        ### sets height of self.rect)
-        self.reposition_expanded_elements()
+        label_text_settings = (
 
-        ### also create and store a rects manager to
-        ### control all the rects in the node
+            COMMENTED_OUT_LABEL_TEXT_SETTINGS
+            if self.data.get("commented_out", False)
+
+            else NORMAL_LABEL_TEXT_SETTINGS
+
+        )
+
+        ### create input related objects
+        self.create_input_related_objects(label_text_settings)
+
+        ### create output-related objects
+        self.create_output_related_objects(label_text_settings)
+
+        ### create and store a rects manager to control all the rects in
+        ### the node
 
         ## create a list containing the rects to be managed
         ## and get its __iter__ method to use as a callable
@@ -79,7 +88,7 @@ class SignatureModeVisualPreparations():
         self.exp_rectsman = RectsManager(get_all_rects)
 
     def create_col_mode_visual_elements(self):
-        """Create visual elements for node's expanded signature mode."""
+        """Create visual elements for node's collapsed signature mode."""
 
         ### create and store a rects manager to control all the rects in
         ### the node
@@ -123,7 +132,7 @@ class SignatureModeVisualPreparations():
         self.disconnected_param_input_sockets = []
         self.disconnected_subparam_input_sockets = []
 
-    def create_input_related_objects(self):
+    def create_input_related_objects(self, label_text_settings):
         """Create objects representing the node' inputs."""
         ### create maps to hold button instances
         ### for subparameters and for placeholder sockets
@@ -137,6 +146,9 @@ class SignatureModeVisualPreparations():
         ### instantiate a special input socket map to hold
         ### input socket instances
         self.input_socket_live_flmap = FlatListDict()
+
+        ### instantiate map to hold text objects representing parameter names
+        self.parameter_text_obj_map = {}
 
         ### instantiate a placeholder socket map to hold
         ### placeholder socket instances
@@ -207,10 +219,10 @@ class SignatureModeVisualPreparations():
             ## parameter is of variable kind or not
 
             if param_obj.name in self.var_kind_map:
-                self.create_var_parameter_objs(param_obj)
+                self.create_var_parameter_objs(param_obj, label_text_settings)
 
             else:
-                self.create_parameter_objs(param_obj)
+                self.create_parameter_objs(param_obj, label_text_settings)
 
             ## also create a parameter rectsman to manage rects
             ## in the parameter
@@ -230,7 +242,10 @@ class SignatureModeVisualPreparations():
         if parameters:
 
             get_param_rectsmans = [
-                item for item in self.param_rectsman_map.values()
+
+                item 
+                for item in param_rectsman_map.values()
+
             ].__iter__
 
             self.input_rectsman = RectsManager(get_param_rectsmans)
@@ -243,8 +258,29 @@ class SignatureModeVisualPreparations():
         self.subparam_up_button_flmap.update()
         self.subparam_down_button_flmap.update()
 
-    def create_output_sockets(self):
+    def create_output_related_objects(self, label_text_settings):
         """Instantiate and store output sockets."""
+
+        ### create a new dictionary holding text objects representing the
+        ### names of the outputs
+
+        self.output_text_obj_map = oto_map = {
+
+            output_name: (
+
+                CachedTextObject(
+
+                    text=output_name,
+                    text_settings=label_text_settings,
+
+                )
+
+            )
+
+            for output_name in self.ordered_output_type_map
+
+        }
+
         ### create a new dictionary holding output socket
         ### instances mapped to the name of the output
         ### they represent (also reference it locally);
@@ -261,30 +297,38 @@ class SignatureModeVisualPreparations():
         ### regular type hints in Python, but in this
         ### case for return values instead of parameters
 
-        self.output_socket_live_map = {
+        self.output_socket_live_map = osl_map = {
+
             output_name: OutputSocket(
                 node=self,
                 output_name=output_name,
                 type_codename=(type_to_codename(expected_type)),
             )
-            for output_name, expected_type in self.ordered_output_type_map.items()
+
+            for output_name, expected_type
+            in self.ordered_output_type_map.items()
+
         }
 
-        ### gather the rects of the output sockets in a list
+        ### gather the rects of all output objects in a list
         ### in order to use its __iter__ method to create a
         ### rects manager instance which you'll use to
         ### control the rects (and thus the position of the
-        ### sockets
-
-        ## reference output sock live map locally
-        osl_map = self.output_socket_live_map
+        ### output objects)
 
         ## create mentioned list
 
-        rect_list = [
+        rect_list = []
+
+        rect_list.extend(
+            oto_map[output_name].rect
+            for output_name in self.ordered_output_type_map.keys()
+        )
+
+        rect_list.extend(
             osl_map[output_name].rect
             for output_name in self.ordered_output_type_map.keys()
-        ]
+        )
 
         ## finally, instantiate and store the rects
         ## manager

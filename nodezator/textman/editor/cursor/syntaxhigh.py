@@ -2,6 +2,8 @@
 
 ### local imports
 
+from ....config import APP_REFS
+
 from ....pygamesetup.constants import GENERAL_NS, FPS
 
 from ....ourstdlibs.behaviour import empty_function
@@ -15,8 +17,6 @@ from ....syntaxman.utils import (
     SYNTAX_TO_MAPPING_FUNCTION,
     get_ready_theme,
 )
-
-from ....fontsman.constants import FIRA_MONO_BOLD_FONT_PATH
 
 from ..constants import (
     SANS_FONT_SETTINGS,
@@ -40,7 +40,7 @@ FRAMES_TO_UPDATE_SYNTAX = round(FPS * (_MSECS_TO_UPDATE_SYNTAX / 1000))
 class SyntaxHighlighting:
     """Operations/setups for syntax highlighting support."""
 
-    def set_syntax_highlighting(self, font_path, syntax_highlighting):
+    def set_syntax_highlighting(self, font_key, syntax_highlighting):
         """Perform syntax highlighting setups.
 
         Depends on the requested syntax highlighting,
@@ -60,12 +60,9 @@ class SyntaxHighlighting:
         Parameters
         ==========
 
-        font_path (string)
+        font_key (string or pathlib.Path)
             indicates the font style to be used when
-            editing the contents; defaults to ENC_SANS_BOLD_FONT_PATH,
-            which uses the normal font of the app; you can
-            use FIRA_MONO_BOLD_FONT_PATH, to edit text in monospace font
-            (to edit code for instance).
+            editing the contents;
         syntax_highlighting (string)
             represents the name of a syntax used to
             highlight the text (for instance, 'python');
@@ -95,7 +92,7 @@ class SyntaxHighlighting:
 
             default_text_settings = (
                 MONO_FONT_SETTINGS
-                if font_path == FIRA_MONO_BOLD_FONT_PATH
+                if font_key == APP_REFS.mono_font_key
                 else SANS_FONT_SETTINGS
             )
 
@@ -179,7 +176,7 @@ class SyntaxHighlighting:
 
             self.background_color = (
                 MONO_FONT_SETTINGS
-                if font_path == FIRA_MONO_BOLD_FONT_PATH
+                if font_key == APP_REFS.mono_font_key
                 else SANS_FONT_SETTINGS
             )["background_color"]
 

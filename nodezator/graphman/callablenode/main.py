@@ -45,15 +45,14 @@ class CallableNode(
     Exporting,
     OutputVisualization,
 ):
-    """Stores and manages a callable state.
+    """Stores and manages state of a callable object.
 
-    This object is used to manage gathering, storage and
-    processing of data by its underlying callable and its
-    related metadata. Such callable is provided upon
-    instantiation.
+    This object is used to manage gathering, storage and processing of data
+    by its underlying callable and its related metadata. Such callable is
+    provided upon instantiation.
 
-    Additional instance state is provided as an argument
-    called "data", also received upon instantiation.
+    Additional instance state is provided as an argument called "data",
+    also received upon instantiation.
     """
 
     ### XXX ponder: instead of making a method like this
@@ -99,16 +98,20 @@ class CallableNode(
 
         self.node_defining_object = node_defining_object
 
-        main_callable = self.main_callable = node_defining_object["main_callable"]
+        main_callable = self.main_callable = (
+            node_defining_object["main_callable"]
+        )
 
-        signature_callable = self.signature_callable = node_defining_object[
-            "signature_callable"
-        ]
+        signature_callable = self.signature_callable = (
+            node_defining_object["signature_callable"]
+        )
 
         ##
 
         try:
-            substitution_callable = node_defining_object["substitution_callable"]
+            substitution_callable = (
+                node_defining_object["substitution_callable"]
+            )
 
         except KeyError:
             pass
@@ -223,7 +226,7 @@ class CallableNode(
             self.adjust_sigmode_toggle_button(mode_name)
 
             self.reposition_elements = self.reposition_expanded_elements
-            self.create_body_surface = self.get_expanded_body_surface
+            self.redraw_body_surface = self.get_expanded_body_surface
 
             self.input_sockets = self.input_socket_live_flmap.flat_values
             self.output_sockets = self.output_socket_live_map.values()
@@ -245,7 +248,7 @@ class CallableNode(
             self.adjust_sigmode_toggle_button(mode_name)
 
             self.reposition_elements = self.reposition_collapsed_elements
-            self.create_body_surface = self.get_collapsed_body_surface
+            self.redraw_body_surface = self.get_collapsed_body_surface
 
             self.input_sockets = self.visible_input_sockets
             self.output_sockets = self.visible_output_sockets
@@ -264,7 +267,7 @@ class CallableNode(
             if current_mode_name in {'expanded_signature', 'collapsed_signature'}:
                 APP_REFS.gm.sever_all_connections(self)
 
-            self.create_body_surface = self.get_callable_body_surface
+            self.redraw_body_surface = self.get_callable_body_surface
             self.reposition_elements = self.reposition_callable_elements
 
             self.input_sockets = EMPTY_TUPLE
@@ -283,8 +286,8 @@ class CallableNode(
         self.data['mode'] = mode_name
 
         ###
-        self.reposition_elements()
-        self.setup_body()
+        self.perform_general_body_setups()
+
         ###
 
         self.perform_mode_related_viewer_setups(

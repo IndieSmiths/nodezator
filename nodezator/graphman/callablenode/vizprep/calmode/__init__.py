@@ -4,15 +4,7 @@
 from collections.abc import Callable
 
 
-### third-party import
-from pygame import Rect
-
-
 ### local imports
-
-from .....ourstdlibs.collections.fldict.main import FlatListDict
-
-from .....classes2d.single import Object2D
 
 from .....rectsman.main import RectsManager
 
@@ -21,6 +13,7 @@ from ....socket.surfs import type_to_codename
 
 ## class for composition
 from ....socket.output import OutputSocket
+
 
 
 class CallableModeVisualPreparations():

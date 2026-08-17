@@ -44,6 +44,8 @@ from pygame.key import (
 
 ### local imports
 
+from ..config import APP_REFS
+
 from ..pygamesetup import SERVICES_NS
 
 from ..pygamesetup.constants import GENERAL_NS, WINDOW_RESIZE_EVENT_TYPE
@@ -60,11 +62,6 @@ from ..ourstdlibs.color.creation import get_contrasting_bw
 from ..classes2d.single import Object2D
 
 from ..surfsman.render import render_rect
-
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
 
 from ..textman.editor.main import edit_text
 
@@ -126,8 +123,8 @@ class StringEntry(Object2D):
         self,
         value="",
         loop_holder=None,
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         width=155,
         name="string_entry",
         command=empty_function,

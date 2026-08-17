@@ -13,7 +13,7 @@ from pygame.math import Vector2
 
 ### local imports
 
-from ...config import APP_REFS
+from ...config import APP_REFS, USER_PREFS
 
 from ...pygamesetup import SERVICES_NS
 
@@ -22,8 +22,6 @@ from ...pygamesetup.constants import SCREEN_RECT
 from ...loopman.exception import ContinueLoopException
 
 from ...our3rdlibs.behaviour import indicate_unsaved
-
-from ...userprefsman.main import USER_PREFS
 
 from ..socket.output import OutputSocket
 

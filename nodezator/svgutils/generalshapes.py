@@ -1,4 +1,4 @@
-"""SVG-related utilities."""
+"""General SVG shapes."""
 
 ### standard library imports
 
@@ -17,7 +17,10 @@ from pygame.math import Vector2
 
 
 ### local import
-from .ourstdlibs.mathutils import get_rect_from_points
+
+from ..ourstdlibs.mathutils import get_rect_from_points
+
+from .common import format_color
 
 
 
@@ -68,27 +71,19 @@ LINE_FORMATTER = """
 </svg>
 """.strip().format
 
+POLYGON_FORMATTER = """
+<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}">
+
+    <polygon
+        points="{points}"
+        fill="{fill_color}" stroke="{stroke_color}" stroke-width="{stroke_width}"
+     />
+
+</svg>
+""".strip().format
+
 
 ### functions
-
-def _format_color(color):
-    """Return color in format usable by 'fill' attribute of SVG shapes."""
-    if isinstance(color, str):
-        return color
-
-    elif isinstance(color, Iterable):
-
-        _r, _g, _b, *_ = color
-        return f'rgb({_r}, {_g}, {_b})'
-
-    elif color is None:
-        return 'none'
-
-    else:
-
-        raise TypeError(
-            "'color' must be None, string or iterable of integers with 3+ values"
-        )
 
 
 def get_rect_svg_text(
@@ -102,8 +97,8 @@ def get_rect_svg_text(
     ### format fill color and outline color into a format
     ### used in SVG
 
-    fill_color = _format_color(fill_color)
-    stroke_color = _format_color(outline_color)
+    fill_color = format_color(fill_color)
+    stroke_color = format_color(outline_color)
 
     ### define the dimensions of the SVG
 
@@ -138,9 +133,9 @@ def get_circle_svg_text(
     ### format fill color and outline color into a format
     ### used in SVG
 
-    fill_color = _format_color(fill_color)
+    fill_color = format_color(fill_color)
 
-    stroke_color = _format_color(outline_color)
+    stroke_color = format_color(outline_color)
 
     ### define the dimensions of the SVG, based on the radius and
     ### the outline width
@@ -176,9 +171,9 @@ def get_circle_svg_text_from_radius(
     ### format fill color and outline color into a format
     ### used in SVG
 
-    fill_color = _format_color(fill_color)
+    fill_color = format_color(fill_color)
 
-    stroke_color = _format_color(outline_color)
+    stroke_color = format_color(outline_color)
 
     ### define the dimensions of the SVG and the center of the circle,
     ### based on the radius and the outline width
@@ -211,9 +206,9 @@ def get_ellipse_svg_text(
     ### format fill color and outline color into a format
     ### used in SVG
 
-    fill_color = _format_color(fill_color)
+    fill_color = format_color(fill_color)
 
-    stroke_color = _format_color(outline_color)
+    stroke_color = format_color(outline_color)
 
     ### define the dimensions of the SVG
 
@@ -287,7 +282,7 @@ def get_line_svg_text(
 
     width, height = stroke_bounding_area.size
 
-    stroke_color = _format_color(outline_color)
+    stroke_color = format_color(outline_color)
 
     ### finally pass our data to a str.format() instance that formats
     ### the data into a string representing the contents of a svg file
@@ -304,232 +299,43 @@ def get_line_svg_text(
     )
 
 
-def get_pie_chart_svg_text(
-    value_map,
-    color_map,
-    inner_outline_color,
-    outer_outline_color,
-    background_color=None,
-    background_method="rect",
-    fill_radius=150,
-    inner_outline_width=2,
-    outer_outline_width=2,
-    start_degrees=-90,
-    place_items_clockwise=True,
+def get_polygon_svg_text(
+    width, height, points,
+    fill_color=None,
+    outline_color=None,
+    outline_width=0,
 ):
-    """Return SVG text representing file with a pie chart."""
+    """Return SVG text representing file with a rect."""
+    ### format fill color and outline color into a format
+    ### used in SVG
 
-    total_radius = fill_radius + outer_outline_width
-    width = height = total_radius * 2
-    cx, cy = width // 2, height // 2
+    fill_color = format_color(fill_color)
+    stroke_color = format_color(outline_color)
 
-    svg_text = (
-        f'<svg width="{width}"'
-        f' height="{height}"'
-        f' viewBox="0 0 {width} {height}">\n\n'
-    )
+    ### format points in format used in SVG
 
-    if background_color is not None:
+    points = (
 
-        bg_color = _format_color(background_color)
-        
-        if background_method == 'rect':
+        ' '.join(
 
-            svg_text += (
-                f'<rect x="0" y="0" width="{width}" height="{height}"'
-                f' fill="{bg_color}" />\n\n'
-            )
+            f'{x},{y}'
+            for x, y in points
 
-        else:
-
-            ### for now, we only use 'rect' as the background_method,
-            ### that is, we emulate a background color by using a rect
-            ### shape placed behind everything (the first element after
-            ### the <svg> tag)
-            raise ValueError("'background_method' can only be 'rect'.")
-
-    highest_item, *remaining_items = (
-        sorted(value_map.items(), key=lambda item: item[1], reverse=True)
-    )
-
-    remaining_sum = sum(item[1] for item in remaining_items)
-
-    fill_color = _format_color(color_map[highest_item[0]])
-
-    svg_text += (
-        f'<circle cx="{cx}" cy="{cy}"'
-        f' r="{fill_radius}" fill="{fill_color}"'
-        ' stroke="none" />\n\n'
-    )
-
-    inner_stroke_color = _format_color(inner_outline_color)
-    outer_stroke_color = _format_color(outer_outline_color)
-
-    if remaining_sum:
-
-        signal_operation = (
-            1. if place_items_clockwise else -1.
-        ).__mul__
-
-        clockwise_flag = int(place_items_clockwise)
-
-        total_sum = sum(value_map.values())
-
-        offset = Vector2(cx, cy)
-
-        circle_origin = arc_start = (
-            Vector2(fill_radius, 0).rotate(start_degrees)
         )
 
-        cumulative_percent = 0.0
-
-        flag = True
-        lines_text = ''
-
-        for key, value in remaining_items:
-
-            ### if value is 0 or 0., skip item
-            if not value: continue
-
-            ### start
-            abs_arc_start = arc_start + offset
-
-            ### cumulative and angle
-
-            cumulative_percent += value / total_sum
-            angle = cumulative_percent * 360
-
-            ### end
-
-            arc_end = circle_origin.rotate(signal_operation(angle))
-            abs_arc_end = arc_end + offset
-
-            ### create svg
-
-            fill_color = _format_color(color_map[key])
-
-            ## path
-
-            svg_text += (
-                f'<path d="M{cx} {cy}'
-                f' L {abs_arc_start.x} {abs_arc_start.y}'
-                f' A {fill_radius} {fill_radius}'
-                f' 0 0 {clockwise_flag} {abs_arc_end.x} {abs_arc_end.y} Z"'
-                f' fill="{fill_color}" stroke="none" />\n\n'
-            )
-
-            ## if flag, start line
-
-            if flag:
-
-                flag = False
-
-                lines_text += (
-                    f'<line x1="{cx}" y1="{cy}"'
-                    f' x2="{abs_arc_start.x}" y2="{abs_arc_start.y}"'
-                    f' stroke="{inner_stroke_color}"'
-                    f' stroke-width="{inner_outline_width}" />\n\n'
-                )
-
-
-            ## end line
-            lines_text += (
-                f'<line x1="{cx}" y1="{cy}"'
-                f' x2="{abs_arc_end.x}" y2="{abs_arc_end.y}"'
-                f' stroke="{inner_stroke_color}"'
-                f' stroke-width="{inner_outline_width}" />\n\n'
-            )
-
-
-            ### alias end as new start
-            arc_start = arc_end
-
-        ### add lines
-        svg_text += lines_text
-
-        ### add a small circle at the center where the lines meet
-
-        if inner_outline_width > 1:
-
-            small_radius = inner_outline_width // 2
-
-            svg_text += (
-                f'<circle cx="{cx}" cy="{cy}"'
-                f' r="{small_radius}" fill="{inner_stroke_color}"'
-                f' stroke="none" />\n\n'
-            )
-
-    svg_text += (
-        f'<circle cx="{cx}" cy="{cy}"'
-        f' r="{fill_radius}" fill="none"'
-        f' stroke="{outer_stroke_color}"'
-        f' stroke-width="{outer_outline_width}" />\n\n'
     )
 
-    svg_text += '</svg>'
+    ### finally pass our data to a str.format() instance that formats
+    ### the data into a string representing the contents of a svg file
+    ### describing our line, returning such string
 
-    return svg_text
-
-
-
-def yield_transformed_svgs(svg_text, id_string, transform_data):
-
-    doc = parseString(svg_text)
-    svg = doc.firstChild
-
-    ###
-
-    for element in doc.getElementsByTagName('*'):
-
-        if element.hasAttribute('id'):
-            element.setIdAttribute('id')
-
-    ###
-    element = doc.getElementById(id_string)
-
-    for transform_name, *deltas in transform_data:
-
-        _change_transform(element, transform_name, *deltas)
-        yield svg.toxml()
-
-
-def _change_transform(element, transform_name, value_string):
-
-    if not value_string:
-        raise ValueError('must provide a value_string')
-
-    ###
-
-    if element.hasAttribute('transform'):
-
-        transform = element.getAttribute('transform')
-
-        ##
-
-        if transform_name in transform:
-
-            new_transform = sub(
-                f'({transform_name}\(.*\))',
-                f'{transform_name}({value_string})',
-                transform,
-            )
-
-        ##
-
-        else:
-
-            transform_text = f'{transform_name}({value_string})'
-
-            if transform:
-                new_transform = f'{transform} {transform_text}'
-
-            else:
-                new_transform = transform_text
-
-    ###
-    else:
-        new_transform = f'{transform_name}({value_string})'
-
-    ###
-    element.setAttribute('transform', new_transform)
-
+    return (
+        POLYGON_FORMATTER(
+            width=width,
+            height=height,
+            points=points,
+            fill_color=fill_color,
+            stroke_color=stroke_color,
+            stroke_width=outline_width,
+        )
+    )

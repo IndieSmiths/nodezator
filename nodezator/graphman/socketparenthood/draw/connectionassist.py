@@ -34,10 +34,9 @@ from ....surfsman.render import render_surface_from_svg_text
 
 from ....textman.render import render_text
 
-from ....svgutils import (
-    get_circle_svg_text_from_radius,
-    yield_transformed_svgs,
-)
+from ....svgutils.generalshapes import get_circle_svg_text_from_radius
+
+from ....svgutils.common import yield_transformed_svgs
 
 from ....userprefsman.validation import AVAILABLE_SOCKET_DETECTION_GRAPHICS
 

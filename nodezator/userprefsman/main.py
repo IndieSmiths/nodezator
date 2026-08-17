@@ -10,10 +10,19 @@ from pathlib import Path
 
 from copy import deepcopy
 
+from warnings import warn
+
+
+### third-party imports
+
+from pygame import error as PygameError
+
+from pygame.font import Font, match_font
+
 
 ### local imports
 
-from ..config import APP_REFS, WRITEABLE_PATH, OLD_WRITEABLE_PATH
+from ..config import APP_REFS, USER_PREFS, WRITEABLE_PATH, OLD_WRITEABLE_PATH
 
 from ..appinfo import APP_DIR_NAME, NATIVE_FILE_EXTENSION
 
@@ -23,7 +32,12 @@ from ..ourstdlibs.pyl import load_pyl, save_pyl
 
 from ..our3rdlibs.userlogger import USER_LOGGER
 
-from ..translatedtext import TranslationNode
+from ..fontsman.cache import FONTS_DB
+
+from ..fontsman.constants import (
+    ENC_SANS_BOLD_FONT_PATH,
+    FIRA_MONO_BOLD_FONT_PATH,
+)
 
 from .validation import (
     AVAILABLE_SOCKET_DETECTION_GRAPHICS,
@@ -59,32 +73,6 @@ store user files; we won't be able to save a custom configuration
 neither custom data like recent files and bookmarks.
 """.strip()
 
-
-### dictionary wherein to store user preferences; initially
-### populated with default values
-
-USER_PREFS = {
-    'LOCALE': 'en_us',
-    'NUMBER_OF_BACKUPS': 5,
-    'USER_LOGGER_MAX_LINES': 1000,
-    'CUSTOM_STDOUT_MAX_LINES': 1000,
-    'TEXT_EDITOR_BEHAVIOR': 'default',
-    'SOCKET_DETECTION_GRAPHICS': 'reaching_hands',
-    'DETECTION_DISTANCE': 150,
-    'GRASPING_DISTANCE': 75,
-    'GENERAL_FONT_HEIGHT': 17,
-    'MONO_FONT_HEIGHT': 20,
-    'GENERAL_FONT_KIND': 'default',
-    'GENERAL_FONT_TO_USE': '',
-    'MONO_FONT_KIND': 'default',
-    'MONO_FONT_TO_USE': '',
-}
-
-
-### validate user preference defaults
-validate_prefs_data(USER_PREFS)
-
-
 ### names of config files
 
 CONFIG_FILE_NAMES = (
@@ -105,13 +93,16 @@ CONFIG_FILE_NAMES = (
 ## current base location for the config directory
 APP_CONFIG_DIR = WRITEABLE_PATH / 'config'
 
-
 ## current locations for specific files
 
 _current_locations_map = {
     filename: APP_CONFIG_DIR / filename
     for filename in CONFIG_FILE_NAMES
 }
+
+## the temp file swap just uses the current app config dir because it is
+## not meant to persist in disk
+TEMP_FILE_SWAP = APP_CONFIG_DIR  / f'temp_file_swap{NATIVE_FILE_EXTENSION}'
 
 
 ### create variables to hold the paths for the config files
@@ -161,113 +152,323 @@ _old_non_get_pref_path_locations_map = {
 }
 
 
-### check whether the APP_CONFIG_DIR exists and create it otherwise
+### populate dictionary wherein to store user preferences with default values
 
-if not APP_CONFIG_DIR.exists():
+USER_PREFS.update(
 
-    try:
-        APP_CONFIG_DIR.mkdir(parents=True)
+{
+    'LOCALE': 'en_us',
+    'NUMBER_OF_BACKUPS': 5,
+    'USER_LOGGER_MAX_LINES': 1000,
+    'CUSTOM_STDOUT_MAX_LINES': 1000,
+    'TEXT_EDITOR_BEHAVIOR': 'default',
+    'SOCKET_DETECTION_GRAPHICS': 'reaching_hands',
+    'DETECTION_DISTANCE': 150,
+    'GRASPING_DISTANCE': 75,
+    'GENERAL_FONT_HEIGHT': 17,
+    'MONO_FONT_HEIGHT': 20,
+    'GENERAL_FONT_KIND': 'default',
+    'GENERAL_FONT_TO_USE': '',
+    'MONO_FONT_KIND': 'default',
+    'MONO_FONT_TO_USE': '',
+}
 
-    except Exception:
-        USER_LOGGER.exception(CONFIG_DIR_NOT_CREATED_MESSAGE)
+)
 
 
-### if the APP_CONFIG_DIR already existed or was created in the previous
-### if block, we can now check whether there is data in the old locations
-### that is missing in the current locations and, if so, copy the data
-### into the new locations
+### validate user preference defaults
+validate_prefs_data(USER_PREFS)
+
+
+### TODO
+### must make sure USER_LOGGER entries logged here (if at all),
+### persist in the user logger;
 ###
-### we decided not to delete the files in the old locations, in case they
-### are needed by the user somehow; the deletion must be done manually by
-### the users if they desire
+### that is: although the records are kept after this function,
+### the window manager cleans the user logger with a call of
+### a function from memoryman; that call is actually important,
+### so I don't want to get rid of it; instead, it is probably
+### best to allow all such logs to persist indefinitely in the
+### session, or at least store much more; this could be done but
+### saving them in the temp folder; then, instead of using the
+### text viewer for seeing the entire log, we could create a
+### dedicated interface to list all entries (the user could then
+### click each entry to display its contents in the text viewer);
+###
+### this could be integrated with a notification system;
 
-if APP_CONFIG_DIR.exists():
+def load_and_preprocess_user_preferences():
 
-    for filename in CONFIG_FILE_NAMES:
+    ### check whether the APP_CONFIG_DIR exists and create it otherwise
 
-        ### old paths used for that filename
+    if not APP_CONFIG_DIR.exists():
 
-        old_paths = (
+        try:
+            APP_CONFIG_DIR.mkdir(parents=True)
 
-            # the ones on top get the preference when more than one file
-            # exists
+        except Exception:
+            USER_LOGGER.exception(CONFIG_DIR_NOT_CREATED_MESSAGE)
 
-            _old_projname_locations_map[filename],
-            _old_non_get_pref_path_locations_map[filename],
+
+    ### if the APP_CONFIG_DIR already existed or was created in the previous
+    ### if block, we can now check whether there is data in the old locations
+    ### that is missing in the current locations and, if so, copy the data
+    ### into the new locations
+    ###
+    ### we decided not to delete the files in the old locations, in case they
+    ### are needed by the user somehow; the deletion must be done manually by
+    ### the users if they desire
+
+    if APP_CONFIG_DIR.exists():
+
+        for filename in CONFIG_FILE_NAMES:
+
+            ### old paths used for that filename
+
+            old_paths = (
+
+                # the ones on top get the preference when more than one file
+                # exists
+
+                _old_projname_locations_map[filename],
+                _old_non_get_pref_path_locations_map[filename],
+
+            )
+
+            ### current path used for that filename
+            current_path = _current_locations_map[filename]
+
+            ### we only try copying from old locations in case the file doesn't
+            ### exist in the current location
+
+            if not current_path.exists():
+
+                for old_path in old_paths:
+
+                    ## also, we only try copying from the old path if it exists
+
+                    if old_path.exists():
+
+                        ## try copying
+
+                        try:
+                            copyfile(str(old_path), str(current_path))
+
+                        ## in case an error occurs, log error
+
+                        except Exception:
+
+                            USER_LOGGER.exception(
+                                "Error when copying {filename} data from"
+                                " {old_path} to {current_path}."
+                            )
+
+                        ## otherwise, break out of this loop
+                        else:
+                            break
+
+
+    ### now we can finally load the config data, if it exists
+
+    ## if file exists, try loading it
+
+    if CONFIG_FILEPATH.exists():
+
+        try:
+            user_config_data = load_pyl(CONFIG_FILEPATH)
+
+        except Exception:
+            USER_LOGGER.exception(ERROR_LOADING_USER_PREFS_MESSAGE)
+
+        else:
+
+            try:
+                validate_prefs_data(user_config_data)
+
+            except Exception:
+                USER_LOGGER.exception(INVALID_USER_PREFS_MESSAGE)
+
+            else:
+                USER_PREFS.update(**user_config_data)
+
+    ## otherwise, log this info
+
+    else:
+        USER_LOGGER.info(UNEXISTENT_USER_PREFS_MESSAGE)
+
+    ### apply user configuration where needed
+    USER_LOGGER.max_lines = USER_PREFS["USER_LOGGER_MAX_LINES"]
+
+    ### preprocess values for fonts to be used
+
+    for keys in (
+        ('GENERAL_FONT_KIND', 'GENERAL_FONT_TO_USE', 'GENERAL_FONT_HEIGHT'),
+        ('MONO_FONT_KIND', 'MONO_FONT_TO_USE', 'MONO_FONT_HEIGHT'),
+    ):
+
+        kind, value, height = (USER_PREFS[key] for key in keys)
+
+        is_general = 'GENERAL' in keys[0]
+
+        font_key_attr_name = 'general_font_key' if is_general else 'mono_font_key'
+
+        setattr(
+
+            APP_REFS,
+            ('general_font_height' if is_general else 'mono_font_height'),
+            height,
 
         )
 
-        ### current path used for that filename
-        current_path = _current_locations_map[filename]
+        if kind == 'default':
 
-        ### we only try copying from old locations in case the file doesn't
-        ### exist in the current location
+            setattr(
 
-        if not current_path.exists():
+                APP_REFS,
+                font_key_attr_name,
 
-            for old_path in old_paths:
+                (
+                    ENC_SANS_BOLD_FONT_PATH
+                    if is_general
 
-                ## also, we only try copying from the old path if it exists
+                    else FIRA_MONO_BOLD_FONT_PATH
 
-                if old_path.exists():
+                ),
 
-                    ## try copying
+            )
 
-                    try:
-                        copyfile(str(old_path), str(current_path))
+        elif kind == 'system_font':
 
-                    ## in case an error occurs, log error
+            if match_font(value) is not None:
 
-                    except Exception:
+                try:
+                    FONTS_DB[value][height]
 
-                        USER_LOGGER.exception(
-                            "Error when copying {filename} data from"
-                            " {old_path} to {current_path}."
-                        )
+                except (PygameError, Exception) as err:
 
-                    ## otherwise, break out of this loop
-                    else:
-                        break
+                    key = keys[1]
 
-### the temp file swap just uses the current app config dir because it is
-### not meant to persist in disk
-TEMP_FILE_SWAP = APP_CONFIG_DIR  / f'temp_file_swap{NATIVE_FILE_EXTENSION}'
+                    message = (
+                        "Could not properly load and render text with system"
+                        f" font named {value!r} (config key is {key!r}) set on"
+                        f" user preferences using height {height} (also set on"
+                        " user preferences). As a result, we are using default"
+                        " font instead."
+                    )
 
+                    warn(message)
+                    USER_LOGGER.warning(message)
 
-### now we can finally load the config data, if it exists
+                    setattr(
 
-## if file exists, try loading it
+                        APP_REFS,
+                        font_key_attr_name,
 
-if CONFIG_FILEPATH.exists():
+                        (
+                            ENC_SANS_BOLD_FONT_PATH
+                            if is_general
 
-    try:
-        user_config_data = load_pyl(CONFIG_FILEPATH)
+                            else FIRA_MONO_BOLD_FONT_PATH
 
-    except Exception:
-        USER_LOGGER.exception(ERROR_LOADING_USER_PREFS_MESSAGE)
+                        ),
 
-    else:
+                    )
 
-        try:
-            validate_prefs_data(user_config_data)
+                else:
+                    setattr(APP_REFS, font_key_attr_name, value)
 
-        except Exception:
-            USER_LOGGER.exception(INVALID_USER_PREFS_MESSAGE)
+            else:
 
-        else:
-            USER_PREFS.update(**user_config_data)
+                key = keys[1]
 
-## otherwise, log this info
+                message = (
+                    "Could not find system font set on user preferences"
+                    f" for {key} ({value!r}). Using default font instead."
+                )
 
-else:
-    USER_LOGGER.info(UNEXISTENT_USER_PREFS_MESSAGE)
+                warn(message)
+                USER_LOGGER.warning(message)
 
+                setattr(
 
-### reference user prefs in translation node class
-TranslationNode._user_prefs = USER_PREFS
+                    APP_REFS,
+                    font_key_attr_name,
 
-### apply user configuration where needed
-USER_LOGGER.max_lines = USER_PREFS["USER_LOGGER_MAX_LINES"]
+                    (
+                        ENC_SANS_BOLD_FONT_PATH
+                        if is_general
+
+                        else FIRA_MONO_BOLD_FONT_PATH
+
+                    ),
+
+                )
+
+        elif kind == 'font_file':
+
+            if not Path(value).exists():
+
+                key = keys[1]
+
+                message = (
+                    "Could not find font file on path set on user preferences for"
+                    f" {key} ({value!r})."
+                    " Using default font instead."
+                )
+
+                warn(message)
+                USER_LOGGER.warning(message)
+
+                setattr(
+
+                    APP_REFS,
+                    font_key_attr_name,
+
+                    (
+                        ENC_SANS_BOLD_FONT_PATH
+                        if is_general
+
+                        else FIRA_MONO_BOLD_FONT_PATH
+
+                    ),
+
+                )
+
+            else:
+
+                try:
+                    FONTS_DB[Path(value)][height]
+
+                except (PygameError, Exception):
+
+                    key = keys[1]
+
+                    message = (
+                        "Could not properly load and render text with font file"
+                        " from path set on user preferences for"
+                        f" {key} ({value!r}). Using default font instead."
+                    )
+
+                    warn(message)
+                    USER_LOGGER.warning(message)
+
+                    setattr(
+
+                        APP_REFS,
+                        font_key_attr_name,
+
+                        (
+                            ENC_SANS_BOLD_FONT_PATH
+                            if is_general
+
+                            else FIRA_MONO_BOLD_FONT_PATH
+
+                        ),
+
+                    )
+
+                else:
+                    setattr(APP_REFS, font_key_attr_name, Path(value))
 
 
 ### function for updating socket detection graphics

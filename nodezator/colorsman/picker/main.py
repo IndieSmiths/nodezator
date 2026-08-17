@@ -37,13 +37,6 @@ from ...textman.render import render_text
 
 from ...textman.label.main import Label
 
-from ...fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-    FIRA_MONO_BOLD_FONT_HEIGHT,
-    FIRA_MONO_BOLD_FONT_PATH,
-)
-
 from ..colors import (
     BUTTON_FG,
     BUTTON_BG,
@@ -58,9 +51,6 @@ from .op import Operations
 
 
 ### font settings
-
-ENC_SANS_FONT_HEIGHT = ENC_SANS_BOLD_FONT_HEIGHT
-FIRA_MONO_FONT_HEIGHT = FIRA_MONO_BOLD_FONT_HEIGHT
 
 TEXT_PADDING = 5
 LABEL_PADDING = 2
@@ -130,8 +120,8 @@ class ColorsPicker(Operations):
 
         caption_surf = render_text(
             text="Click to select/deselect colors",
-            font_height=ENC_SANS_FONT_HEIGHT,
-            font_key=ENC_SANS_BOLD_FONT_PATH,
+            font_height=APP_REFS.general_font_height,
+            font_key=APP_REFS.general_font_key,
             padding=TEXT_PADDING,
             foreground_color=WINDOW_FG,
             background_color=WINDOW_BG,
@@ -150,8 +140,8 @@ class ColorsPicker(Operations):
         labels = self.labels = List2D(
             Label(
                 text="",
-                font_height=FIRA_MONO_FONT_HEIGHT,
-                font_key=FIRA_MONO_BOLD_FONT_PATH,
+                font_height=APP_REFS.general_font_height,
+                font_key=APP_REFS.mono_font_key,
                 padding=LABEL_PADDING,
                 foreground_color=WINDOW_FG,
                 background_color=WINDOW_BG,
@@ -165,7 +155,7 @@ class ColorsPicker(Operations):
         ## position labels near the bottom left corner
         ## of the screen
 
-        height_increment = FIRA_MONO_FONT_HEIGHT + (2 * LABEL_PADDING)
+        height_increment = APP_REFS.general_font_height + (2 * LABEL_PADDING)
 
         for label, offset in zip(
             labels,
@@ -199,8 +189,8 @@ class ColorsPicker(Operations):
             Object2D.from_surface(
                 surface=render_text(
                     text=text,
-                    font_height=ENC_SANS_FONT_HEIGHT,
-                    font_key=ENC_SANS_BOLD_FONT_PATH,
+                    font_height=APP_REFS.general_font_height,
+                    font_key=APP_REFS.general_font_key,
                     padding=BUTTON_PADDING,
                     foreground_color=BUTTON_FG,
                     background_color=BUTTON_BG,

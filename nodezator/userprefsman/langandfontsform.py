@@ -24,11 +24,11 @@ from pygame.locals import (
 
 from ..pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
-from ..config import APP_REFS
+from ..config import APP_REFS, USER_PREFS
 
 from ..translatedtext import TRANSLATIONS
 
-from .main import USER_PREFS, CONFIG_FILEPATH
+from .main import CONFIG_FILEPATH
 
 from .validation import (
     AVAILABLE_LOCALES,
@@ -51,14 +51,8 @@ from ..our3rdlibs.button import Button
 
 from ..our3rdlibs.behaviour import set_status_message
 
-
 from ..classes2d.single import Object2D
 from ..classes2d.collections import List2D
-
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
 
 from ..textman.render import render_text
 
@@ -97,16 +91,16 @@ t = TRANSLATIONS.language_and_fonts_form
 ### constants
 
 TEXT_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'foreground_color': WINDOW_FG,
     'background_color': WINDOW_BG,
 }
 
 BUTTON_SETTINGS = {
-    'font_height': ENC_SANS_BOLD_FONT_HEIGHT,
-    'font_key': ENC_SANS_BOLD_FONT_PATH,
+    'font_height': APP_REFS.general_font_height,
+    'font_key': APP_REFS.general_font_key,
     'padding': 5,
     'depth_finish_thickness': 1,
     'foreground_color': BUTTON_FG,
@@ -201,67 +195,90 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
         ### create specific widgets to edit user preferences
 
-        lang_option_menu = OptionMenu(
-            loop_holder=self,
-            options=AVAILABLE_LOCALES,
-            value=USER_PREFS['LOCALE'],
-            draw_on_window_resize=self.draw,
-            name='LOCALE',
-            max_width=0,
-        )
+        lang_option_menu = (
 
-        general_font_size_intfloat_entry = IntFloatEntry(
-            loop_holder=self,
-            value=USER_PREFS['GENERAL_FONT_HEIGHT'],
-            name='GENERAL_FONT_HEIGHT',
-            width=90,
-            min_value=min(GENERAL_FONT_HEIGHT_RANGE),
-            max_value=max(GENERAL_FONT_HEIGHT_RANGE),
-            numeric_classes_hint='int',
-            allow_none=False,
-            draw_on_window_resize=self.draw,
-        )
-
-        mono_font_size_intfloat_entry = IntFloatEntry(
-            loop_holder=self,
-            value=USER_PREFS['MONO_FONT_HEIGHT'],
-            name='MONO_FONT_HEIGHT',
-            min_value=min(MONO_FONT_HEIGHT_RANGE),
-            max_value=max(MONO_FONT_HEIGHT_RANGE),
-            width=90,
-            numeric_classes_hint='int',
-            allow_none=False,
-            draw_on_window_resize=self.draw,
-        )
-
-        general_font_kind_option_menu = self.gen_font_option = OptionMenu(
-            loop_holder=self,
-            options=FONT_KIND_OPTIONS,
-            value=USER_PREFS['GENERAL_FONT_KIND'],
-            name='GENERAL_FONT_KIND',
-            draw_on_window_resize=self.draw,
-            command=self.switch_general_font_use_widget,
-            max_width=0,
-        )
-
-        mono_font_kind_option_menu = self.mono_font_option = OptionMenu(
-            loop_holder=self,
-            options=FONT_KIND_OPTIONS,
-            value=USER_PREFS['MONO_FONT_KIND'],
-            name='MONO_FONT_KIND',
-            draw_on_window_resize=self.draw,
-            command=self.switch_mono_font_use_widget,
-            max_width=0,
-        )
-
-        self.prefs_widgets = prefs_widgets = List2D(
-            (
-                lang_option_menu,
-                general_font_size_intfloat_entry,
-                mono_font_size_intfloat_entry,
-                general_font_kind_option_menu,
-                mono_font_kind_option_menu,
+            OptionMenu(
+                loop_holder=self,
+                options=AVAILABLE_LOCALES,
+                value=USER_PREFS['LOCALE'],
+                draw_on_window_resize=self.draw,
+                name='LOCALE',
             )
+
+        )
+
+        general_font_size_intfloat_entry = (
+
+            IntFloatEntry(
+                loop_holder=self,
+                value=USER_PREFS['GENERAL_FONT_HEIGHT'],
+                name='GENERAL_FONT_HEIGHT',
+                width=90,
+                min_value=min(GENERAL_FONT_HEIGHT_RANGE),
+                max_value=max(GENERAL_FONT_HEIGHT_RANGE),
+                numeric_classes_hint='int',
+                allow_none=False,
+                draw_on_window_resize=self.draw,
+            )
+
+        )
+
+        mono_font_size_intfloat_entry = (
+
+            IntFloatEntry(
+                loop_holder=self,
+                value=USER_PREFS['MONO_FONT_HEIGHT'],
+                name='MONO_FONT_HEIGHT',
+                min_value=min(MONO_FONT_HEIGHT_RANGE),
+                max_value=max(MONO_FONT_HEIGHT_RANGE),
+                width=90,
+                numeric_classes_hint='int',
+                allow_none=False,
+                draw_on_window_resize=self.draw,
+            )
+
+        )
+
+        general_font_kind_option_menu = self.gen_font_option = (
+
+            OptionMenu(
+                loop_holder=self,
+                options=FONT_KIND_OPTIONS,
+                value=USER_PREFS['GENERAL_FONT_KIND'],
+                name='GENERAL_FONT_KIND',
+                draw_on_window_resize=self.draw,
+                command=self.switch_general_font_use_widget,
+            )
+
+        )
+
+        mono_font_kind_option_menu = self.mono_font_option = (
+
+            OptionMenu(
+                loop_holder=self,
+                options=FONT_KIND_OPTIONS,
+                value=USER_PREFS['MONO_FONT_KIND'],
+                name='MONO_FONT_KIND',
+                draw_on_window_resize=self.draw,
+                command=self.switch_mono_font_use_widget,
+            )
+
+        )
+
+        self.prefs_widgets = prefs_widgets = (
+
+            List2D(
+
+                (
+                    lang_option_menu,
+                    general_font_size_intfloat_entry,
+                    mono_font_size_intfloat_entry,
+                    general_font_kind_option_menu,
+                    mono_font_kind_option_menu,
+                )
+
+            )
+
         )
 
         right = max(label.rect.right for label in labels) + 5
@@ -295,28 +312,30 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
             ## font preview
 
-            value = user_value if font_kind == 'font file' else '.'
+            value = user_value if font_kind == 'font_file' else '.'
 
             fp = FontPreview(
                 value=value,
+                name=value_key,
                 loop_holder=self,
                 draw_on_window_resize=self.draw,
             )
 
-            widget_map['font file'] = fp
+            widget_map['font_file'] = fp
 
             ## system fonts option menu
 
-            value = user_value if font_kind == 'system font' else ''
+            value = user_value if font_kind == 'system_font' else ''
 
             sfom = SystemFontsOptionMenu(
                 value=value,
+                name=value_key,
                 loop_holder=self,
                 string_when_single=True,
                 draw_on_window_resize=self.draw,
             )
 
-            widget_map['system font'] = sfom
+            widget_map['system_font'] = sfom
 
             ## default holder (when user chooses default font to be used)
 
@@ -329,7 +348,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
 
             )
 
-            dh = DefaultHolder(value=value, max_width=400)
+            dh = DefaultHolder(value=value, name=value_key, max_width=400)
 
             widget_map['default'] = dh
 
@@ -450,16 +469,22 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
             )
 
 
+        widget_collections = (self.widgets, self.prefs_widgets)
+
         widgets = self.widgets
 
         for widget in widgets_to_remove:
-            if widget in widgets:
-                widgets.remove(widget)
+
+            for collection in widget_collections:
+
+                if widget in collection:
+                    collection.remove(widget)
 
         widget_to_add.rect.topleft = topright
         widget_to_add.rect.move_ip(5, 0)
 
-        widgets.append(widget_to_add)
+        for collection in widget_collections:
+            collection.append(widget_to_add)
 
 
     switch_general_font_use_widget = (
@@ -584,7 +609,7 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
     )
 
     def finish_form(self):
-        """Assign new category indices and exit loop."""
+        """Save and set new preferences if copy with new values validates."""
 
         prefs_copy = USER_PREFS.copy()
 
@@ -629,8 +654,8 @@ class UserPreferencesLanguageAndFontsForm(Object2D, LoopHolder):
         ### notify user via dialog and status message
 
         message = (
-            "User preferences changed. Some changes may"
-            " only take effect after restarting the app"
+            "Language preferences changed. Most of these changes"
+            " only take effect after restarting the app."
         )
 
         set_status_message(message)

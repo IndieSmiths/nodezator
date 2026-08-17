@@ -6,10 +6,7 @@ from xml.etree.ElementTree import Element
 
 ### local imports
 
-from ..fontsman.constants import (
-    ENC_SANS_BOLD_FONT_HEIGHT,
-    ENC_SANS_BOLD_FONT_PATH,
-)
+from ..config import APP_REFS
 
 from ..textman.label.main import Label
 
@@ -56,8 +53,8 @@ class DefaultHolder(Label):
         self,
         value,
         name="default_holder",
-        font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-        font_key=ENC_SANS_BOLD_FONT_PATH,
+        font_height=APP_REFS.general_font_height,
+        font_key=APP_REFS.general_font_key,
         max_width=155,
         padding=1,
         foreground_color=(40, 40, 40),
@@ -208,8 +205,8 @@ class DefaultHolder(Label):
 
         text_element.text = fit_text(
             text=repr(self.value),
-            font_height=ENC_SANS_BOLD_FONT_HEIGHT,
-            font_key=ENC_SANS_BOLD_FONT_PATH,
+            font_height=APP_REFS.general_font_height,
+            font_key=APP_REFS.general_font_key,
             padding=1,
             max_width=145,
             ommit_direction="right",

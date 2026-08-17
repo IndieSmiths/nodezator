@@ -30,6 +30,8 @@ from .widgetsetup.button import setup_buttons
 from .widgetsetup.entry import setup_entries
 from .widgetsetup.label import setup_labels
 
+from .initialpositioning import position_elements_and_get_boundaries
+
 
 ## class for composition
 from .panel.main import ColorsPanel
@@ -55,39 +57,14 @@ class ColorsEditor(
     setup_entries = setup_entries
     setup_labels = setup_labels
 
+    ### and this one positions everything and defines the boundaries
+
+    position_elements_and_get_boundaries = position_elements_and_get_boundaries
+
     ### constructor
 
     def __init__(self):
         """Create and set up support objects."""
-        ### build surface and rect representing this
-        ### colors editor; the surface will be used as
-        ### its background
-
-        ## create and surface in the 'image' attribute,
-        ## also referencing it locally for further changes
-        image = self.image = render_rect(820, 660, WINDOW_BG)
-
-        ## draw a border on the image
-        draw_border(image, thickness=2)
-
-        ## create a surface representing a special area
-        ## wherein to locate controls used to edit the
-        ## current selected color (the controls will be
-        ## created further ahead); then draw it over the
-        ## 'image' surface
-
-        # create surface
-        controls_area_surf = render_rect(785, 400, WINDOW_BG)
-
-        # add a finish around it to convey depth
-        draw_depth_finish(controls_area_surf, outset=False, thickness=5)
-
-        # blit the area over the 'image' surface
-        image.blit(controls_area_surf, (20, 215))
-
-        ## create a rect from the 'image' surface
-        self.rect = image.get_rect()
-
         ### instantiate the colors panel, a special panel
         ### widget used to display the colors we are
         ### editing; it also highlights which color is
@@ -98,13 +75,49 @@ class ColorsEditor(
             no_of_visible_colors=7,
         )
 
-        ### create widget structure to support the
-        ### colors editor's operations
+        ### create widget structure to support the colors editor's operations
+        ### and position all those elements
 
         self.setup_scales()
         self.setup_buttons()
         self.setup_entries()
         self.setup_labels()
+
+        (
+            boundaries_rect,
+            controls_area_rect,
+        ) = self.position_elements_and_get_boundaries()
+
+
+        ### use inflate copy of boundaries as our rect
+        rect = self.rect = boundaries_rect.inflate(10, 10)
+
+        ### build surface and rect representing this colors editor;
+        ### the surface will be used as its background
+
+        ## create and surface in the 'image' attribute, also referencing it
+        ## locally for further changes
+        image = self.image = render_rect(*rect.size, WINDOW_BG)
+
+        ## draw a border on the image
+        draw_border(image, thickness=2)
+
+        ### create a surface representing a special area wherein to locate
+        ### controls used to edit the current selected color (the controls
+        ### will be created further ahead); then draw it over the 'image'
+        ### surface
+
+        ## create surface
+        controls_area_surf = render_rect(*controls_area_rect.size, WINDOW_BG)
+
+        ## add a finish around it to convey depth
+        draw_depth_finish(controls_area_surf, outset=False, thickness=5)
+
+        ## blit the area over the 'image' surface
+
+        rect_offset = -Vector2(rect.topleft)
+        image.blit(controls_area_surf, controls_area_rect.move(rect_offset))
+
 
         ### store topleft coordinates of specific object
         ### groups to use whenever repositioning the
