@@ -50,6 +50,8 @@ from ..colorsman.colors import (
     WINDOW_FG,
 )
 
+from .initialpositioning import perform_initial_positioning
+
 from .constants import (
     FONT_HEIGHT,
     FILEMAN_WIDTH,
@@ -112,17 +114,29 @@ class FileManager(FileManagerOperations):
         ### extra info on this flag
         self.expecting_files_only = False
 
-        ### build widget structure and assign variables
+        ### build widget structure
 
         self.build_labels()
         self.instantiate_and_store_widgets()
+
+        ### perform initial positioning of all elements
+        perform_initial_positioning(self)
 
         ### assign update behaviour
         self.update = empty_function
 
         ### create image and rect attributes
 
-        self.image = render_rect(FILEMAN_WIDTH, self.rect_height, WINDOW_BG)
+        self.image = (
+
+            render_rect(
+                FILEMAN_WIDTH,
+                self.rect_height,
+                WINDOW_BG,
+            )
+
+        )
+
         draw_border(self.image)
         self.rect = self.image.get_rect()
 
@@ -132,15 +146,19 @@ class FileManager(FileManagerOperations):
         ### store semitransparent object the size of
         ### this widget's rect
 
-        self.rect_size_semitransp_obj = Object2D.from_surface(
-            surface=UNHIGHLIGHT_SURF_MAP[self.rect.size]
+        self.rect_size_semitransp_obj = (
+
+            Object2D.from_surface(
+                surface=UNHIGHLIGHT_SURF_MAP[self.rect.size]
+            )
+
         )
 
         ### reposition objects
         self.reposition_objects()
 
-        ### draw background of panels on our own background,
-        ### so we don't need to draw them every loop
+        ### draw background of panels on our own background, so we don't need
+        ### to draw them every loop
 
         offset = -Vector2(self.rect.topleft)
 
@@ -303,7 +321,7 @@ class FileManager(FileManagerOperations):
             ### x
 
             (
-                5
+                10
                 + current_label_size[0]
             ),
 
@@ -421,7 +439,7 @@ class FileManager(FileManagerOperations):
                 loop_holder=self,
                 font_height=FONT_HEIGHT,
                 draw_on_window_resize=self.draw,
-                width=FILEMAN_WIDTH-5,
+                width=400, # TODO replace hardcoded value
                 command=self.update_selection_from_entry,
             )
 

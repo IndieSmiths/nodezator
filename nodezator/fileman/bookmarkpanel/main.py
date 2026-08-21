@@ -191,7 +191,12 @@ class BookmarkPanel:
             ### only keep existing bookmarks
 
             existing_bookmarks = [
-                path_string for path_string in bookmarks if Path(path_string).is_dir()
+
+                path_string
+                for path_string in bookmarks
+
+                if Path(path_string).is_dir()
+
             ]
 
             ### if existing bookmarks are different than the
@@ -257,7 +262,10 @@ class BookmarkPanel:
 
         for path_obj in self.bookmark_objs:
 
-            path_obj.change_selection_appearance(path_obj.path == current_dir)
+            (
+                path_obj
+                .change_selection_appearance(path_obj.path == current_dir)
+            )
 
     def check_live_bookmarks(self):
         """Check if the bookmarks still exist.
