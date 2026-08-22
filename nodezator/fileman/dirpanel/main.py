@@ -63,6 +63,7 @@ from ..constants import (
     PATH_OBJ_PARENT_TEXT,
     FILEMAN_WIDTH,
     DIR_PANEL_WIDTH,
+    BKM_PANEL_WIDTH,
 )
 
 ## class extensions
@@ -547,21 +548,10 @@ class DirectoryPanel(
 
     present_new_folder_form = partialmethod(present_new_path_form, False)
 
-    def reposition(self):
-        """Reposition panel relative to file manager."""
+    def reposition(self, diff):
+        """Move panel by diff and reposition elements accordingly."""
 
-        self.rect.topleft = (
-
-            self.fm.rect
-
-            .move(
-                10 + BKM_PANEL_WIDTH,
-                PANEL_LABELS_TOP + FONT_HEIGHT,
-            )
-
-            .topleft
-
-        )
+        self.rect.move_ip(diff)
 
         self.path_objs.rect.topleft = self.rect.move(1, 1).topleft
 

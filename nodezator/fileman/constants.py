@@ -8,10 +8,6 @@ from ..config import APP_REFS
 
 FONT_HEIGHT = APP_REFS.general_font_height  # height of font in pixels
 
-### tops
-
-CURRENT_LABEL_TOP = FONT_HEIGHT + 5
-PANELS_LABELS_TOP = FONT_HEIGHT * 2 + 5
 
 ### widths
 

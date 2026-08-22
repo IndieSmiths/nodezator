@@ -50,14 +50,12 @@ from ..colorsman.colors import (
     WINDOW_FG,
 )
 
-from .initialpositioning import perform_initial_positioning
+from .initialpositioning import position_elements_and_get_height
 
 from .constants import (
     FONT_HEIGHT,
     FILEMAN_WIDTH,
     BKM_PANEL_WIDTH,
-    CURRENT_LABEL_TOP,
-    PANELS_LABELS_TOP,
 )
 
 ## class extension
@@ -116,32 +114,42 @@ class FileManager(FileManagerOperations):
 
         ### build widget structure
 
-        self.build_labels()
+        caption_objs = get_caption_objs()
+
+        ## store distance from origin to title obj midright to use as
+        ## an offset to position the caption label
+        self.caption_label_offset = caption_objs.rect.move(2, 0).midright
+
+        ## store specific measurements in dedicated attributes
+
+        self.current_label_top = caption_objs.rect.bottom + 5
+        self.panels_labels_top = self.current_label_top + FONT_HEIGHT + 10
+
+        ##
+
+        self.build_labels(
+            FILEMAN_WIDTH - caption_objs.rect.width - 20
+        )
+
         self.instantiate_and_store_widgets()
 
-        ### perform initial positioning of all elements
-        perform_initial_positioning(self)
+        ### perform initial positioning of all elements and calculate
+        ### height of area occupied by them (since we already know the
+        ### width, which is a fixed amount)
+        rect_height = position_elements_and_get_height(self)
 
         ### assign update behaviour
         self.update = empty_function
 
         ### create image and rect attributes
 
-        self.image = (
-
-            render_rect(
-                FILEMAN_WIDTH,
-                self.rect_height,
-                WINDOW_BG,
-            )
-
-        )
+        self.image = render_rect(FILEMAN_WIDTH, rect_height, WINDOW_BG)
 
         draw_border(self.image)
         self.rect = self.image.get_rect()
 
         ###
-        self.blit_static_surfs_on_image()
+        self.blit_static_surfs_on_image(caption_objs)
 
         ### store semitransparent object the size of
         ### this widget's rect
@@ -175,7 +183,7 @@ class FileManager(FileManagerOperations):
 
         APP_REFS.window_resize_setups.append(self.reposition_objects)
 
-    def blit_static_surfs_on_image(self):
+    def blit_static_surfs_on_image(self, caption_objs):
         """Create and blit surfaces on self.image.
 
         These images never change or move, this is why
@@ -183,71 +191,22 @@ class FileManager(FileManagerOperations):
         them on the background once and for all, instead
         of having to blit them every loop.
         """
+        ### draw caption objs on our background
+        caption_objs.draw_on_surf(self.image)
+
         ### blit surfaces on the background representing this file manager icon
         ### plus its name, then an hyphen
-
-        ## instantiate objects
-
-        icon_obj = (
-
-            Object2D.from_surface(
-
-                render_layered_icon(
-                    chars=[chr(ordinal) for ordinal in (33, 34)],
-                    dimension_name="height",
-                    dimension_value=30,
-                    colors=[BLACK, (30, 130, 70)],
-                    background_width=32,
-                    background_height=32,
-                )
-
-            )
-
-        )
-
-        title_obj = (
-
-            Object2D.from_surface(
-
-                render_text(
-                    t.caption + " -",
-                    font_height=FONT_HEIGHT,
-                    foreground_color=WINDOW_FG,
-                    background_color=WINDOW_BG,
-                    padding=5,
-                )
-
-            )
-
-        )
-
-        ## store them in a special set
-        app_objs = Set2D((icon_obj, title_obj))
-
-        ## align title midleft with icon midright
-        title_obj.rect.midleft = icon_obj.rect.midright
-
-        ## store distance from origin to title obj midright to use as
-        ## an offset to position the caption label
-        self.caption_label_offset = title_obj.rect.move(2, 5).midright
-
-        ## now move the objects together, so they sit near the topleft
-        ## corner of our background
-        app_objs.rect.topleft = (5, 5)
-
-        ## finally, draw them on our background
-        app_objs.draw_on_surf(self.image)
 
         ### draw text objects on background
 
         for text, topleft in (
 
-            (t.current + ":", (5, CURRENT_LABEL_TOP)),
-            (t.bookmarks, (5, PANELS_LABELS_TOP)),
+            (t.current + ":", (5, self.current_label_top)),
+            (t.bookmarks, (5, self.panels_labels_top)),
 
             (
                 t.directory_contents,
-                (10 + BKM_PANEL_WIDTH , PANELS_LABELS_TOP),
+                (10 + BKM_PANEL_WIDTH , self.panels_labels_top),
             ),
 
         ):
@@ -267,7 +226,7 @@ class FileManager(FileManagerOperations):
             self.image.blit(surf, topleft)
 
 
-    def build_labels(self):
+    def build_labels(self, caption_label_max_width):
         """Build and store label objects."""
         ### create a special set to store labels
         self.labels = Set2D()
@@ -276,13 +235,17 @@ class FileManager(FileManagerOperations):
 
         ## instantiate and store it
 
-        self.caption_label = Label(
-            t.caption,
-            font_height=FONT_HEIGHT,
-            padding=5,
-            foreground_color=WINDOW_FG,
-            background_color=WINDOW_BG,
-            #max_width=max_width, # set only when summoning file manager
+        self.caption_label = (
+
+            Label(
+                t.caption,
+                font_height=FONT_HEIGHT,
+                padding=5,
+                foreground_color=WINDOW_FG,
+                background_color=WINDOW_BG,
+                max_width=caption_label_max_width,
+            )
+
         )
 
         self.labels.add(self.caption_label)
@@ -292,13 +255,17 @@ class FileManager(FileManagerOperations):
         ### according to the current mode; that is, it will
         ### be either 'Selected:' or 'New path:'
 
-        self.selected_label = Object2D.from_surface(
-            render_text(
-                t.selected + ":",
-                font_height=FONT_HEIGHT,
-                foreground_color=WINDOW_FG,
-                background_color=WINDOW_BG,
+        self.selected_label = (
+
+            Object2D.from_surface(
+                render_text(
+                    t.selected + ":",
+                    font_height=FONT_HEIGHT,
+                    foreground_color=WINDOW_FG,
+                    background_color=WINDOW_BG,
+                )
             )
+
         )
 
         self.labels.add(self.selected_label)
@@ -326,7 +293,7 @@ class FileManager(FileManagerOperations):
             ),
 
             ### y
-            CURRENT_LABEL_TOP + (current_label_size[1]//2)
+            self.current_label_top + (current_label_size[1]//2)
         )
 
         ### instantiate directory panel; store it as attribute and
@@ -467,30 +434,25 @@ class FileManager(FileManagerOperations):
 
     def reposition_objects(self):
 
-        self.rect.center = SCREEN_RECT.center
+        diff = Vector2(SCREEN_RECT.center) - self.rect.center
 
-        self.rect_size_semitransp_obj.rect.center = self.rect.center
+        self.rect.move_ip(diff)
 
-        self.dir_panel.reposition()
+        self.rect_size_semitransp_obj.rect.move_ip(diff)
+
+        self.dir_panel.reposition(diff)
+
+        # bkm_panel doesn't need diff, as positions itself relative
+        # to dir panel
         self.bkm_panel.reposition()
 
-        self.caption_label.rect.midleft = (
-            self.rect.move(self.caption_label_offset).topleft
-        )
+        self.caption_label.rect.move_ip(diff)
 
-        self.selected_label.rect.bottomleft = (
-            self.rect.move(10, -15).bottomleft
-        )
+        self.selected_label.rect.move_ip(diff)
 
-        self.selection_entry.rect.midleft = (
-            self.selected_label.rect.move(5, 0).midright
-        )
+        self.selection_entry.rect.move_ip(diff)
 
-        ## reposition the current path entry with the offset we saved for it
-
-        self.navigation_entry.rect.midleft = (
-            self.rect.move(self.navigation_entry_offset).topleft
-        )
+        self.navigation_entry.rect.move_ip(diff)
 
         ### reposition buttons relative to the right side
         ### of the file manager and the top of the
@@ -498,10 +460,7 @@ class FileManager(FileManagerOperations):
 
         ## retrieve a bottomright coordinate
 
-        bottomright = (
-            self.rect.move(-10, 0).right,
-            self.dir_panel.rect.move(0, -5).top,
-        )
+        bottomright = self.dir_panel.rect.move(0, -5).topright
 
         ## position each button side by side, using the
         ## bottomleft coordinate of one as the bottomright
@@ -519,9 +478,56 @@ class FileManager(FileManagerOperations):
             button.rect.bottomright = bottomright
             bottomright = button.rect.move(-5, 0).bottomleft
 
-        self.submit_button.rect.bottomright = self.rect.move(-10, -10).bottomright
+        self.submit_button.rect.move_ip(diff)
+        self.cancel_button.rect.move_ip(diff)
 
-        self.cancel_button.rect.topright = self.submit_button.rect.move(-5, 0).topleft
+
+def get_caption_objs(): 
+
+    icon_obj = (
+
+        Object2D.from_surface(
+
+            render_layered_icon(
+                chars=[chr(ordinal) for ordinal in (33, 34)],
+                dimension_name="height",
+                dimension_value=30,
+                colors=[BLACK, (30, 130, 70)],
+                background_width=32,
+                background_height=32,
+            )
+
+        )
+
+    )
+
+    title_obj = (
+
+        Object2D.from_surface(
+
+            render_text(
+                t.caption + " -",
+                font_height=FONT_HEIGHT,
+                foreground_color=WINDOW_FG,
+                background_color=WINDOW_BG,
+                padding=5,
+            )
+
+        )
+
+    )
+
+    ## align title midleft with icon midright
+    title_obj.rect.midleft = icon_obj.rect.midright
+
+    ## store them in a special set
+    caption_objs = Set2D((icon_obj, title_obj))
+
+    ## now move the objects together, so they sit near the topleft
+    ## corner of our background
+    caption_objs.rect.topleft = (5, 5)
+
+    return caption_objs
 
 
 select_paths = FileManager().select_paths

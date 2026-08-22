@@ -478,7 +478,8 @@ class BookmarkPanel:
 
     def reposition(self):
         """Reposition panel relative to file manager."""
-        self.rect.topright = self.dir_panel.rect.move(-15, 0).topleft
+
+        self.rect.topright = self.dir_panel.rect.move(-5, 0).topleft
 
         self.bookmark_objs.rect.topleft = self.rect.move(1, 1).topleft
 
