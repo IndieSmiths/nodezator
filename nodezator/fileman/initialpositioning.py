@@ -22,14 +22,14 @@ def position_elements_and_get_height(fm):
     """
 
     fm.navigation_entry.rect.left = fm.navigation_entry_offset[0]
-    fm.navigation_entry.rect.top = fm.current_label_top
+    fm.navigation_entry.rect.centery = fm.current_label_top + (FONT_HEIGHT//2) + 5
 
     fm.caption_label.rect.midleft = fm.caption_label_offset
 
     dp = fm.dir_panel
 
     dp.rect.right = FILEMAN_WIDTH - 5
-    dp.rect.top = fm.panels_labels_top + FONT_HEIGHT + 5
+    dp.rect.top = fm.panels_labels_top + FONT_HEIGHT + 10
 
     dp.path_objs.rect.topleft = dp.rect.move(1, 1).topleft
 
@@ -39,7 +39,7 @@ def position_elements_and_get_height(fm):
     bp.rect.top = dp.rect.top
     bp.bookmark_objs.rect.topleft = bp.rect.move(1, 1).topleft
 
-    fm.selected_label.rect.topleft = bp.rect.move(0, 5).bottomleft
+    fm.selected_label.rect.topleft = bp.rect.move(0, 10).bottomleft
 
     sel_entry = fm.selection_entry
     sel_entry.rect.midleft = fm.selected_label.rect.move(5, 0).midright
@@ -47,11 +47,8 @@ def position_elements_and_get_height(fm):
     sbtn = fm.submit_button
     cbtn = fm.cancel_button
 
-    sbtn.rect.right = FILEMAN_WIDTH - 10
-    sbtn.rect.top = sel_entry.rect.bottom + 10
-
+    sbtn.rect.topright = dp.rect.move(0, 5).bottomright
     cbtn.rect.topright = sbtn.rect.move(-10, 0).topleft
-
 
     height = sbtn.rect.bottom + 10
 

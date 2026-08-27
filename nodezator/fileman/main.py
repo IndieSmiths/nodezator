@@ -122,7 +122,7 @@ class FileManager(FileManagerOperations):
 
         ## store specific measurements in dedicated attributes
 
-        self.current_label_top = caption_objs.rect.bottom + 5
+        self.current_label_top = caption_objs.rect.bottom
         self.panels_labels_top = self.current_label_top + FONT_HEIGHT + 10
 
         ##
@@ -399,6 +399,14 @@ class FileManager(FileManagerOperations):
 
         ### create an entry widget to edit path names;
 
+        entry_width = (
+            FILEMAN_WIDTH
+            - 40
+            - self.selected_label.rect.width
+            - self.cancel_button.rect.width
+            - self.submit_button.rect.width
+        )
+
         self.selection_entry = (
 
             StringEntry(
@@ -406,7 +414,7 @@ class FileManager(FileManagerOperations):
                 loop_holder=self,
                 font_height=FONT_HEIGHT,
                 draw_on_window_resize=self.draw,
-                width=400, # TODO replace hardcoded value
+                width=entry_width,
                 command=self.update_selection_from_entry,
             )
 
@@ -459,8 +467,7 @@ class FileManager(FileManagerOperations):
         ### directory panel
 
         ## retrieve a bottomright coordinate
-
-        bottomright = self.dir_panel.rect.move(0, -5).topright
+        bottomright = self.dir_panel.rect.move(0, -3).topright
 
         ## position each button side by side, using the
         ## bottomleft coordinate of one as the bottomright
