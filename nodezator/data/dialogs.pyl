@@ -68,4 +68,6 @@
 
   'cant_use_picker_for_no_system_fonts_were_detected' : {'level_name': 'info'},
 
+  'system_testing_suspended' : {'level_name': 'info'},
+
 }

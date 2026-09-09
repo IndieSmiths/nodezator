@@ -35,7 +35,7 @@ from ...pygamesetup import SERVICES_NS, SCREEN_RECT, blit_on_screen
 
 from ...pygamesetup.constants import FPS, GENERAL_NS
 
-from ...dialog import create_and_show_dialog
+from ...dialog import create_and_show_dialog, show_dialog_from_key
 
 from ...ourstdlibs.behaviour import empty_function
 
@@ -722,6 +722,19 @@ class SystemTestingSessionForm(Object2D):
 
     def set_system_testing_session(self):
         """Present form to set and trigger system testing session."""
+
+        ### XXX usage of this method is suspended until we update the system
+        ### testing facilities to take into account the possibility that the
+        ### user set a new font and font size for the interface;
+        ###
+        ### if this functionality was kept available, it could produce false
+        ### positives/negatives due to changes in the size of the nodes,
+        ### which is why for now it is suspended, along with other functions
+        ### from this module which also trigger system tests;
+
+        show_dialog_from_key('system_testing_suspended')
+        return
+
         ### if we are in play or record mode, test sessions can't be
         ### triggered, so notify user via dialog and prevent rest of
         ### method from executing by returning earlier
@@ -939,13 +952,24 @@ class SystemTestingSessionForm(Object2D):
 
 
 ### instantiate class and reference relevant method
-set_system_testing_session = SystemTestingSessionForm().set_system_testing_session
+
+set_system_testing_session = (
+    SystemTestingSessionForm().set_system_testing_session
+)
 
 
 ### utility functions
 
+
 def rerun_previous_test_session():
     """Trigger system testing session reusing previous settings."""
+
+    ### XXX check comment above the set_system_testing_session() method
+    ### earlier in this module to know why this function is temporarily
+    ### suspended
+    show_dialog_from_key('system_testing_suspended')
+    return
+
     ### if we are in play or record mode, test sessions can't be
     ### triggered, so notify user via dialog and prevent rest of
     ### method from executing by returning earlier
@@ -1020,6 +1044,13 @@ def rerun_previous_test_session():
 
 def run_all_cases_at_max_speed():
     """Trigger system testing session with all test cases at maximum speed."""
+
+    ### XXX check comment above the set_system_testing_session() method
+    ### earlier in this module to know why this function is temporarily
+    ### suspended
+    show_dialog_from_key('system_testing_suspended')
+    return
+
     ### if we are in play or record mode, test sessions can't be
     ### triggered, so notify user via dialog and prevent rest of
     ### method from executing by returning earlier

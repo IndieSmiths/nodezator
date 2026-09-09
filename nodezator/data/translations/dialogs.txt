@@ -163,3 +163,9 @@ cant_use_picker_for_no_system_fonts_were_detected
     message
         en-us It is not possible to use the system fonts picker because no system fonts were detected
         pt-br Não é possível usar o seletor the fontes do sistema porque não foram detectadas
+
+system_testing_suspended
+
+    message
+        en-us System testing services are suspended. They'll be restored as soon as we update it to take into account the fact that the user can change the font and its size, which might take a while.
+        pt-br Serviços de testes de sistema estão suspensos. Serão restaurados tão logo atualizemos ele para que leve em conta o fato de que usuários podem mudar a fonte e tamanho do texto, o que pode levar um tempo.

@@ -449,6 +449,7 @@ class MenuSetup:
 
             help_children_data.insert(-2, new_child)
 
+
         ## Add new "GUI automation" top menu with different
         ## commands related to input playback/recording and its
         ## many applications
