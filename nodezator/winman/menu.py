@@ -79,9 +79,13 @@ class MenuSetup:
 
     def create_menubar(self):
         """Create the menubar."""
+
         ### define menu data for basic menu structure
 
         menu_list = [
+
+            ## file menu
+
             {
                 "label": t.file,
                 "children": [
@@ -112,6 +116,31 @@ class MenuSetup:
                     },
                 ],
             },
+
+            ## edit menu
+
+            {
+
+                "label": t.edit,
+
+                "children": [
+
+                    {
+                        "label": t.user_preferences,
+                        "icon": "tools",
+                        "command": edit_user_preferences,
+                    },
+
+                    {
+                        "label": t.lang_and_fonts,
+                        "command": edit_lang_and_fonts_settings,
+                    },
+
+                ],
+            },
+
+            ## help menu
+
             {
                 "label": t.help,
                 "children": [
@@ -247,9 +276,9 @@ class MenuSetup:
                 ],
             }
             # insert top menu on menu list
-            menu_list.insert(1, graph_menu)
+            menu_list.insert(2, graph_menu)
 
-        # otherwise, it means a file is load, proceed with
+        # otherwise, it means a file is loaded, proceed with
         # adding new menus/commands
 
         else:
@@ -329,34 +358,6 @@ class MenuSetup:
 
             # also insert separator
             file_children_data.insert(10, {"label": "----"})
-
-            ## Add new "Edit" top menu with different
-            ## commands related to edition
-
-            # build top menu data
-
-            edit_menu = {
-
-                "label": t.edit,
-
-                "children": [
-
-                    {
-                        "label": t.user_preferences,
-                        "icon": "tools",
-                        "command": edit_user_preferences,
-                    },
-
-                    {
-                        "label": t.lang_and_fonts,
-                        "command": edit_lang_and_fonts_settings,
-                    },
-
-                ],
-            }
-
-            # insert top menu on menu list
-            menu_list.insert(1, edit_menu)
 
             ## Add new "Graph" top menu with different
             ## commands related to the graph
