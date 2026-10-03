@@ -1,9 +1,6 @@
 """Facility w/ class for visualizing and picking system fonts."""
 
-### standard library imports
-
-from itertools import chain
-
+### standard library import
 from collections import defaultdict
 
 
@@ -57,7 +54,6 @@ from pygame.draw import (
 
 from ...config import (
     APP_REFS,
-    SAMPLE_UNICODE_CHARS_PATH,
     SORTED_SYS_FONT_NAMES,
 )
 
@@ -68,8 +64,6 @@ from ...pygamesetup.constants import SCREEN_RECT
 from ...dialog import show_dialog_from_key
 
 from ...logman.main import get_new_logger
-
-from ...ourstdlibs.pyl import load_pyl
 
 from ...ourstdlibs.collections.general import FactoryDict
 
@@ -102,51 +96,29 @@ from ...colorsman.colors import (
     WINDOW_BG,
 )
 
+from ..constants import SAMPLE_TEXT_MAP
+
 
 ### module level contants/values/objects
 
-try:
-    SAMPLE_UNICODE_CHARS_DATA = load_pyl(SAMPLE_UNICODE_CHARS_PATH)
-
-except Exception as err:
-    raise RuntimeError("Couldn't load sample unicode characters") from err
-
-
 FONT_HEIGHT_FOR_LARGE_PREVIEW = 24
 
-LABEL_TEXTS, _char_texts = zip(*SAMPLE_UNICODE_CHARS_DATA)
-
-STRINGS_WITH_SAMPLE_CHARACTERS = [
-    char_text.replace(',', '')
-    for char_text in _char_texts
-]
+_locale_codes, SAMPLE_TEXTS = zip(*SAMPLE_TEXT_MAP.items())
 
 LARGE_PREVIEW_LABELS_2D = List2D(
 
     Object2D.from_surface(
 
         render_text(
-            f'{label_text}:',
+            label_text,
             font_height=FONT_HEIGHT_FOR_LARGE_PREVIEW,
             font_key=ENC_SANS_BOLD_FONT_PATH,
         )
 
     )
 
-    for label_text in LABEL_TEXTS
+    for label_text in _locale_codes
 
-)
-
-LARGE_PREVIEW_LABELS_2D.rect.snap_rects_ip(
-    retrieve_pos_from='bottomleft',
-    assign_pos_to='topleft',
-)
-
-LARGE_PREVIEW_LABELS_2D.rect.move_ip(4, 0)
-
-LARGE_PREVIEW_LABELS_PADDED_MAX_RIGHT = (
-    max(label_2d.rect.right for label_2d in LARGE_PREVIEW_LABELS_2D)
-    + 4
 )
 
 
@@ -161,7 +133,7 @@ _SPACE_CHAR = (
 _RED_TOFU = _SPACE_CHAR.copy()
 _RED_TOFU.fill('red')
 
-def _get_custom_tofu(str_with_sample_chars):
+def _get_custom_tofu(sample_text):
 
 
     return combine_surfaces(
@@ -169,7 +141,7 @@ def _get_custom_tofu(str_with_sample_chars):
         surfaces = [
 
             _SPACE_CHAR if char == ' ' else _RED_TOFU
-            for char in str_with_sample_chars
+            for char in sample_text
 
         ],
 
@@ -178,17 +150,17 @@ def _get_custom_tofu(str_with_sample_chars):
 
     )
 
-CUSTOM_TOFU_WHEN_CANT_RENDER_CHAR_GROUPS = (
+CUSTOM_TOFU_WHEN_CANT_RENDER_SAMPLE_TEXTS = (
 
     List2D(
 
 
         Object2D.from_surface(
-            _get_custom_tofu(str_with_sample_chars)
+            _get_custom_tofu(sample_text)
         )
 
 
-        for str_with_sample_chars in STRINGS_WITH_SAMPLE_CHARACTERS
+        for sample_text in SAMPLE_TEXTS
 
     )
 
@@ -202,22 +174,10 @@ FONT_PREVIEW_AREA_SIZE = (640, 65)
 PLACEHOLDER_PREVIEW_SURF = Surface(FONT_LIST_ITEM_SIZE).convert()
 PLACEHOLDER_PREVIEW_SURF.fill('white')
 
-PREVIEW_CHARS = ' '.join(
-
-    chain(
-
-        char_group.replace(',', '').replace(' ', '') + ' '
-
-        for _, char_group in SAMPLE_UNICODE_CHARS_DATA
-
-    )
-
-)
-
 
 FONT_PREVIEW_SETTINGS = {
     'font_size': 22,
-    'chars': PREVIEW_CHARS,
+    'chars': ' '.join(SAMPLE_TEXTS),
     'width': FONT_PREVIEW_AREA_SIZE[0],
     'height': FONT_PREVIEW_AREA_SIZE[1],
     'not_found_width': FONT_PREVIEW_AREA_SIZE[0],
@@ -611,18 +571,18 @@ class SystemFontsPicker(Object2D, LoopHolder):
 
         try:
 
-            char_groups_2d = List2D(
+            sample_texts_2d = List2D(
 
 
                 Object2D.from_surface(
                     render_text(
-                        text=str_with_sample_chars,
+                        text=sample_text,
                         font_height=FONT_HEIGHT_FOR_LARGE_PREVIEW,
                         font_key=font_name,
                     )
                 )
 
-                for str_with_sample_chars in STRINGS_WITH_SAMPLE_CHARACTERS
+                for sample_text in SAMPLE_TEXTS
 
             )
 
@@ -633,27 +593,31 @@ class SystemFontsPicker(Object2D, LoopHolder):
                 f" {font_name}: {err}"
             )
 
-            char_groups_2d = CUSTOM_TOFU_WHEN_CANT_RENDER_CHAR_GROUPS
+            sample_texts_2d = CUSTOM_TOFU_WHEN_CANT_RENDER_SAMPLE_TEXTS
 
-        LARGE_PREVIEW_LABELS_2D.rect.topleft = cur_rect.move(0, 16).bottomleft
 
-        for label_2d, char_group in (
-            zip(LARGE_PREVIEW_LABELS_2D, char_groups_2d)
+        topleft = cur_rect.move(0, 16).bottomleft
+
+        for label_2d, sample_text2d in (
+            zip(LARGE_PREVIEW_LABELS_2D, sample_texts_2d)
         ):
 
-            char_group.rect.topleft = (
-                LARGE_PREVIEW_LABELS_PADDED_MAX_RIGHT,
-                label_2d.rect.top,
+            label_2d.rect.topleft = topleft
+            sample_text2d.rect.topleft = label_2d.rect.move(20, 0).bottomleft
+
+            topleft = (
+                label_2d.rect.left,
+                sample_text2d.rect.move(0, 10).bottom,
             )
 
         ### blit onto preview surface
 
-        for label_2d, char_group in (
-            zip(LARGE_PREVIEW_LABELS_2D, char_groups_2d)
+        for label_2d, sample_text2d in (
+            zip(LARGE_PREVIEW_LABELS_2D, sample_texts_2d)
         ):
 
             blit_on_preview(label_2d.image, label_2d.rect)
-            blit_on_preview(char_group.image, char_group.rect)
+            blit_on_preview(sample_text2d.image, sample_text2d.rect)
 
     def update_selected_objs(self):
 

@@ -34,7 +34,7 @@ from ...fontsman.preview.cache import (
     update_cache_for_font_preview,
 )
 
-from ...fontsman.viewer.main import view_fonts
+from ...fontsman.viewer import view_fonts
 
 from ...surfsman.cache import NOT_FOUND_SURF_MAP
 

@@ -47,37 +47,35 @@ from pygame.transform import smoothscale
 
 ### local imports
 
-from ...config import APP_REFS
+from ..config import APP_REFS
 
-from ...pygamesetup import SCREEN_RECT, SERVICES_NS
+from ..pygamesetup import SCREEN_RECT, SERVICES_NS
 
-from ...dialog import create_and_show_dialog
+from ..dialog import create_and_show_dialog
 
-from ...logman.main import get_new_logger
+from ..logman.main import get_new_logger
 
-from ...ourstdlibs.collections.general import FactoryDict
+from ..ourstdlibs.collections.general import FactoryDict
 
-from ...our3rdlibs.userlogger import USER_LOGGER
+from ..our3rdlibs.userlogger import USER_LOGGER
 
-from ...loopman.main import LoopHolder
+from ..loopman.main import LoopHolder
 
-from ...classes2d.single import Object2D
+from ..classes2d.single import Object2D
+from ..classes2d.collections import List2D
 
-from ...classes2d.collections import List2D
+from ..surfsman.render import render_rect, combine_surfaces
+from ..surfsman.draw import draw_border
 
-from ...surfsman.render import render_rect, combine_surfaces
-from ...surfsman.draw import draw_border
+from ..widget.intfloatentry.main import IntFloatEntry
 
-from ...widget.intfloatentry.main import IntFloatEntry
+from ..textman.render import render_text
 
-from ...textman.render import render_text
+from ..rectsman.main import RectsManager
 
-from ...rectsman.main import RectsManager
+from .constants import ENC_SANS_BOLD_FONT_PATH, SAMPLE_TEXT_MAP
 
-from ...fontsman.constants import ENC_SANS_BOLD_FONT_PATH
-from ...fontsman.cache import UnattainableFontHeightError
-
-from .render import render_char_info
+from .cache import UnattainableFontHeightError
 
 
 
@@ -201,11 +199,11 @@ class FontsViewer(Object2D, LoopHolder):
         self.offset = -Vector2(self.rect.topleft)
 
         try:
-            self.char_objs
+            self.sample_text_objs
         except AttributeError:
             pass
         else:
-            self.char_objs.rect.move_ip(diff)
+            self.sample_text_objs.rect.move_ip(diff)
 
         for rect in (
             self.caption.rect,
@@ -308,21 +306,52 @@ class FontsViewer(Object2D, LoopHolder):
 
         font = self.font_obj_map[self.font_key]
 
-        self.char_objs = List2D(
+        stos = self.sample_text_objs = List2D()
 
-            Object2D.from_surface(render_char_info(char, font))
-            for char in CHARS
+        topleft = self.viz_area.move(2, 2).topleft
 
-        )
+        for locale_code, sample_text in SAMPLE_TEXT_MAP.items():
 
-        self.char_objs.rect.lay_rects_like_table_ip(
-            dimension_name='width',
-            dimension_unit='pixels',
-            max_dimension_value=self.viz_area.width - 2,
-            cell_padding=5,
-        )
+            locale2d = (
 
-        self.char_objs.rect.topleft = self.viz_area.move(2, 2).topleft
+                Object2D.from_surface(
+
+                    render_text(
+                        text=locale_code,
+                        font_height = 28,
+                        font_key = ENC_SANS_BOLD_FONT_PATH,
+                    )
+
+                )
+
+            )
+
+            sample2d = (
+
+                Object2D.from_surface(
+
+                    render_text(
+                        text=sample_text,
+                        font_height = 28,
+                        font_key = self.font_key
+                    )
+
+                )
+
+            )
+
+            locale2d.rect.topleft = topleft
+            sample2d.rect.topleft = locale2d.rect.move(20, 0).bottomleft
+
+            stos.extend((locale2d, sample2d))
+
+            topleft = (
+                locale2d.rect.left,
+                sample2d.rect.move(0, 10).bottom,
+            )
+
+
+        ###
 
         ### update font key text obj
 
@@ -345,16 +374,16 @@ class FontsViewer(Object2D, LoopHolder):
         key_pressed_states = SERVICES_NS.get_pressed_keys()
 
         if key_pressed_states[K_a]:
-            self.char_objs.rect.move_ip(-20, 0)
+            self.sample_text_objs.rect.move_ip(-20, 0)
 
         elif key_pressed_states[K_s]:
-            self.char_objs.rect.move_ip(0, 20)
+            self.sample_text_objs.rect.move_ip(0, 20)
 
         elif key_pressed_states[K_w]:
-            self.char_objs.rect.move_ip(0, -20)
+            self.sample_text_objs.rect.move_ip(0, -20)
 
         elif key_pressed_states[K_d]:
-            self.char_objs.rect.move_ip(20, 0)
+            self.sample_text_objs.rect.move_ip(20, 0)
 
     def handle_events(self):
 
@@ -418,7 +447,7 @@ class FontsViewer(Object2D, LoopHolder):
 
         viz_offset = -Vector2(self.viz_area.topleft)
 
-        for obj in self.char_objs:
+        for obj in self.sample_text_objs:
 
             if rect_touches_viewer(obj.rect):
                 viz_panel.blit(obj.image, obj.rect.move(viz_offset))
