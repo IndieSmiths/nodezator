@@ -151,6 +151,26 @@ Users can even choose the detection graphics used. From the most serious and dis
 ![Socket detection using baseball elements and eyes](https://nodezator.com/images/socket_detection_baseball_elements_and_eyes.gif)
 
 
+### Ziplining navigation
+
+With the ziplining feature users can **shift-click** a connection in order to be transported to the previous or next node instantly. This can be used to traverse the graph back and forth.
+
+![Browsing the graph with the ziplining feature](https://nodezator.com/images/ziplining_navigation.gif)
+
+People often need to inspect the path followed by data through connections between nodes to make sense of a graph. But sometimes such connections are very long, extending beyond the screen.
+
+Since we know we want to visit the next connected node regardless of its location, why spend time scrolling the screen? That's why ziplining exists.
+
+
+### Bird's eye view
+
+Another useful usability measure to help traverse the graph, the bird's eye view shows a semitransparent miniature version of the whole graph overlaid on the screen, allowing users to jump to any specific spot on the graph by clicking the corresponding spot on the miniature.
+
+![Bird's eye view](https://nodezator.com/images/birds_eye_view.png)
+
+In fact, you can hover the miniature with the mouse button pressed to traverse the entire graph continuously.
+
+
 ### Additional Python-related tools
 
 Being a node-based representation of Python, Nodezator includes a few extra features that help you access Python features in a node-based interface.
