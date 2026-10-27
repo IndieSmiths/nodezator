@@ -70,9 +70,11 @@ Nodezator can already be used in production and supports a vast variety of workf
 After you finish reading this README file, you may also want to visit Nodezator's homepage: https://nodezator.com
 
 
+
 ## Features
 
 On top of making it very easy to define nodes, Nodezator comes packed full of useful features for both Python programmers and other professionals that (likely with the help of a fellow programmer) can setup a no-code/low-code workflow.
+
 
 ### Work effortlessly with other libraries
 
@@ -169,6 +171,19 @@ Another useful usability measure to help traverse the graph, the bird's eye view
 ![Bird's eye view](https://nodezator.com/images/birds_eye_view.png)
 
 In fact, you can hover the miniature with the mouse button pressed to traverse the entire graph continuously.
+
+
+### Language/locale support and community/users translation
+
+Nodezator fully supports English (en-us) and is on its way to reach complete coverage of Brazilian Portuguese (pt-br) and Simplified Chinese (zh-cn).
+
+Our translations depend on contributions from the community/users via pull requests. Please, check the **TRANSLATIONS.md** document at the top of the repository to learn how to contribute. Also, please, don't submit software translations of any kind, only manual translations.
+
+You can find whether your language/locale is available on the **Edit > Language and fonts** menu, where you can also choose another font for the interface if needed for your language/locale, either from your disk or from among the system fonts (the ones listed automatically by the [underlying backend tool](https://pyga.me/docs/ref/font.html#pygame.font.get_fonts) used).
+
+![Picking locale and font](https://nodezator.com/images/picking_locale_and_font.gif)
+
+Is your language/locale missing? Please, consider helping translate.
 
 
 ### Additional Python-related tools
