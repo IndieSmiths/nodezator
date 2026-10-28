@@ -122,7 +122,7 @@ class HTSLBrowser(
 
         ### create image and rect
 
-        self.image = render_rect(1060, 680, HTSL_BROWSER_BG)
+        self.image = render_rect(1120, 680, HTSL_BROWSER_BG)
 
         self.image.blit(AWW_ICON, (5, 5))
 
