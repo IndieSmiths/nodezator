@@ -1,0 +1,92 @@
+<htsl>
+
+<head>
+  <title>What's new in Nodezator 1.6?</title>
+</head>
+
+<body>
+
+<p><a href="whats-new/index.htsl">All "What's new" pages (since 1.3.14)</a></p>
+
+
+<h1>What's new in Nodezator 1.6?</h1>
+
+<ul>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.6.0">[v1.6.0] Language support, different fonts and size for text</a></li>
+</ul>
+
+<ol>
+
+    <li><a href="whats-new/v1-6.htsl#better-language-support">Better language support</a>
+
+        <ol>
+            <li><a href="whats-new/v1-6.htsl#allowing-users-pick-different-fonts">Allowing users to pick different fonts</a></li>
+            <li><a href="whats-new/v1-6.htsl#allowing-users-pick-different-sizes-fonts">Allowing users to pick different sizes for the fonts</a></li>
+        </ol>
+
+    </li>
+</ol>
+
+
+<p>The scheduled work for this release consisted of 02 features, but we delivered one additional usability feature and other changes as well. The scheduled features were:</p>
+
+<ul>
+    <li>Providing better language/locale support by allowing users to change the interface's font</li>
+    <li>Allowing users to change the font size</li>
+</ul>
+
+<p>The additional QOL feature is the ziplining feature, that allows users to jump to the next node by shift-clicking a connection.</p>
+
+<p>The remaining changes will be presented futher ahead, in a dedicated section.</p>
+
+<p>In addition to the information presented in this release text, you can find much of the development process documented in the monthly work reports for the years of <a href="https://github.com/orgs/IndieSmiths/discussions/10">2025</a> (starting from October's report) and <a href="https://github.com/orgs/IndieSmiths/discussions/12">2026</a> (until August's report) published on GitHub. They serve as a development log (devlog) detailing changes and related decisions (although much of the content also consists of reported work for other apps of the Indie Smiths project). Although there's been requests to solve this problem by users in the past, the specific formal request that started this round of changes was <a href="https://github.com/IndieSmiths/nodezator/issues/120">issue #120 on GitHub</a>.</p>
+
+
+
+<h2 id="better-language-support">Better language support</h2>
+
+<h3 id="allowing-users-pick-different-fonts">Allowing users to pick different fonts</h3>
+
+<p>Before this 1.6 release people could already help translate the project, but there was a crucial barrier: Nodezator lays down the interface elements based on the default font that ships with it. This means that although people could already provide translations to their languages/locales, if the language/locale relied on characters not present in the font, the text would render as <a href="https://en.wikipedia.org/wiki/Notdef_glyph">tofu text/substitute characters</a>.</p>
+
+<p>Although there was consensus that changing this is both helpful and desirable, the enormous amount of work required to tackle such task means it was a change that wasn't easy to schedule, specially considering I also share my open-source development time and effort with other apps/games of the project Indie Smiths.</p>
+
+<p>Even so, given the importance of this change, I finally scheduled and started working on it on November of last year (2025) and been working on it until the very end of this month of October 2026 with pauses in order to tend to other open-source apps I maintain.</p>
+
+<p>As we just stated, this task was enormous and took almost a whole year to complete. It is a large task because it requires many steps that consist of multiple changes on the whole codebase.</p>
+
+<p>One of the required steps for users to pick whichever font and font size they want was creating a panel where users can see and choose fonts available on their system to be used within Nodezator. Another step was the creation of a dedicated widget that stores selected system font(s) and invokes this special panel when the user wants to pick a different font or fonts. Yet another require step was the creation of new user preferences/configurations and a related new dedicated form where users can edit such settings.</p>
+
+<p>The image below shows the new form for changing font (and language/locale) settings and also the panel for picking system fonts.</p>
+
+<img src="whats-new/images/v1-6-x/lang_locale_system_font_interfaces.png" alt="Language and font form and system font picker panel." />
+
+<p>Because this new form also has to work with the other existing form that also changes user settings, a lot of the underlying code also had to be changed to reflect this fact.</p>
+
+<p>Even after all of this was done, there were still many more other tasks, as we'll discuss in the next section.</p>
+
+<h3 id="allowing-users-pick-different-sizes-fonts">Allowing users to pick different sizes for the fonts</h3>
+
+<p>Providing the new form, widget and special panel for users to pick system fonts is not enough to provide a better language support the way we need it to be. As we mentioned, the new form also allows users to pick different font sizes. Why is that?</p>
+
+<p>Well, the reason is that depending on the language and its script (how the letters/ideograms are drawn), the default font size might result in text that is too small, lacking enough space for the text to be rendered properly so that it is readable. For instance, <a href="https://en.wikipedia.org/wiki/CJK_characters">CJK</a> characters are often very detailed and might require a (slightly or not) bigger size to be easier to read.</p>
+
+<p>Because of that, allowing user to change only the font itself was not enough. It was also necessary to allow users to change the font size. However, as we mentioned, before this new version 1.6, Nodezator laid down its interface assuming the default font was used. This means that if we change the size of the font we mess the layout of the elements, sometimes leaving the app in a unusable state.</p>
+
+<p>And that is why we needed to go around the whole codebase changing each the code for each interface so that it would take into account the size of the font when laying down its elements. Most time and effort probably went into such tasks. Below I list just some of those interfaces I could recall off the top of my head:</p>
+
+<ul>
+    <li>the nodes themselves</li>
+    <li>widgets</li>
+    <li>file browser</li>
+    <li>colors editor and color picker</li>
+    <li>widget picker</li>
+    <li>image exporting form</li>
+    <li>user settings form</li>
+    <li>and so on...</li>
+</ul>
+
+
+</body>
+
+</htsl>
