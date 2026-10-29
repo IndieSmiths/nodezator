@@ -22,9 +22,11 @@
         <ol>
             <li><a href="whats-new/v1-6.htsl#allowing-users-pick-different-fonts">Allowing users to pick different fonts</a></li>
             <li><a href="whats-new/v1-6.htsl#allowing-users-pick-different-sizes-fonts">Allowing users to pick different sizes for the fonts</a></li>
+            <li><a href="whats-new/v1-6.htsl#two-good-unintended-consequences">Two good unintended consequences</a></li>
         </ol>
 
     </li>
+    <li><a href="whats-new/v1-6.htsl#allowing-users-pick-different-fonts">Allowing users to pick different fonts</a></li>
 </ol>
 
 
@@ -35,7 +37,7 @@
     <li>Allowing users to change the font size</li>
 </ul>
 
-<p>The additional QOL feature is the ziplining feature, that allows users to jump to the next node by shift-clicking a connection.</p>
+<p>The additional usability feature is the ziplining feature, that allows users to jump to the next node by shift-clicking a connection.</p>
 
 <p>The remaining changes will be presented futher ahead, in a dedicated section.</p>
 
@@ -73,7 +75,7 @@
 
 <p>Because of that, allowing user to change only the font itself was not enough. It was also necessary to allow users to change the font size. However, as we mentioned, before this new version 1.6, Nodezator laid down its interface assuming the default font was used. This means that if we change the size of the font we mess the layout of the elements, sometimes leaving the app in a unusable state.</p>
 
-<p>And that is why we needed to go around the whole codebase changing each the code for each interface so that it would take into account the size of the font when laying down its elements. Most time and effort probably went into such tasks. Below I list just some of those interfaces I could recall off the top of my head:</p>
+<p>And that is why we needed to go around the whole codebase changing the code for each interface so that it would take into account the size of the font when laying down its elements (rather than using hardcoded values based on the default font). Most time and effort probably went into such tasks. Below I list just some of those interfaces I could recall off the top of my head:</p>
 
 <ul>
     <li>the nodes themselves</li>
@@ -85,6 +87,36 @@
     <li>user settings form</li>
     <li>and so on...</li>
 </ul>
+
+<p>Now that such interfaces take the font size into account, increasing the size doesn't produce a mess. For instance, the image below depicts the colors editor before and after it takes font size into account when laying out its visuals:</p>
+
+<img src="whats-new/images/v1-6-x/colors_editor_before_after.png" alt="Image depicts the colors editor before and after it takes font size into account when laying out its visuals." />
+
+<p>In the image above we used a purposefully big size just for the sake of testing the code (but of course you can use such size if you want).</p>
+
+<p>Just because we now allow the user to pick the font size, doesn't mean we support any size. At least for now, the available range is 16 to 39 pixels in height. Allowing sizes bigger than that would require even more changes and take even longer, because we'd also need to introduce scrolling in many of those interfaces. This should cover most if not all cases, so we believe it is a neat range of available sizes. Even so, if desired and requested by the userbase, we see no problem in scheduling such work in the future in order to allow ever bigger text.</p>
+
+<p>For now, however, Nodezator has many other tasks of higher priority for us to tackle, which is probably what we'll do.</p>
+
+<p>The changes released in this new version are not 100% complete, though. For instance, in many cases accompanying icons do not scale in conjunction with the text (as can be seen in the previous image depicting the colors editor, where some icons remain small even though the text is bigger). These missing changes were postponed because they don't hinder the usage of the app in any way. Of course, we do intend to schedule and complete all this work sooner rather than later.</p>
+
+
+<h3 id="two-good-unintended-consequences">Two good unintended consequences</h3>
+
+<p>The fact that we worked on the interfaces within Nodezator so that they now render and lay out their visuals taking into account the font size, including the nodes themselves and the widgets that they hold, brought forth 02 (two) unintended but good consequences. Allow me to explain.</p>
+
+<p>Since we had to make it so a node grows larger to accomodate its contents and we had to do the same to the widgets the node holds (since many of such widgets display text and/or labels), the nodes also have to take the widget size into account. This means if the text is bigger, the widgets may be bigger and the labels in the node are also bigger (node's title, names of the parameters and names of outputs) resulting in a bigger node. Thus, the 02 (two) consequences are:</p>
+
+<ul>
+    <li>Nodes can now shrink in size, taking less space</li>
+    <li>In future changes we can finally allow the user to change the size of the widgets</li>
+</ul>
+
+<p>For instance, the image below shows the new appearance of some nodes using the default text size. Note how they are much more compact.</p>
+
+<img src="whats-new/images/v1-6-x/nodes_before_after.png" alt="Image depicts the nodes before and after the changes (now they shrink or grow to accomodate their contents, although in this image we only show instances where they shrank)." />
+
+<p>Although the image only shows instances where the nodes shrink, they can now grow as well. For instance, if the node's title (the name of the callable object used for the node) is larger, the width of the node will increase as well to accomodate the text. This is where the second consequence comes from, that is, now that the node grows according to the size of its elements, we can also allow users to increase the size of the widgets. Although we didn't implement such possibility yet, after all the work we did the underlying code is ready for such changes to be made next, we intend to include this in our next round of changes planned for Nodezator.</p>
 
 
 </body>
