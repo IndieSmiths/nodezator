@@ -26,7 +26,9 @@
         </ol>
 
     </li>
-    <li><a href="whats-new/v1-6.htsl#allowing-users-pick-different-fonts">Allowing users to pick different fonts</a></li>
+    <li><a href="whats-new/v1-6.htsl#new-usability-feature-ziplining">New usability feature: ziplining</a></li>
+    <li><a href="whats-new/v1-6.htsl#other-changes">Other changes</a></li>
+
 </ol>
 
 
@@ -37,7 +39,7 @@
     <li>Allowing users to change the font size</li>
 </ul>
 
-<p>The additional usability feature is the ziplining feature, that allows users to jump to the next node by shift-clicking a connection.</p>
+<p>The additional usability feature is the ziplining feature, that allows users to jump to the next or previous node by shift-clicking a connection.</p>
 
 <p>The remaining changes will be presented futher ahead, in a dedicated section.</p>
 
@@ -88,7 +90,9 @@
     <li>and so on...</li>
 </ul>
 
-<p>Now that such interfaces take the font size into account, increasing the size doesn't produce a mess. For instance, the image below depicts the colors editor before and after it takes font size into account when laying out its visuals:</p>
+<p>Not only interfaces had to be updated, but some features as well, like SVG exporting, which had to be updated to take the font size into account.</p>
+
+<p>Now that such subsystems take the font size into account, increasing the size doesn't produce a mess. For instance, the image below depicts the colors editor before and after it takes font size into account when laying out its visuals:</p>
 
 <img src="whats-new/images/v1-6-x/colors_editor_before_after.png" alt="Image depicts the colors editor before and after it takes font size into account when laying out its visuals." />
 
@@ -116,7 +120,50 @@
 
 <img src="whats-new/images/v1-6-x/nodes_before_after.png" alt="Image depicts the nodes before and after the changes (now they shrink or grow to accomodate their contents, although in this image we only show instances where they shrank)." />
 
-<p>Although the image only shows instances where the nodes shrink, they can now grow as well. For instance, if the node's title (the name of the callable object used for the node) is larger, the width of the node will increase as well to accomodate the text. This is where the second consequence comes from, that is, now that the node grows according to the size of its elements, we can also allow users to increase the size of the widgets. Although we didn't implement such possibility yet, after all the work we did the underlying code is ready for such changes to be made next, we intend to include this in our next round of changes planned for Nodezator.</p>
+<p>Although the image only shows instances where the nodes shrank, they can now grow as well. For instance, if the node's title (the name of the callable object used for the node) is larger, the width of the node will increase as well to accomodate the text.</p>
+
+<p>This is where the second consequence comes from, that is, we can also allow users to increase the size of the widgets, because now the nodes resize according to the size of their contents. Although we didn't implement this possibility of resizing widgets yet, after all the work done the underlying code is ready for such changes to be made next. We intend to include such changes in our next round of development work planned for Nodezator.</p>
+
+
+<h2 id="new-usability-feature-ziplining">New usability feature: ziplining</h2>
+
+<p>Since I already wrote about the ziplining feature on the README.md file of the repository with enough detail, I'll simply quote the text here explaining the feature, including a link to a GIF so you can see it in action:</p>
+
+<blockquote>
+
+    <p>With the ziplining feature users can <b>shift-click</b> a connection in order to be transported to the previous or next node instantly. This can be used to traverse the graph back and forth.</p>
+
+    <p><a href="https://nodezator.com/images/ziplining_navigation.gif">Browsing the graph with the ziplining feature</a></p>
+
+    <p>People often need to inspect the path followed by data through connections between nodes to make sense of a graph. But sometimes such connections are very long, extending beyond the screen.</p>
+
+    <p>Since we know we want to visit the next connected node regardless of its location, why spend time scrolling the screen? That's why ziplining exists.</p>
+
+</blockquote>
+
+<h2 id="other-changes">Other changes</h2>
+
+<p>Several other changes were included, most made during this scheduled work, but some we merged from previous work that was merged only into topic branches. Here we briefly present the ones we think are most worth mentioning. Among the ommited changes are fixes and other small changes that are mostly consequences or small steps related to the other changes we discussed previously.</p>
+
+<p>In order to improve language support, we had to replace the language support system by a more modern version that was actually based on code written for the <a href="https://github.com/IndieSmiths/bionicblue">Bionic Blue game</a> for its language support. The new system makes it a bit easier to translate since it uses a new plain text format that is simpler to use for non-developers than the Python dictionaries we were using.</p>
+
+<p>The default font files included in Nodezator previously contained many additional CJK characters that, at the time of Nodezator's first release, we included in the hope that they were enough to display most text in those languages. Later it became apparent that it wasn't the case. Now that users can choose their favorite fonts there's no need to include such extra characters anymore. So another change we introduced was replacing the default font files by their original (much lighter) versions since they do not contain extra characters.</p>
+
+<p>Speaking of other languages, a translation for Simplified Chinese (zh-cn locale) was finally merged (it was merged into a topic branch while we waited for the new language support system to be released along with this 1.6 version).</p>
+
+<p>Support for Simplified Chinese (and the already available Brazilian Portuguese) is still partial though, because there are many text and labels within the app that were not "plugged" to language support yet (some of them were not even plugged to the previous language support system also). We expect to schedule time to close this gap so users can provide translations for the text/labels that are missing translations for such languages (and so when other languages are added people can properly provide translations for all text/labels in the app).</p>
+
+<p>Some of the usability features we use to move around the graph actually move too abruptly, instantly, which makes it harder for the user to properly perceive the motion. Although we judge it to be only a minor inconvenience, we thought it was easy enough to introduce a new temporary state that drives such motion in much more smooth way. You can see this new motion when jumping to a new node with the form that appears by pressing the <b>shift+J</b> keys, but it was also included in the ziplining feature (the GIF linked on the previous section on the ziplining feature shows this smoother movement, although not as smooth as can be seen on the app itself, because the GIF has reduced framerate in order to save space).</p>
+
+<p>Finaly, another change worth mentioning was the suspension of the system testing services for the app. This excerpt from the corresponding commit message explains why:</p>
+
+<blockquote>
+    <p>Such services are suspended until we update them to take into account the fact that users can now change the font and its size, which might take a while.</p>
+</blockquote>
+
+<p>That is, the current system testing system relies on pre-recorded mouse movement and screen scrolling and reproducing such motions only make sense when the visual elements have the same dimensions as the elements had when the motions were recorded. Since each user can now change the font and its size, affecting the size of the node and its elements, we need to change system testing so that it takes that into account.</p>
+
+<p>I already have a design in mind, so even though this should take some time to implement, it should pose too much of a challenge, and the new version will be even more flexible than the current one that we suspended.</p>
 
 
 </body>
