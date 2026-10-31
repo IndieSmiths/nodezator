@@ -155,6 +155,10 @@
 
 <p>Some of the usability features we use to move around the graph actually move too abruptly, instantly, which makes it harder for the user to properly perceive the motion. Although we judge it to be only a minor inconvenience, we thought it was easy enough to introduce a new temporary state that drives such motion in much more smooth way. You can see this new motion when jumping to a new node with the form that appears by pressing the <b>shift+J</b> keys, but it was also included in the ziplining feature (the GIF linked on the previous section on the ziplining feature shows this smoother movement, although not as smooth as can be seen on the app itself, because the GIF has reduced framerate in order to save space).</p>
 
+<p>As we mentioned previously, in many cases accompanying icons do not scale along with the font size. We also said this is something we'll tackle in future work. However, we did already started doing something about it. We actually developed a new subpackage called <code>svgobjs</code> that provides an object-oriented way to define SVG visuals.</p>
+
+<p>We are already using it to define visuals programmatically so they conform to the size of the font. For now we are only using it to create the corners of the nodes, but we'll likely employ it in most of the other instances where SVG is used within the app. You can actually inspect and use it outside Nodezator, because we also published it as a standalone repository (you can find it here: <a href="https://github.com/IndieSmiths/svgobjs">https://github.com/IndieSmiths/svgobjs</a>), as part of our efforts to improve the reach of the tools/content we create and improve the management of the underlying knowledge.</p>
+
 <p>Finaly, another change worth mentioning was the suspension of the system testing services for the app. This excerpt from the corresponding commit message explains why:</p>
 
 <blockquote>
