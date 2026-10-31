@@ -435,6 +435,18 @@ Other parts of the code, however, specially the most recent ones, are not so ref
 Also, other parts of the code, despite being carefully designed, might be redesigned in the future, since now that the app is published, it should evolve as we find problems and contribute to improve the app. In other words, some of the design may change in the future, so bear in mind that the software is still evolving.
 
 
+## Sibling projects
+
+The creator/maintainer of Nodezator (Kennedy) created and maintains other open-source projects as well. Because he has to split his time between them, it often takes a few months (sometimes more) for new work to be done in some of them. Even so, they are all active projects that he intends to complete.
+
+One of them is [Bionic Blue](https://github.com/IndieSmiths/bionicblue), an action platformer game made with the pygame-ce library. The first fully playable mission is already available. Here's a brief GIF showing the first few seconds of the mission:
+
+<p align="center">
+<a href="https://github.com/IndieSmiths/bionicblue"><img alt="Bionic Blue game screenshot" src="https://i.imgur.com/L9J1poV.gif" /></a>
+</p>
+
+
+
 [Kennedy Richard Silva Guerra]: https://kennedyrichard.com
 [PyPI]: https://pypi.org
 [numpy.save()]: https://numpy.org/doc/stable/reference/generated/numpy.save.html
