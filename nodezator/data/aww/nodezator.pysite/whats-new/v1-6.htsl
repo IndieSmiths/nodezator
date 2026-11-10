@@ -1,0 +1,179 @@
+<htsl>
+
+<head>
+  <title>What's new in Nodezator 1.6?</title>
+</head>
+
+<body>
+
+<p><a href="whats-new/index.htsl">All "What's new" pages (since 1.3.14)</a></p>
+
+
+<h1>What's new in Nodezator 1.6?</h1>
+
+<ul>
+    <li><a href="https://github.com/IndieSmiths/nodezator/releases/tag/v1.6.0rc1">[v1.6.0rc1] Different fonts and size for interface, ziplining and more</a></li>
+</ul>
+
+<ol>
+
+    <li><a href="whats-new/v1-6.htsl#better-language-support">Better language support</a>
+
+        <ol>
+            <li><a href="whats-new/v1-6.htsl#allowing-users-pick-different-fonts">Allowing users to pick different fonts</a></li>
+            <li><a href="whats-new/v1-6.htsl#allowing-users-pick-different-sizes-fonts">Allowing users to pick different sizes for the fonts</a></li>
+            <li><a href="whats-new/v1-6.htsl#two-good-unintended-consequences">Two good unintended consequences</a></li>
+        </ol>
+
+    </li>
+    <li><a href="whats-new/v1-6.htsl#new-usability-feature-ziplining">New usability feature: ziplining</a></li>
+    <li><a href="whats-new/v1-6.htsl#other-changes">Other changes</a></li>
+
+</ol>
+
+
+<p>The scheduled work for this release consisted of 02 features, but we delivered one additional usability feature and other changes as well. The scheduled features were:</p>
+
+<ul>
+    <li>Providing better language/locale support by allowing users to change the interface's font</li>
+    <li>Allowing users to change the font size</li>
+</ul>
+
+<p>The additional usability feature is called ziplining. It allows users to jump to the next or previous node by shift-clicking a connection.</p>
+
+<p>The remaining changes will be presented futher ahead, in a dedicated section.</p>
+
+<p>In addition to the information presented in this release text, you can find much of the development process documented in the monthly work reports for the years of <a href="https://github.com/orgs/IndieSmiths/discussions/10">2025</a> (starting from October's report) and <a href="https://github.com/orgs/IndieSmiths/discussions/12">2026</a> (until August's report) published on GitHub. They serve as a development log (devlog) detailing changes and related decisions (although much of the content also consists of reported work for other apps of the Indie Smiths project). Although there's been requests to solve this problem by users in the past, the specific formal request that started this round of changes was <a href="https://github.com/IndieSmiths/nodezator/issues/120">issue #120 on GitHub</a>.</p>
+
+
+
+<h2 id="better-language-support">Better language support</h2>
+
+
+<p>Here I present the changes related to improving language support for the app. Mainly, the ability to choose the font you want to use and its size. <a href="https://nodezator.com/images/picking_locale_and_font.gif">This GIF</a> demonstrates how you can do that.</p>
+
+
+<h3 id="allowing-users-pick-different-fonts">Allowing users to pick different fonts</h3>
+
+<p>Before this 1.6 release people could already help translate the project, but there was a crucial barrier: Nodezator lays down the interface elements based on the default font that ships with it. This means that although people could already provide translations to their languages/locales, if the language/locale relied on characters not present in the font, the text would render as <a href="https://en.wikipedia.org/wiki/Notdef_glyph">tofu text/substitute characters</a>.</p>
+
+<p>Although there was consensus that changing this is both helpful and desirable, the enormous amount of work required to tackle such task means it was a change that wasn't easy to schedule, specially considering I also share my open-source development time and effort with other apps/games of the project Indie Smiths.</p>
+
+<p>Even so, given the importance of this change, I finally scheduled and started working on it on November of last year (2025) and been working on it until the very end of this month of October 2026 with pauses in order to tend to other open-source apps I maintain.</p>
+
+<p>As we just stated, this task was enormous and took almost a whole year to complete. It is a large task because it requires many steps that consist of multiple changes on the whole codebase.</p>
+
+<p>One of the required steps for users to pick whichever font and font size they want was creating a panel where users can see and choose fonts available on their system to be used within Nodezator. Another step was the creation of a dedicated widget that stores selected system font(s) and invokes this special panel when the user wants to pick a different font or fonts. Yet another require step was the creation of new user preferences/configurations and a related new dedicated form where users can edit such settings.</p>
+
+<p>The image below shows the new form for changing font (and language/locale) settings and also the panel for picking system fonts.</p>
+
+<img src="whats-new/images/v1-6-x/lang_locale_system_font_interfaces.png" alt="Language and font form and system font picker panel." />
+
+<p>Because this new form also has to work with the other existing form that also changes user settings, a lot of the underlying code also had to be changed to reflect this fact.</p>
+
+<p>Even after all of this was done, there were still many more other tasks, as we'll discuss in the next section.</p>
+
+<h3 id="allowing-users-pick-different-sizes-fonts">Allowing users to pick different sizes for the fonts</h3>
+
+<p>Providing the new form, widget and special panel for users to pick system fonts is not enough to provide a better language support the way we need it to be. As we mentioned, the new form also allows users to pick different font sizes. Why is that?</p>
+
+<p>Well, the reason is that depending on the language and its script (how the letters/ideograms are drawn), the default font size might result in text that is too small, lacking enough space for the text to be rendered properly so that it is readable. For instance, <a href="https://en.wikipedia.org/wiki/CJK_characters">CJK</a> characters are often very detailed and might require a (slightly or not) bigger size to be easier to read.</p>
+
+<p>Because of that, allowing user to change only the font itself was not enough. It was also necessary to allow users to change the font size. However, as we mentioned, before this new version 1.6, Nodezator laid down its interface assuming the default font was used. This means that if we change the size of the font we mess the layout of the elements, sometimes leaving the app in a unusable state.</p>
+
+<p>And that is why we needed to go around the whole codebase changing the code for each interface so that it would take into account the size of the font when laying down its elements (rather than using hardcoded values based on the default font). Most time and effort probably went into such tasks. Below I list just some of those interfaces I could recall off the top of my head:</p>
+
+<ul>
+    <li>the nodes themselves</li>
+    <li>widgets</li>
+    <li>file browser</li>
+    <li>colors editor and color picker</li>
+    <li>widget picker</li>
+    <li>image exporting form</li>
+    <li>user settings form</li>
+    <li>and so on...</li>
+</ul>
+
+<p>Not only interfaces had to be updated, but some features as well, like SVG exporting, which had to be updated to take the font size into account.</p>
+
+<p>Now that such subsystems take the font size into account, increasing the size doesn't produce a mess. For instance, the image below depicts the colors editor before and after it takes font size into account when laying out its visuals:</p>
+
+<img src="whats-new/images/v1-6-x/colors_editor_before_after.png" alt="Image depicts the colors editor before and after it takes font size into account when laying out its visuals." />
+
+<p>In the image above we used a purposefully big size just for the sake of testing the code (but of course you can use such size if you want).</p>
+
+<p>Just because we now allow the user to pick the font size, doesn't mean we support any size. At least for now, the available range is 16 to 39 pixels in height. Allowing sizes bigger than that would require even more changes and take even longer, because we'd also need to introduce scrolling in many of those interfaces. This should cover most if not all cases, so we believe it is a neat range of available sizes. Even so, if desired and requested by the userbase, we see no problem in scheduling such work in the future in order to allow ever bigger text.</p>
+
+<p>For now, however, Nodezator has many other tasks of higher priority for us to tackle, which is probably what we'll do.</p>
+
+<p>The changes released in this new version are not 100% complete, though. For instance, in many cases accompanying icons do not scale in conjunction with the text (as can be seen in the previous image depicting the colors editor, where some icons remain small even though the text is bigger). These missing changes were postponed because they don't hinder the usage of the app in any way. Of course, we do intend to schedule and complete all this work sooner rather than later.</p>
+
+
+<h3 id="two-good-unintended-consequences">Two good unintended consequences</h3>
+
+<p>The fact that we worked on the interfaces within Nodezator so that they now render and lay out their visuals taking into account the font size, including the nodes themselves and the widgets that they hold, brought forth 02 (two) unintended but good consequences. Allow me to explain.</p>
+
+<p>Since we had to make it so a node grows larger to accomodate its contents and we had to do the same to the widgets the node holds (since many of such widgets display text and/or labels), the nodes also have to take the widget size into account. This means if the text is bigger, the widgets may be bigger and the labels in the node are also bigger (node's title, names of the parameters and names of outputs) resulting in a bigger node. Thus, the 02 (two) consequences are:</p>
+
+<ul>
+    <li>Nodes can now shrink in size, taking less space</li>
+    <li>In future changes we can finally allow the user to change the size of the widgets</li>
+</ul>
+
+<p>For instance, the image below shows the new appearance of some nodes using the default text size. Note how they are much more compact.</p>
+
+<img src="whats-new/images/v1-6-x/nodes_before_after.png" alt="Image depicts the nodes before and after the changes (now they shrink or grow to accomodate their contents, although in this image we only show instances where they shrank)." />
+
+<p>Although the image only shows instances where the nodes shrank, they can now grow as well. For instance, if the node's title (the name of the callable object used for the node) is larger, the width of the node will increase as well to accomodate the text.</p>
+
+<p>This is where the second consequence comes from, that is, we can also allow users to increase the size of the widgets, because now the nodes resize according to the size of their contents. Although we didn't implement this possibility of resizing widgets yet, after all the work done the underlying code is ready for such changes to be made next. We intend to include such changes in our next round of development work planned for Nodezator.</p>
+
+
+<h2 id="new-usability-feature-ziplining">New usability feature: ziplining</h2>
+
+<p>Since I already wrote about the ziplining feature on the README.md file of the repository with enough detail, I'll simply quote the text here explaining the feature, including a link to a GIF so you can see it in action:</p>
+
+<blockquote>
+
+    <p>With the ziplining feature users can <b>shift-click</b> a connection in order to be transported to the previous or next node instantly. This can be used to traverse the graph back and forth.</p>
+
+    <p><a href="https://nodezator.com/images/ziplining_navigation.gif">Browsing the graph with the ziplining feature</a></p>
+
+    <p>People often need to inspect the path followed by data through connections between nodes to make sense of a graph. But sometimes such connections are very long, extending beyond the screen.</p>
+
+    <p>Since we know we want to visit the next connected node regardless of its location, why spend time scrolling the screen? That's why ziplining exists.</p>
+
+</blockquote>
+
+<h2 id="other-changes">Other changes</h2>
+
+<p>Several other changes were included, most made during this scheduled work, but some we merged from previous work that was merged only into topic branches. Here we briefly present the ones we think are most worth mentioning. Among the ommited changes are fixes and other small changes that are mostly consequences or small steps related to the other changes we discussed previously.</p>
+
+<p>In order to improve language support, we had to replace the language support system by a more modern version that was actually based on code written for the <a href="https://github.com/IndieSmiths/bionicblue">Bionic Blue game</a> for its language support. The new system makes it a bit easier to translate since it uses a new plain text format that is simpler to use for non-developers than the Python dictionaries we were using.</p>
+
+<p>The default font files included in Nodezator previously contained many additional CJK characters that, at the time of Nodezator's first release, we included in the hope that they were enough to display most text in those languages. Later it became apparent that it wasn't the case. Now that users can choose their favorite fonts there's no need to include such extra characters anymore. So another change we introduced was replacing the default font files by their original (much lighter) versions since they do not contain extra characters.</p>
+
+<p>Speaking of other languages, a translation for Simplified Chinese (zh-cn locale) was finally merged (it was merged into a topic branch while we waited for the new language support system to be released along with this 1.6 version).</p>
+
+<p>Support for Simplified Chinese (and the already available Brazilian Portuguese) is still partial though, because there are many text and labels within the app that were not "plugged" to language support yet (some of them were not even plugged to the previous language support system also). We expect to schedule time to close this gap so users can provide translations for the text/labels that are missing translations for such languages (and so when other languages are added people can properly provide translations for all text/labels in the app).</p>
+
+<p>Some of the usability features we use to move around the graph actually move too abruptly, instantly, which makes it harder for the user to properly perceive the motion. Although we judge it to be only a minor inconvenience, we thought it was easy enough to introduce a new temporary state that drives such motion in much more smooth way. You can see this new motion when jumping to a new node with the form that appears by pressing the <b>shift+J</b> keys, but it was also included in the ziplining feature (the GIF linked on the previous section on the ziplining feature shows this smoother movement, although not as smooth as can be seen on the app itself, because the GIF has reduced framerate in order to save space).</p>
+
+<p>As we mentioned previously, in many cases accompanying icons do not scale along with the font size. We also said this is something we'll tackle in future work. However, we did already started doing something about it. We actually developed a new subpackage called <code>svgobjs</code> that provides an object-oriented way to define SVG visuals.</p>
+
+<p>We are already using it to define visuals programmatically so they conform to the size of the font. For now we are only using it to create the corners of the nodes, but we'll likely employ it in most of the other instances where SVG is used within the app. You can actually inspect and use it outside Nodezator, because we also published it as a standalone repository (you can find it here: <a href="https://github.com/IndieSmiths/svgobjs">https://github.com/IndieSmiths/svgobjs</a>), as part of our efforts to improve the reach of the tools/content we create and improve the management of the underlying knowledge.</p>
+
+<p>Finaly, another change worth mentioning was the suspension of the system testing services for the app. This excerpt from the corresponding commit message explains why:</p>
+
+<blockquote>
+    <p>Such services are suspended until we update them to take into account the fact that users can now change the font and its size, which might take a while.</p>
+</blockquote>
+
+<p>That is, the current system testing system relies on pre-recorded mouse movement and screen scrolling and reproducing such motions only make sense when the visual elements have the same dimensions as the elements had when the motions were recorded. Since each user can now change the font and its size, affecting the size of the node and its elements, we need to change system testing so that it takes that into account.</p>
+
+<p>I already have a design in mind, so even though this should take some time to implement, it should not pose too much of a challenge, and the new version will be even more flexible than the current one that we suspended.</p>
+
+
+</body>
+
+</htsl>
