@@ -4,53 +4,46 @@
 from collections import namedtuple
 
 
-### application version;
-###
-### the release level can be...
-###
-### 'beta' : changes are being implemented or were
-###          just implemented, but not enough tests
-###          were performed yet;
-###
-### 'release_candidate' : can be released, should not
-###                       be used in production, though;
-###
-### 'stable' : can be used in production; bugs,
-###            if existent, are considered tolerable;
 
-AppVersion = namedtuple("AppVersion", "major minor micro release_level")
+### versioning
 
-APP_VERSION = AppVersion(1, 5, 5, "release_candidate")
+# release level meaning:
+#
+# '' (empty string) -> stable release
+# 'a1', 'a2', etc. -> alpha release
+# 'b1', 'b2', etc. -> beta release
+# 'rc1', 'rc2', etc. -> release candidate
 
-MINIMAL_VERSION_STRING = '.'.join(map(str, APP_VERSION[:3]))
+AppVersion = namedtuple('AppVersion', 'major minor micro release_level')
+
+APP_VERSION = AppVersion(1, 5, 5, '')
+
+APP_VERSION_STRING = '.'.join(map(str, APP_VERSION[:3])) + APP_VERSION[3]
 
 
 ### titles for the application
 
 TITLE = "Nodezator"
+ABBREVIATED_TITLE = "NDZ"
 
 ## used to name directories related to the app, like
 ## the config and log folders; it is important in
 ## case the title ever uses a name with characters not
 ## supported by any major operating system;
-APP_DIR_NAME = "nodezator"
 
+APP_DIR_NAME = "nodezator"
 ORG_DIR_NAME = 'IndieSmiths' # org name for pygame.system.get_pref_path
 
-ABBREVIATED_TITLE = "NDZ"
 
+## custom title and other custom formats
 
-## custom title formats;
+FULL_TITLE = f"{TITLE} {APP_VERSION_STRING}"
 
-
-FULL_TITLE = "{} {} ({})".format(
-    TITLE, ".".join(str(i) for i in APP_VERSION[:3]), APP_VERSION[3]
+FULL_TITLE_MINUS_RELEASE_LEVEL = (
+    f"{TITLE} {'.'.join(str(i) for i in APP_VERSION[:3])}"
 )
 
-NO_RELEASE_LEVEL_FULL_TITLE = "{} {}".format(
-    TITLE,
-    ".".join(str(i) for i in APP_VERSION[:3]),
-)
+
 
 ### other
 

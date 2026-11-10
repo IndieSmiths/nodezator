@@ -655,14 +655,7 @@ def get_whats_new_obj():
         background_color=SPLASH_BG,
     )
 
-    filename = (
-        f"v{'-'.join(map(str, APP_VERSION[:2]))}.htsl"
-        + (
-            f"#v{'-'.join(map(str, APP_VERSION[:3]))}"
-            if APP_VERSION[3]
-            else ""
-        )
-    )
+    filename = f"v{'-'.join(map(str, APP_VERSION[:2]))}.htsl"
 
     link_text = "nodezator://nodezator.pysite/whats-new/" + filename
 

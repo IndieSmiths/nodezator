@@ -9,10 +9,7 @@ from ..translatedtext import TRANSLATIONS
 
 from ..pygamesetup import SCREEN
 
-from ..appinfo import (
-    APP_VERSION,
-    NO_RELEASE_LEVEL_FULL_TITLE,
-)
+from ..appinfo import APP_VERSION, FULL_TITLE_MINUS_RELEASE_LEVEL
 
 from ..recentfile import get_recent_files
 
@@ -81,6 +78,7 @@ logger = get_new_logger(__name__)
 t = TRANSLATIONS.splash_screen
 
 
+### class definition
 
 class SplashScreen(SplashScreenOperations):
     """loop holder representing a splash screen."""
@@ -125,12 +123,20 @@ class SplashScreen(SplashScreenOperations):
         ### represents the text of the application title
 
         self.title_label = Object2D.from_surface(
+
             surface=render_text(
-                text=NO_RELEASE_LEVEL_FULL_TITLE,
+
+                text=FULL_TITLE_MINUS_RELEASE_LEVEL,
+
                 ## text settings w/ different
                 ## font height
-                **{**TEXT_SETTINGS, "font_height": TITLE_FONT_HEIGHT},
+                **{
+                    **TEXT_SETTINGS,
+                    'font_height': TITLE_FONT_HEIGHT,
+                },
+
             )
+
         )
 
         ### obtain and store an object whose surface
@@ -146,18 +152,21 @@ class SplashScreen(SplashScreenOperations):
             )
         )
 
+        ### only if release level is not stable,
         ### obtain and store an object whose surface
         ### represents the text of the application
         ### release level
 
-        self.release_level_label = Object2D.from_surface(
-            surface=render_text(
-                text=APP_VERSION.release_level,
-                ## different text settings for
-                ## release level
-                **RELEASE_LEVEL_TEXT_SETTINGS,
+        if APP_VERSION[3]:
+
+            self.release_level_label = Object2D.from_surface(
+                surface=render_text(
+                    text=APP_VERSION[3],
+                    ## different text settings for
+                    ## release level
+                    **RELEASE_LEVEL_TEXT_SETTINGS,
+                )
             )
-        )
 
         ### create objects whose surfaces contain both
         ### images and text, representing links and actions
@@ -411,19 +420,33 @@ class SplashScreen(SplashScreenOperations):
 
         header.append(self.subheading_label)
 
+        ## only if release level is not stable,
         ## position the release level label relative to
         ## the kind label and also append it to the header
 
-        self.release_level_label.rect.midleft = self.kind_label.rect.move(
-            10, 0
-        ).midright
+        if APP_VERSION[3]:
 
-        header.append(self.release_level_label)
+            self.release_level_label.rect.bottomleft = (
+                self.title_label.rect.move(5, -5).bottomright
+            )
 
-        ## position the "what's new?" object relative to the title lable and
-        ## append it to the header
+            header.append(self.release_level_label)
 
-        self.whats_new_obj.rect.midleft = self.title_label.rect.move(10, 0).midright
+        ## position the "what's new?" object relative to the title label
+        ## (or release level if one is specified) and append it to the header
+
+        if APP_VERSION[3]:
+
+            self.whats_new_obj.rect.midleft = (
+                self.release_level_label.rect.move(10,0).right,
+                self.title_label.rect.centery,
+            )
+
+        else:
+            self.whats_new_obj.rect.midleft = (
+                self.title_label.rect.move(10, 0).midright
+            )
+
         header.append(self.whats_new_obj)
 
         ### create custom list representing objects

@@ -35,11 +35,11 @@ SOFTWARE_KIND_FONT_HEIGHT = 20
 SUBHEADING_FONT_HEIGHT = 28
 
 RELEASE_LEVEL_TEXT_SETTINGS = {
-    'font_height': 20,
+    'font_height': round(TITLE_FONT_HEIGHT *.5),
     'font_key': APP_REFS.general_font_key,
     'padding': 2,
-    'foreground_color': SPLASH_BG,
-    'background_color': SPLASH_FONT,
+    'foreground_color': SPLASH_FONT,
+    'background_color': SPLASH_BG,
 }
 
 SHADOW_THICKNESS = 5
