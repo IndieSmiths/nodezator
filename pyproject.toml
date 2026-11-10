@@ -24,22 +24,23 @@ keywords = [
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
-    "License :: OSI Approved :: The Unlicense (Unlicense)",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: Implementation :: CPython",
-    "Topic :: Software Development",
-    "Topic :: Software Development :: Libraries :: pygame",
-    "Topic :: Desktop Environment",
-    "Topic :: Multimedia",
-    "Topic :: Software Development :: User Interfaces",
-    "Topic :: Software Development :: Code Generators",
     "Topic :: Artistic Software",
     "Topic :: Office/Business",
     "Topic :: Scientific/Engineering",
-    "Intended Audience :: End Users/Desktop",
+    "Topic :: Desktop Environment",
+    "Topic :: Multimedia",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: pygame",
+    "Topic :: Software Development :: User Interfaces",
+    "Topic :: Software Development :: Code Generators",
 ]
-license = { text="Unlicense" }
+license = "Unlicense"
+license-files = ["UNLICENSE"]
 
 [project.urls]
 Homepage = "https://nodezator.com"
@@ -53,7 +54,7 @@ Donate = "https://indiesmiths.com/donate"
 nodezator = "nodezator.__main__:parse_args_and_execute_main"
 
 [build-system]
-requires = ["setuptools>=59.6"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
