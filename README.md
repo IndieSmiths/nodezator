@@ -302,6 +302,9 @@ If you want to install it, just execute the command below. It will install nodez
 pip install --upgrade nodezator
 ```
 
+> [!IMPORTANT]
+> By default, the `pip` command above doesn't install pre-releases (alpha, beta, release candidate, etc.). If the version you want to install is a pre-release version, include the `--pre` option: `pip install --upgrade --pre nodezator`. An alternative is to simply specify the desired version: for instance, if you want `1.6.0rc1`, just execute `pip install nodezator==1.6.0rc1`.
+
 If everything goes well, after installing you should be able to launch the app by typing `nodezator` or `python -m nodezator` in your command line (or `python3 -m nodezator` depending on you system).
 
 
